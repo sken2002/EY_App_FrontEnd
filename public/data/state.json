@@ -1,0 +1,6546 @@
+{
+  "meta": {
+    "portfolioId": "PORT-2024-001",
+    "generatedAt": "2026-04-28T14:42:39.623682Z",
+    "version": "1.0.0",
+    "scenarioCount": 3,
+    "nodeCount": 118,
+    "edgeCount": 74
+  },
+  "riskIndex": {
+    "delivery": {
+      "label": "Delivery & Operational Risk",
+      "icon": "Clock",
+      "overallScore": 0.78,
+      "severity": "critical",
+      "activeAlerts": 45,
+      "breakdown": {
+        "high": 34,
+        "medium": 11,
+        "low": 0
+      }
+    },
+    "cost": {
+      "label": "Cost & Cashflow Risk",
+      "icon": "DollarSign",
+      "overallScore": 0.72,
+      "severity": "critical",
+      "activeAlerts": 42,
+      "breakdown": {
+        "high": 29,
+        "medium": 13,
+        "low": 3
+      }
+    },
+    "supplier": {
+      "label": "Supplier & Contract Risk",
+      "icon": "ShoppingCart",
+      "overallScore": 0.49,
+      "severity": "high",
+      "activeAlerts": 20,
+      "breakdown": {
+        "high": 20,
+        "medium": 0,
+        "low": 25
+      }
+    }
+  },
+  "nodes": [
+    {
+      "id": "WP-0001",
+      "type": "workPackage",
+      "data": {
+        "label": "WP-0001: Work Package 1: Road Construction",
+        "subtitle": "Construction \u00b7 Remote",
+        "status": "In Progress",
+        "priority": "High",
+        "riskScore": 0.85,
+        "severity": "critical",
+        "metrics": {
+          "completionPct": 60.19,
+          "plannedCost": 7407127.46,
+          "actualCost": 7667613.44,
+          "budgetVariance": 3.52,
+          "cpi": 1.153,
+          "spi": 1.02
+        },
+        "deliveryRisk": {
+          "class": "High",
+          "driver": "Slippage ratio 20%",
+          "subComponents": {
+            "milestoneDelay": {
+              "class": "Low",
+              "driver": "No delays detected"
+            },
+            "completionSlippage": {
+              "class": "High",
+              "driver": "Slippage ratio 20%"
+            },
+            "soBacklog": {
+              "class": "High",
+              "driver": "Backlog 86%, 2 on hold"
+            },
+            "operational": {
+              "class": "High",
+              "driver": "4 emergencies"
+            }
+          }
+        },
+        "costRisk": {
+          "class": "High",
+          "driver": "Cashflow deviation -15.8%",
+          "subComponents": {
+            "costVariance": {
+              "class": "Medium",
+              "driver": "Minor overrun 3.5%"
+            },
+            "cpiSpi": {
+              "class": "Low",
+              "driver": "CPI=1.15, SPI=1.02"
+            },
+            "cashflow": {
+              "class": "High",
+              "driver": "Cashflow deviation -15.8%"
+            }
+          }
+        },
+        "supplierRisk": {
+          "class": "Low",
+          "driver": "No data",
+          "subComponents": {
+            "concentration": {
+              "class": "Low",
+              "driver": "No data"
+            },
+            "performance": {
+              "class": "Low",
+              "driver": "No data"
+            }
+          }
+        },
+        "owner": "PM-9",
+        "contractorId": ""
+      },
+      "position": {
+        "x": 541.0,
+        "y": 1193.0
+      }
+    },
+    {
+      "id": "WP-0002",
+      "type": "workPackage",
+      "data": {
+        "label": "WP-0002: Work Package 2: Safety Systems",
+        "subtitle": "IT Systems \u00b7 Remote",
+        "status": "In Progress",
+        "priority": "Critical",
+        "riskScore": 0.85,
+        "severity": "critical",
+        "metrics": {
+          "completionPct": 23.22,
+          "plannedCost": 821688.6,
+          "actualCost": 0,
+          "budgetVariance": 0,
+          "cpi": 0.758,
+          "spi": 0.829
+        },
+        "deliveryRisk": {
+          "class": "High",
+          "driver": "Backlog 100%, 1 on hold",
+          "subComponents": {
+            "milestoneDelay": {
+              "class": "Medium",
+              "driver": "Delay or at-risk signals present"
+            },
+            "completionSlippage": {
+              "class": "Medium",
+              "driver": "Completion at 23%"
+            },
+            "soBacklog": {
+              "class": "High",
+              "driver": "Backlog 100%, 1 on hold"
+            },
+            "operational": {
+              "class": "Medium",
+              "driver": "2 unresolved"
+            }
+          }
+        },
+        "costRisk": {
+          "class": "High",
+          "driver": "CPI=0.76, SPI=0.83",
+          "subComponents": {
+            "costVariance": {
+              "class": "Low",
+              "driver": "Within budget"
+            },
+            "cpiSpi": {
+              "class": "High",
+              "driver": "CPI=0.76, SPI=0.83"
+            },
+            "cashflow": {
+              "class": "High",
+              "driver": "Cashflow deviation 18.3%"
+            }
+          }
+        },
+        "supplierRisk": {
+          "class": "High",
+          "driver": "Single supplier (SPOF)",
+          "subComponents": {
+            "concentration": {
+              "class": "High",
+              "driver": "Single supplier (SPOF)"
+            },
+            "performance": {
+              "class": "High",
+              "driver": "1 non-compliant, avg score 68%"
+            }
+          }
+        },
+        "owner": "PM-10",
+        "contractorId": "CONTRACTOR-1"
+      },
+      "position": {
+        "x": 1196.0,
+        "y": 871.0
+      }
+    },
+    {
+      "id": "WP-0003",
+      "type": "workPackage",
+      "data": {
+        "label": "WP-0003: Work Package 3: Site Preparation",
+        "subtitle": "Construction \u00b7 Remote",
+        "status": "Completed",
+        "priority": "Medium",
+        "riskScore": 0.85,
+        "severity": "critical",
+        "metrics": {
+          "completionPct": 100.0,
+          "plannedCost": 27826011.25,
+          "actualCost": 27851777.79,
+          "budgetVariance": 0.09,
+          "cpi": 1.221,
+          "spi": 1.084
+        },
+        "deliveryRisk": {
+          "class": "Medium",
+          "driver": "Backlog 50%",
+          "subComponents": {
+            "milestoneDelay": {
+              "class": "Low",
+              "driver": "No data"
+            },
+            "completionSlippage": {
+              "class": "Low",
+              "driver": "On track"
+            },
+            "soBacklog": {
+              "class": "Medium",
+              "driver": "Backlog 50%"
+            },
+            "operational": {
+              "class": "Medium",
+              "driver": "1 unresolved"
+            }
+          }
+        },
+        "costRisk": {
+          "class": "High",
+          "driver": "Cashflow deviation -16.1%",
+          "subComponents": {
+            "costVariance": {
+              "class": "Low",
+              "driver": "Within budget"
+            },
+            "cpiSpi": {
+              "class": "Low",
+              "driver": "CPI=1.22, SPI=1.08"
+            },
+            "cashflow": {
+              "class": "High",
+              "driver": "Cashflow deviation -16.1%"
+            }
+          }
+        },
+        "supplierRisk": {
+          "class": "Low",
+          "driver": "No data",
+          "subComponents": {
+            "concentration": {
+              "class": "Low",
+              "driver": "No data"
+            },
+            "performance": {
+              "class": "Low",
+              "driver": "No data"
+            }
+          }
+        },
+        "owner": "PM-2",
+        "contractorId": "CONTRACTOR-8"
+      },
+      "position": {
+        "x": 66.0,
+        "y": -196.0
+      }
+    },
+    {
+      "id": "WP-0004",
+      "type": "workPackage",
+      "data": {
+        "label": "WP-0004: Work Package 4: Site Preparation",
+        "subtitle": "IT Systems \u00b7 Canary Wharf",
+        "status": "In Progress",
+        "priority": "Medium",
+        "riskScore": 0.85,
+        "severity": "critical",
+        "metrics": {
+          "completionPct": 55.4,
+          "plannedCost": 35240105.52,
+          "actualCost": 0,
+          "budgetVariance": 0,
+          "cpi": 0.717,
+          "spi": 0.803
+        },
+        "deliveryRisk": {
+          "class": "High",
+          "driver": "High delay proportion (\u226570%)",
+          "subComponents": {
+            "milestoneDelay": {
+              "class": "High",
+              "driver": "High delay proportion (\u226570%)"
+            },
+            "completionSlippage": {
+              "class": "Medium",
+              "driver": "Completion at 55%"
+            },
+            "soBacklog": {
+              "class": "Medium",
+              "driver": "Backlog 50%"
+            },
+            "operational": {
+              "class": "Low",
+              "driver": "No operational incidents"
+            }
+          }
+        },
+        "costRisk": {
+          "class": "High",
+          "driver": "CPI=0.72, SPI=0.80",
+          "subComponents": {
+            "costVariance": {
+              "class": "Low",
+              "driver": "Within budget"
+            },
+            "cpiSpi": {
+              "class": "High",
+              "driver": "CPI=0.72, SPI=0.80"
+            },
+            "cashflow": {
+              "class": "Low",
+              "driver": "Cashflow on track"
+            }
+          }
+        },
+        "supplierRisk": {
+          "class": "Low",
+          "driver": "No data",
+          "subComponents": {
+            "concentration": {
+              "class": "Low",
+              "driver": "No data"
+            },
+            "performance": {
+              "class": "Low",
+              "driver": "No data"
+            }
+          }
+        },
+        "owner": "PM-11",
+        "contractorId": "CONTRACTOR-13"
+      },
+      "position": {
+        "x": -105.0,
+        "y": 804.0
+      }
+    },
+    {
+      "id": "WP-0005",
+      "type": "workPackage",
+      "data": {
+        "label": "WP-0005: Work Package 5: Documentation",
+        "subtitle": "Construction \u00b7 Thames Gateway",
+        "status": "In Progress",
+        "priority": "High",
+        "riskScore": 0.85,
+        "severity": "critical",
+        "metrics": {
+          "completionPct": 52.43,
+          "plannedCost": 45700238.15,
+          "actualCost": 45969673.66,
+          "budgetVariance": 0.59,
+          "cpi": 1.062,
+          "spi": 0.946
+        },
+        "deliveryRisk": {
+          "class": "High",
+          "driver": "Backlog 100%, 0 on hold",
+          "subComponents": {
+            "milestoneDelay": {
+              "class": "Medium",
+              "driver": "Delay or at-risk signals present"
+            },
+            "completionSlippage": {
+              "class": "Medium",
+              "driver": "Completion at 52%"
+            },
+            "soBacklog": {
+              "class": "High",
+              "driver": "Backlog 100%, 0 on hold"
+            },
+            "operational": {
+              "class": "High",
+              "driver": "1 emergencies"
+            }
+          }
+        },
+        "costRisk": {
+          "class": "Medium",
+          "driver": "CPI=1.06, SPI=0.95",
+          "subComponents": {
+            "costVariance": {
+              "class": "Low",
+              "driver": "Within budget"
+            },
+            "cpiSpi": {
+              "class": "Medium",
+              "driver": "CPI=1.06, SPI=0.95"
+            },
+            "cashflow": {
+              "class": "Medium",
+              "driver": "Minor cashflow deviation 11.1%"
+            }
+          }
+        },
+        "supplierRisk": {
+          "class": "High",
+          "driver": "2 non-compliant, avg score 61%",
+          "subComponents": {
+            "concentration": {
+              "class": "Medium",
+              "driver": "2 suppliers"
+            },
+            "performance": {
+              "class": "High",
+              "driver": "2 non-compliant, avg score 61%"
+            }
+          }
+        },
+        "owner": "PM-12",
+        "contractorId": "CONTRACTOR-15"
+      },
+      "position": {
+        "x": 859.0,
+        "y": 1110.0
+      }
+    },
+    {
+      "id": "WP-0006",
+      "type": "workPackage",
+      "data": {
+        "label": "WP-0006: Work Package 6: Quality Assurance",
+        "subtitle": "IT Systems \u00b7 Thames Gateway",
+        "status": "In Progress",
+        "priority": "Low",
+        "riskScore": 0.85,
+        "severity": "critical",
+        "metrics": {
+          "completionPct": 23.6,
+          "plannedCost": 24929033.83,
+          "actualCost": 25254485.99,
+          "budgetVariance": 1.31,
+          "cpi": 0.863,
+          "spi": 0.783
+        },
+        "deliveryRisk": {
+          "class": "Medium",
+          "driver": "Delay or at-risk signals present",
+          "subComponents": {
+            "milestoneDelay": {
+              "class": "Medium",
+              "driver": "Delay or at-risk signals present"
+            },
+            "completionSlippage": {
+              "class": "Medium",
+              "driver": "Completion at 24%"
+            },
+            "soBacklog": {
+              "class": "Medium",
+              "driver": "Backlog 50%"
+            },
+            "operational": {
+              "class": "Low",
+              "driver": "No operational incidents"
+            }
+          }
+        },
+        "costRisk": {
+          "class": "High",
+          "driver": "CPI=0.86, SPI=0.78",
+          "subComponents": {
+            "costVariance": {
+              "class": "Low",
+              "driver": "Within budget"
+            },
+            "cpiSpi": {
+              "class": "High",
+              "driver": "CPI=0.86, SPI=0.78"
+            },
+            "cashflow": {
+              "class": "High",
+              "driver": "Cashflow deviation -24.1%"
+            }
+          }
+        },
+        "supplierRisk": {
+          "class": "Low",
+          "driver": "No data",
+          "subComponents": {
+            "concentration": {
+              "class": "Low",
+              "driver": "No data"
+            },
+            "performance": {
+              "class": "Low",
+              "driver": "No data"
+            }
+          }
+        },
+        "owner": "PM-11",
+        "contractorId": "CONTRACTOR-11"
+      },
+      "position": {
+        "x": 16.0,
+        "y": 993.0
+      }
+    },
+    {
+      "id": "WP-0007",
+      "type": "workPackage",
+      "data": {
+        "label": "WP-0007: Work Package 7: Bridge Rehabilitation",
+        "subtitle": "Facilities \u00b7 Thames Gateway",
+        "status": "Cancelled",
+        "priority": "High",
+        "riskScore": 0.85,
+        "severity": "critical",
+        "metrics": {
+          "completionPct": 7.62,
+          "plannedCost": 660643.15,
+          "actualCost": 664596.46,
+          "budgetVariance": 0.6,
+          "cpi": 0.908,
+          "spi": 0.915
+        },
+        "deliveryRisk": {
+          "class": "High",
+          "driver": "Status: Cancelled",
+          "subComponents": {
+            "milestoneDelay": {
+              "class": "Low",
+              "driver": "No delays detected"
+            },
+            "completionSlippage": {
+              "class": "High",
+              "driver": "Status: Cancelled"
+            },
+            "soBacklog": {
+              "class": "High",
+              "driver": "Backlog 100%, 0 on hold"
+            },
+            "operational": {
+              "class": "Medium",
+              "driver": "5 unresolved"
+            }
+          }
+        },
+        "costRisk": {
+          "class": "High",
+          "driver": "Cashflow deviation 24.5%",
+          "subComponents": {
+            "costVariance": {
+              "class": "Low",
+              "driver": "Within budget"
+            },
+            "cpiSpi": {
+              "class": "Medium",
+              "driver": "CPI=0.91, SPI=0.92"
+            },
+            "cashflow": {
+              "class": "High",
+              "driver": "Cashflow deviation 24.5%"
+            }
+          }
+        },
+        "supplierRisk": {
+          "class": "Low",
+          "driver": "No data",
+          "subComponents": {
+            "concentration": {
+              "class": "Low",
+              "driver": "No data"
+            },
+            "performance": {
+              "class": "Low",
+              "driver": "No data"
+            }
+          }
+        },
+        "owner": "PM-9",
+        "contractorId": "CONTRACTOR-15"
+      },
+      "position": {
+        "x": 1239.0,
+        "y": -75.0
+      }
+    },
+    {
+      "id": "WP-0008",
+      "type": "workPackage",
+      "data": {
+        "label": "WP-0008: Work Package 8: Bridge Rehabilitation",
+        "subtitle": "IT Systems \u00b7 King's Cross",
+        "status": "In Progress",
+        "priority": "Critical",
+        "riskScore": 0.85,
+        "severity": "critical",
+        "metrics": {
+          "completionPct": 30.47,
+          "plannedCost": 18467547.98,
+          "actualCost": 18658479.16,
+          "budgetVariance": 1.03,
+          "cpi": 0.866,
+          "spi": 0.766
+        },
+        "deliveryRisk": {
+          "class": "Medium",
+          "driver": "Delay or at-risk signals present",
+          "subComponents": {
+            "milestoneDelay": {
+              "class": "Medium",
+              "driver": "Delay or at-risk signals present"
+            },
+            "completionSlippage": {
+              "class": "Medium",
+              "driver": "Completion at 30%"
+            },
+            "soBacklog": {
+              "class": "Medium",
+              "driver": "Backlog 75%"
+            },
+            "operational": {
+              "class": "Medium",
+              "driver": "6 unresolved"
+            }
+          }
+        },
+        "costRisk": {
+          "class": "High",
+          "driver": "CPI=0.87, SPI=0.77",
+          "subComponents": {
+            "costVariance": {
+              "class": "Low",
+              "driver": "Within budget"
+            },
+            "cpiSpi": {
+              "class": "High",
+              "driver": "CPI=0.87, SPI=0.77"
+            },
+            "cashflow": {
+              "class": "High",
+              "driver": "Cashflow deviation 18.6%"
+            }
+          }
+        },
+        "supplierRisk": {
+          "class": "Low",
+          "driver": "No data",
+          "subComponents": {
+            "concentration": {
+              "class": "Low",
+              "driver": "No data"
+            },
+            "performance": {
+              "class": "Low",
+              "driver": "No data"
+            }
+          }
+        },
+        "owner": "PM-3",
+        "contractorId": "CONTRACTOR-9"
+      },
+      "position": {
+        "x": -11.0,
+        "y": -105.0
+      }
+    },
+    {
+      "id": "WP-0009",
+      "type": "workPackage",
+      "data": {
+        "label": "WP-0009: Work Package 9: Safety Systems",
+        "subtitle": "IT Systems \u00b7 Thames Gateway",
+        "status": "In Progress",
+        "priority": "Critical",
+        "riskScore": 0.85,
+        "severity": "critical",
+        "metrics": {
+          "completionPct": 94.59,
+          "plannedCost": 27195156.39,
+          "actualCost": 26652818.43,
+          "budgetVariance": -1.99,
+          "cpi": 0.919,
+          "spi": 0.849
+        },
+        "deliveryRisk": {
+          "class": "High",
+          "driver": "Backlog 83%, 0 on hold",
+          "subComponents": {
+            "milestoneDelay": {
+              "class": "Low",
+              "driver": "No delays detected"
+            },
+            "completionSlippage": {
+              "class": "Low",
+              "driver": "On track"
+            },
+            "soBacklog": {
+              "class": "High",
+              "driver": "Backlog 83%, 0 on hold"
+            },
+            "operational": {
+              "class": "High",
+              "driver": "5 emergencies"
+            }
+          }
+        },
+        "costRisk": {
+          "class": "High",
+          "driver": "Cashflow deviation 22.7%",
+          "subComponents": {
+            "costVariance": {
+              "class": "Low",
+              "driver": "Within budget"
+            },
+            "cpiSpi": {
+              "class": "Medium",
+              "driver": "CPI=0.92, SPI=0.85"
+            },
+            "cashflow": {
+              "class": "High",
+              "driver": "Cashflow deviation 22.7%"
+            }
+          }
+        },
+        "supplierRisk": {
+          "class": "Low",
+          "driver": "No data",
+          "subComponents": {
+            "concentration": {
+              "class": "Low",
+              "driver": "No data"
+            },
+            "performance": {
+              "class": "Low",
+              "driver": "No data"
+            }
+          }
+        },
+        "owner": "PM-6",
+        "contractorId": ""
+      },
+      "position": {
+        "x": 17.0,
+        "y": 844.0
+      }
+    },
+    {
+      "id": "WP-0010",
+      "type": "workPackage",
+      "data": {
+        "label": "WP-0010: Work Package 10: Documentation",
+        "subtitle": "Construction \u00b7 Canary Wharf",
+        "status": "In Progress",
+        "priority": "Low",
+        "riskScore": 0.55,
+        "severity": "high",
+        "metrics": {
+          "completionPct": 30.23,
+          "plannedCost": 11832618.3,
+          "actualCost": 0,
+          "budgetVariance": 0,
+          "cpi": 1.248,
+          "spi": 1.079
+        },
+        "deliveryRisk": {
+          "class": "Medium",
+          "driver": "Delay or at-risk signals present",
+          "subComponents": {
+            "milestoneDelay": {
+              "class": "Medium",
+              "driver": "Delay or at-risk signals present"
+            },
+            "completionSlippage": {
+              "class": "Medium",
+              "driver": "Completion at 30%"
+            },
+            "soBacklog": {
+              "class": "Medium",
+              "driver": "Backlog 40%"
+            },
+            "operational": {
+              "class": "Medium",
+              "driver": "2 unresolved"
+            }
+          }
+        },
+        "costRisk": {
+          "class": "Medium",
+          "driver": "Minor cashflow deviation 9.9%",
+          "subComponents": {
+            "costVariance": {
+              "class": "Low",
+              "driver": "Within budget"
+            },
+            "cpiSpi": {
+              "class": "Low",
+              "driver": "CPI=1.25, SPI=1.08"
+            },
+            "cashflow": {
+              "class": "Medium",
+              "driver": "Minor cashflow deviation 9.9%"
+            }
+          }
+        },
+        "supplierRisk": {
+          "class": "Low",
+          "driver": "No data",
+          "subComponents": {
+            "concentration": {
+              "class": "Low",
+              "driver": "No data"
+            },
+            "performance": {
+              "class": "Low",
+              "driver": "No data"
+            }
+          }
+        },
+        "owner": "PM-7",
+        "contractorId": ""
+      },
+      "position": {
+        "x": 325.0,
+        "y": -301.0
+      }
+    },
+    {
+      "id": "WP-0011",
+      "type": "workPackage",
+      "data": {
+        "label": "WP-0011: Work Package 11: Bridge Rehabilitation",
+        "subtitle": "Construction \u00b7 Canary Wharf",
+        "status": "In Progress",
+        "priority": "Low",
+        "riskScore": 0.85,
+        "severity": "critical",
+        "metrics": {
+          "completionPct": 71.9,
+          "plannedCost": 3181473.77,
+          "actualCost": 0,
+          "budgetVariance": 0,
+          "cpi": 1.012,
+          "spi": 1.019
+        },
+        "deliveryRisk": {
+          "class": "High",
+          "driver": "High delay proportion (\u226570%)",
+          "subComponents": {
+            "milestoneDelay": {
+              "class": "High",
+              "driver": "High delay proportion (\u226570%)"
+            },
+            "completionSlippage": {
+              "class": "Low",
+              "driver": "On track"
+            },
+            "soBacklog": {
+              "class": "Medium",
+              "driver": "Backlog 78%"
+            },
+            "operational": {
+              "class": "Medium",
+              "driver": "4 unresolved"
+            }
+          }
+        },
+        "costRisk": {
+          "class": "Low",
+          "driver": "Within budget",
+          "subComponents": {
+            "costVariance": {
+              "class": "Low",
+              "driver": "Within budget"
+            },
+            "cpiSpi": {
+              "class": "Low",
+              "driver": "CPI=1.01, SPI=1.02"
+            },
+            "cashflow": {
+              "class": "Low",
+              "driver": "Cashflow on track"
+            }
+          }
+        },
+        "supplierRisk": {
+          "class": "Low",
+          "driver": "No data",
+          "subComponents": {
+            "concentration": {
+              "class": "Low",
+              "driver": "No data"
+            },
+            "performance": {
+              "class": "Low",
+              "driver": "No data"
+            }
+          }
+        },
+        "owner": "PM-5",
+        "contractorId": "CONTRACTOR-14"
+      },
+      "position": {
+        "x": 776.0,
+        "y": -363.0
+      }
+    },
+    {
+      "id": "WP-0012",
+      "type": "workPackage",
+      "data": {
+        "label": "WP-0012: Work Package 12: Site Preparation",
+        "subtitle": "Construction \u00b7 Greenwich",
+        "status": "In Progress",
+        "priority": "Low",
+        "riskScore": 0.55,
+        "severity": "high",
+        "metrics": {
+          "completionPct": 51.28,
+          "plannedCost": 48465314.74,
+          "actualCost": 0,
+          "budgetVariance": 0,
+          "cpi": 0.82,
+          "spi": 0.967
+        },
+        "deliveryRisk": {
+          "class": "Medium",
+          "driver": "Delay or at-risk signals present",
+          "subComponents": {
+            "milestoneDelay": {
+              "class": "Medium",
+              "driver": "Delay or at-risk signals present"
+            },
+            "completionSlippage": {
+              "class": "Medium",
+              "driver": "Completion at 51%"
+            },
+            "soBacklog": {
+              "class": "Medium",
+              "driver": "Backlog 50%"
+            },
+            "operational": {
+              "class": "Low",
+              "driver": "No operational incidents"
+            }
+          }
+        },
+        "costRisk": {
+          "class": "Medium",
+          "driver": "CPI=0.82, SPI=0.97",
+          "subComponents": {
+            "costVariance": {
+              "class": "Low",
+              "driver": "Within budget"
+            },
+            "cpiSpi": {
+              "class": "Medium",
+              "driver": "CPI=0.82, SPI=0.97"
+            },
+            "cashflow": {
+              "class": "Medium",
+              "driver": "Minor cashflow deviation 9.0%"
+            }
+          }
+        },
+        "supplierRisk": {
+          "class": "Low",
+          "driver": "No data",
+          "subComponents": {
+            "concentration": {
+              "class": "Low",
+              "driver": "No data"
+            },
+            "performance": {
+              "class": "Low",
+              "driver": "No data"
+            }
+          }
+        },
+        "owner": "PM-5",
+        "contractorId": "CONTRACTOR-13"
+      },
+      "position": {
+        "x": -97.0,
+        "y": 111.0
+      }
+    },
+    {
+      "id": "WP-0013",
+      "type": "workPackage",
+      "data": {
+        "label": "WP-0013: Work Package 13: Safety Systems",
+        "subtitle": "Facilities \u00b7 King's Cross",
+        "status": "On Hold",
+        "priority": "Low",
+        "riskScore": 0.85,
+        "severity": "critical",
+        "metrics": {
+          "completionPct": 0.61,
+          "plannedCost": 9899944.43,
+          "actualCost": 0,
+          "budgetVariance": 0,
+          "cpi": 1.001,
+          "spi": 0.87
+        },
+        "deliveryRisk": {
+          "class": "High",
+          "driver": "Status: On Hold",
+          "subComponents": {
+            "milestoneDelay": {
+              "class": "Medium",
+              "driver": "Delay or at-risk signals present"
+            },
+            "completionSlippage": {
+              "class": "High",
+              "driver": "Status: On Hold"
+            },
+            "soBacklog": {
+              "class": "High",
+              "driver": "Backlog 75%, 2 on hold"
+            },
+            "operational": {
+              "class": "Medium",
+              "driver": "3 unresolved"
+            }
+          }
+        },
+        "costRisk": {
+          "class": "High",
+          "driver": "Cashflow deviation 75.2%",
+          "subComponents": {
+            "costVariance": {
+              "class": "Low",
+              "driver": "Within budget"
+            },
+            "cpiSpi": {
+              "class": "Medium",
+              "driver": "CPI=1.00, SPI=0.87"
+            },
+            "cashflow": {
+              "class": "High",
+              "driver": "Cashflow deviation 75.2%"
+            }
+          }
+        },
+        "supplierRisk": {
+          "class": "High",
+          "driver": "Single supplier (SPOF)",
+          "subComponents": {
+            "concentration": {
+              "class": "High",
+              "driver": "Single supplier (SPOF)"
+            },
+            "performance": {
+              "class": "High",
+              "driver": "1 non-compliant, avg score 67%"
+            }
+          }
+        },
+        "owner": "PM-1",
+        "contractorId": "CONTRACTOR-2"
+      },
+      "position": {
+        "x": 580.0,
+        "y": 1164.0
+      }
+    },
+    {
+      "id": "WP-0014",
+      "type": "workPackage",
+      "data": {
+        "label": "WP-0014: Work Package 14: Quality Assurance",
+        "subtitle": "Construction \u00b7 Greenwich",
+        "status": "In Progress",
+        "priority": "Medium",
+        "riskScore": 0.85,
+        "severity": "critical",
+        "metrics": {
+          "completionPct": 62.65,
+          "plannedCost": 6434387.39,
+          "actualCost": 6320568.02,
+          "budgetVariance": -1.77,
+          "cpi": 0.833,
+          "spi": 0.96
+        },
+        "deliveryRisk": {
+          "class": "Medium",
+          "driver": "Delay or at-risk signals present",
+          "subComponents": {
+            "milestoneDelay": {
+              "class": "Medium",
+              "driver": "Delay or at-risk signals present"
+            },
+            "completionSlippage": {
+              "class": "Low",
+              "driver": "On track"
+            },
+            "soBacklog": {
+              "class": "Medium",
+              "driver": "Backlog 50%"
+            },
+            "operational": {
+              "class": "Low",
+              "driver": "No operational incidents"
+            }
+          }
+        },
+        "costRisk": {
+          "class": "High",
+          "driver": "Cashflow deviation 15.2%",
+          "subComponents": {
+            "costVariance": {
+              "class": "Low",
+              "driver": "Within budget"
+            },
+            "cpiSpi": {
+              "class": "Medium",
+              "driver": "CPI=0.83, SPI=0.96"
+            },
+            "cashflow": {
+              "class": "High",
+              "driver": "Cashflow deviation 15.2%"
+            }
+          }
+        },
+        "supplierRisk": {
+          "class": "Low",
+          "driver": "No data",
+          "subComponents": {
+            "concentration": {
+              "class": "Low",
+              "driver": "No data"
+            },
+            "performance": {
+              "class": "Low",
+              "driver": "No data"
+            }
+          }
+        },
+        "owner": "PM-3",
+        "contractorId": "CONTRACTOR-5"
+      },
+      "position": {
+        "x": -155.0,
+        "y": 529.0
+      }
+    },
+    {
+      "id": "WP-0015",
+      "type": "workPackage",
+      "data": {
+        "label": "WP-0015: Work Package 15: Bridge Rehabilitation",
+        "subtitle": "Engineering \u00b7 Remote",
+        "status": "In Progress",
+        "priority": "High",
+        "riskScore": 0.85,
+        "severity": "critical",
+        "metrics": {
+          "completionPct": 89.33,
+          "plannedCost": 49806774.17,
+          "actualCost": 0,
+          "budgetVariance": 0,
+          "cpi": 0.738,
+          "spi": 0.799
+        },
+        "deliveryRisk": {
+          "class": "High",
+          "driver": "Backlog 80%, 0 on hold",
+          "subComponents": {
+            "milestoneDelay": {
+              "class": "Low",
+              "driver": "No delays detected"
+            },
+            "completionSlippage": {
+              "class": "Low",
+              "driver": "On track"
+            },
+            "soBacklog": {
+              "class": "High",
+              "driver": "Backlog 80%, 0 on hold"
+            },
+            "operational": {
+              "class": "Medium",
+              "driver": "4 unresolved"
+            }
+          }
+        },
+        "costRisk": {
+          "class": "High",
+          "driver": "CPI=0.74, SPI=0.80",
+          "subComponents": {
+            "costVariance": {
+              "class": "Low",
+              "driver": "Within budget"
+            },
+            "cpiSpi": {
+              "class": "High",
+              "driver": "CPI=0.74, SPI=0.80"
+            },
+            "cashflow": {
+              "class": "High",
+              "driver": "Cashflow deviation 23.6%"
+            }
+          }
+        },
+        "supplierRisk": {
+          "class": "High",
+          "driver": "1 non-compliant, avg score 63%",
+          "subComponents": {
+            "concentration": {
+              "class": "Medium",
+              "driver": "2 suppliers"
+            },
+            "performance": {
+              "class": "High",
+              "driver": "1 non-compliant, avg score 63%"
+            }
+          }
+        },
+        "owner": "PM-10",
+        "contractorId": "CONTRACTOR-13"
+      },
+      "position": {
+        "x": 623.0,
+        "y": -397.0
+      }
+    },
+    {
+      "id": "WP-0016",
+      "type": "workPackage",
+      "data": {
+        "label": "WP-0016: Work Package 16: Environmental Remediation",
+        "subtitle": "Engineering \u00b7 Canary Wharf",
+        "status": "On Hold",
+        "priority": "High",
+        "riskScore": 0.85,
+        "severity": "critical",
+        "metrics": {
+          "completionPct": 1.55,
+          "plannedCost": 43967284.77,
+          "actualCost": 47151755.04,
+          "budgetVariance": 7.24,
+          "cpi": 1.064,
+          "spi": 1.032
+        },
+        "deliveryRisk": {
+          "class": "High",
+          "driver": "Status: On Hold",
+          "subComponents": {
+            "milestoneDelay": {
+              "class": "Low",
+              "driver": "No delays detected"
+            },
+            "completionSlippage": {
+              "class": "High",
+              "driver": "Status: On Hold"
+            },
+            "soBacklog": {
+              "class": "High",
+              "driver": "Backlog 80%, 1 on hold"
+            },
+            "operational": {
+              "class": "High",
+              "driver": "2 emergencies"
+            }
+          }
+        },
+        "costRisk": {
+          "class": "Medium",
+          "driver": "Minor overrun 7.2%",
+          "subComponents": {
+            "costVariance": {
+              "class": "Medium",
+              "driver": "Minor overrun 7.2%"
+            },
+            "cpiSpi": {
+              "class": "Low",
+              "driver": "CPI=1.06, SPI=1.03"
+            },
+            "cashflow": {
+              "class": "Low",
+              "driver": "Cashflow on track"
+            }
+          }
+        },
+        "supplierRisk": {
+          "class": "Low",
+          "driver": "No data",
+          "subComponents": {
+            "concentration": {
+              "class": "Low",
+              "driver": "No data"
+            },
+            "performance": {
+              "class": "Low",
+              "driver": "No data"
+            }
+          }
+        },
+        "owner": "PM-9",
+        "contractorId": "CONTRACTOR-15"
+      },
+      "position": {
+        "x": 827.0,
+        "y": -344.0
+      }
+    },
+    {
+      "id": "WP-0017",
+      "type": "workPackage",
+      "data": {
+        "label": "WP-0017: Work Package 17: Quality Assurance",
+        "subtitle": "Infrastructure \u00b7 King's Cross",
+        "status": "In Progress",
+        "priority": "High",
+        "riskScore": 0.85,
+        "severity": "critical",
+        "metrics": {
+          "completionPct": 47.56,
+          "plannedCost": 17011048.66,
+          "actualCost": 18626239.03,
+          "budgetVariance": 9.49,
+          "cpi": 0.845,
+          "spi": 0.787
+        },
+        "deliveryRisk": {
+          "class": "High",
+          "driver": "Backlog 100%, 2 on hold",
+          "subComponents": {
+            "milestoneDelay": {
+              "class": "Medium",
+              "driver": "Delay or at-risk signals present"
+            },
+            "completionSlippage": {
+              "class": "Medium",
+              "driver": "Completion at 48%"
+            },
+            "soBacklog": {
+              "class": "High",
+              "driver": "Backlog 100%, 2 on hold"
+            },
+            "operational": {
+              "class": "High",
+              "driver": "4 emergencies"
+            }
+          }
+        },
+        "costRisk": {
+          "class": "High",
+          "driver": "CPI=0.84, SPI=0.79",
+          "subComponents": {
+            "costVariance": {
+              "class": "Medium",
+              "driver": "Minor overrun 9.5%"
+            },
+            "cpiSpi": {
+              "class": "High",
+              "driver": "CPI=0.84, SPI=0.79"
+            },
+            "cashflow": {
+              "class": "High",
+              "driver": "Cashflow deviation -17.3%"
+            }
+          }
+        },
+        "supplierRisk": {
+          "class": "High",
+          "driver": "Single supplier (SPOF)",
+          "subComponents": {
+            "concentration": {
+              "class": "High",
+              "driver": "Single supplier (SPOF)"
+            },
+            "performance": {
+              "class": "High",
+              "driver": "1 non-compliant, avg score 69%"
+            }
+          }
+        },
+        "owner": "PM-10",
+        "contractorId": "CONTRACTOR-7"
+      },
+      "position": {
+        "x": 125.0,
+        "y": 1072.0
+      }
+    },
+    {
+      "id": "WP-0018",
+      "type": "workPackage",
+      "data": {
+        "label": "WP-0018: Work Package 18: Quality Assurance",
+        "subtitle": "Construction \u00b7 Greenwich",
+        "status": "In Progress",
+        "priority": "High",
+        "riskScore": 0.85,
+        "severity": "critical",
+        "metrics": {
+          "completionPct": 18.74,
+          "plannedCost": 43104777.81,
+          "actualCost": 0,
+          "budgetVariance": 0,
+          "cpi": 0.738,
+          "spi": 0.854
+        },
+        "deliveryRisk": {
+          "class": "High",
+          "driver": "Backlog 86%, 2 on hold",
+          "subComponents": {
+            "milestoneDelay": {
+              "class": "Low",
+              "driver": "No delays detected"
+            },
+            "completionSlippage": {
+              "class": "Medium",
+              "driver": "Completion at 19%"
+            },
+            "soBacklog": {
+              "class": "High",
+              "driver": "Backlog 86%, 2 on hold"
+            },
+            "operational": {
+              "class": "High",
+              "driver": "4 emergencies"
+            }
+          }
+        },
+        "costRisk": {
+          "class": "High",
+          "driver": "CPI=0.74, SPI=0.85",
+          "subComponents": {
+            "costVariance": {
+              "class": "Low",
+              "driver": "Within budget"
+            },
+            "cpiSpi": {
+              "class": "High",
+              "driver": "CPI=0.74, SPI=0.85"
+            },
+            "cashflow": {
+              "class": "High",
+              "driver": "Cashflow deviation -20.2%"
+            }
+          }
+        },
+        "supplierRisk": {
+          "class": "High",
+          "driver": "Single supplier (SPOF)",
+          "subComponents": {
+            "concentration": {
+              "class": "High",
+              "driver": "Single supplier (SPOF)"
+            },
+            "performance": {
+              "class": "High",
+              "driver": "1 non-compliant, avg score 59%"
+            }
+          }
+        },
+        "owner": "PM-3",
+        "contractorId": "CONTRACTOR-6"
+      },
+      "position": {
+        "x": 1312.0,
+        "y": 798.0
+      }
+    },
+    {
+      "id": "WP-0019",
+      "type": "workPackage",
+      "data": {
+        "label": "WP-0019: Work Package 19: Documentation",
+        "subtitle": "Construction \u00b7 Canary Wharf",
+        "status": "Completed",
+        "priority": "High",
+        "riskScore": 0.85,
+        "severity": "critical",
+        "metrics": {
+          "completionPct": 100.0,
+          "plannedCost": 43672255.75,
+          "actualCost": 42847797.19,
+          "budgetVariance": -1.89,
+          "cpi": 0.732,
+          "spi": 0.836
+        },
+        "deliveryRisk": {
+          "class": "High",
+          "driver": "Severe delay days with significant proportion",
+          "subComponents": {
+            "milestoneDelay": {
+              "class": "High",
+              "driver": "Severe delay days with significant proportion"
+            },
+            "completionSlippage": {
+              "class": "Low",
+              "driver": "On track"
+            },
+            "soBacklog": {
+              "class": "Medium",
+              "driver": "Backlog 0%"
+            },
+            "operational": {
+              "class": "Medium",
+              "driver": "0 unresolved"
+            }
+          }
+        },
+        "costRisk": {
+          "class": "High",
+          "driver": "CPI=0.73, SPI=0.84",
+          "subComponents": {
+            "costVariance": {
+              "class": "Low",
+              "driver": "Within budget"
+            },
+            "cpiSpi": {
+              "class": "High",
+              "driver": "CPI=0.73, SPI=0.84"
+            },
+            "cashflow": {
+              "class": "Low",
+              "driver": "Cashflow on track"
+            }
+          }
+        },
+        "supplierRisk": {
+          "class": "High",
+          "driver": "2 non-compliant, avg score 60%",
+          "subComponents": {
+            "concentration": {
+              "class": "Medium",
+              "driver": "2 suppliers"
+            },
+            "performance": {
+              "class": "High",
+              "driver": "2 non-compliant, avg score 60%"
+            }
+          }
+        },
+        "owner": "PM-7",
+        "contractorId": "CONTRACTOR-14"
+      },
+      "position": {
+        "x": 259.0,
+        "y": -317.0
+      }
+    },
+    {
+      "id": "WP-0020",
+      "type": "workPackage",
+      "data": {
+        "label": "WP-0020: Work Package 20: Environmental Remediation",
+        "subtitle": "Engineering \u00b7 Greenwich",
+        "status": "Completed",
+        "priority": "Critical",
+        "riskScore": 0.85,
+        "severity": "critical",
+        "metrics": {
+          "completionPct": 100.0,
+          "plannedCost": 42261227.58,
+          "actualCost": 0,
+          "budgetVariance": 0,
+          "cpi": 0.821,
+          "spi": 0.822
+        },
+        "deliveryRisk": {
+          "class": "High",
+          "driver": "Backlog 86%, 1 on hold",
+          "subComponents": {
+            "milestoneDelay": {
+              "class": "Low",
+              "driver": "No delays detected"
+            },
+            "completionSlippage": {
+              "class": "Low",
+              "driver": "On track"
+            },
+            "soBacklog": {
+              "class": "High",
+              "driver": "Backlog 86%, 1 on hold"
+            },
+            "operational": {
+              "class": "Medium",
+              "driver": "4 unresolved"
+            }
+          }
+        },
+        "costRisk": {
+          "class": "High",
+          "driver": "CPI=0.82, SPI=0.82",
+          "subComponents": {
+            "costVariance": {
+              "class": "Low",
+              "driver": "Within budget"
+            },
+            "cpiSpi": {
+              "class": "High",
+              "driver": "CPI=0.82, SPI=0.82"
+            },
+            "cashflow": {
+              "class": "Medium",
+              "driver": "Minor cashflow deviation 10.5%"
+            }
+          }
+        },
+        "supplierRisk": {
+          "class": "High",
+          "driver": "Single supplier (SPOF)",
+          "subComponents": {
+            "concentration": {
+              "class": "High",
+              "driver": "Single supplier (SPOF)"
+            },
+            "performance": {
+              "class": "High",
+              "driver": "1 non-compliant, avg score 65%"
+            }
+          }
+        },
+        "owner": "PM-6",
+        "contractorId": "CONTRACTOR-6"
+      },
+      "position": {
+        "x": 1293.0,
+        "y": 108.0
+      }
+    },
+    {
+      "id": "WP-0021",
+      "type": "workPackage",
+      "data": {
+        "label": "WP-0021: Work Package 21: Site Preparation",
+        "subtitle": "Infrastructure \u00b7 Stratford",
+        "status": "On Hold",
+        "priority": "Medium",
+        "riskScore": 0.85,
+        "severity": "critical",
+        "metrics": {
+          "completionPct": 7.42,
+          "plannedCost": 583718.27,
+          "actualCost": 0,
+          "budgetVariance": 0,
+          "cpi": 1.056,
+          "spi": 1.037
+        },
+        "deliveryRisk": {
+          "class": "High",
+          "driver": "Status: On Hold",
+          "subComponents": {
+            "milestoneDelay": {
+              "class": "Medium",
+              "driver": "Delay or at-risk signals present"
+            },
+            "completionSlippage": {
+              "class": "High",
+              "driver": "Status: On Hold"
+            },
+            "soBacklog": {
+              "class": "Medium",
+              "driver": "Backlog 60%"
+            },
+            "operational": {
+              "class": "High",
+              "driver": "2 emergencies"
+            }
+          }
+        },
+        "costRisk": {
+          "class": "Medium",
+          "driver": "Minor cashflow deviation 9.4%",
+          "subComponents": {
+            "costVariance": {
+              "class": "Low",
+              "driver": "Within budget"
+            },
+            "cpiSpi": {
+              "class": "Low",
+              "driver": "CPI=1.06, SPI=1.04"
+            },
+            "cashflow": {
+              "class": "Medium",
+              "driver": "Minor cashflow deviation 9.4%"
+            }
+          }
+        },
+        "supplierRisk": {
+          "class": "High",
+          "driver": "Single supplier (SPOF)",
+          "subComponents": {
+            "concentration": {
+              "class": "High",
+              "driver": "Single supplier (SPOF)"
+            },
+            "performance": {
+              "class": "High",
+              "driver": "1 non-compliant, avg score 74%"
+            }
+          }
+        },
+        "owner": "PM-12",
+        "contractorId": "CONTRACTOR-9"
+      },
+      "position": {
+        "x": -179.0,
+        "y": 436.0
+      }
+    },
+    {
+      "id": "WP-0022",
+      "type": "workPackage",
+      "data": {
+        "label": "WP-0022: Work Package 22: Environmental Remediation",
+        "subtitle": "Infrastructure \u00b7 Greenwich",
+        "status": "On Hold",
+        "priority": "Medium",
+        "riskScore": 0.85,
+        "severity": "critical",
+        "metrics": {
+          "completionPct": 1.74,
+          "plannedCost": 9996084.6,
+          "actualCost": 0,
+          "budgetVariance": 0,
+          "cpi": 1.11,
+          "spi": 1.03
+        },
+        "deliveryRisk": {
+          "class": "High",
+          "driver": "Status: On Hold",
+          "subComponents": {
+            "milestoneDelay": {
+              "class": "Medium",
+              "driver": "Delay or at-risk signals present"
+            },
+            "completionSlippage": {
+              "class": "High",
+              "driver": "Status: On Hold"
+            },
+            "soBacklog": {
+              "class": "Medium",
+              "driver": "Backlog 40%"
+            },
+            "operational": {
+              "class": "Medium",
+              "driver": "1 unresolved"
+            }
+          }
+        },
+        "costRisk": {
+          "class": "Low",
+          "driver": "Within budget",
+          "subComponents": {
+            "costVariance": {
+              "class": "Low",
+              "driver": "Within budget"
+            },
+            "cpiSpi": {
+              "class": "Low",
+              "driver": "CPI=1.11, SPI=1.03"
+            },
+            "cashflow": {
+              "class": "Low",
+              "driver": "Cashflow on track"
+            }
+          }
+        },
+        "supplierRisk": {
+          "class": "Low",
+          "driver": "No data",
+          "subComponents": {
+            "concentration": {
+              "class": "Low",
+              "driver": "No data"
+            },
+            "performance": {
+              "class": "Low",
+              "driver": "No data"
+            }
+          }
+        },
+        "owner": "PM-10",
+        "contractorId": "CONTRACTOR-6"
+      },
+      "position": {
+        "x": -30.0,
+        "y": 930.0
+      }
+    },
+    {
+      "id": "WP-0023",
+      "type": "workPackage",
+      "data": {
+        "label": "WP-0023: Work Package 23: Safety Systems",
+        "subtitle": "Engineering \u00b7 Greenwich",
+        "status": "In Progress",
+        "priority": "High",
+        "riskScore": 0.85,
+        "severity": "critical",
+        "metrics": {
+          "completionPct": 66.43,
+          "plannedCost": 48011684.18,
+          "actualCost": 0,
+          "budgetVariance": 0,
+          "cpi": 0.869,
+          "spi": 1.0
+        },
+        "deliveryRisk": {
+          "class": "Medium",
+          "driver": "Delay or at-risk signals present",
+          "subComponents": {
+            "milestoneDelay": {
+              "class": "Medium",
+              "driver": "Delay or at-risk signals present"
+            },
+            "completionSlippage": {
+              "class": "Low",
+              "driver": "On track"
+            },
+            "soBacklog": {
+              "class": "Medium",
+              "driver": "Backlog 50%"
+            },
+            "operational": {
+              "class": "Low",
+              "driver": "No operational incidents"
+            }
+          }
+        },
+        "costRisk": {
+          "class": "High",
+          "driver": "Cashflow deviation -24.9%",
+          "subComponents": {
+            "costVariance": {
+              "class": "Low",
+              "driver": "Within budget"
+            },
+            "cpiSpi": {
+              "class": "Medium",
+              "driver": "CPI=0.87, SPI=1.00"
+            },
+            "cashflow": {
+              "class": "High",
+              "driver": "Cashflow deviation -24.9%"
+            }
+          }
+        },
+        "supplierRisk": {
+          "class": "High",
+          "driver": "Single supplier (SPOF)",
+          "subComponents": {
+            "concentration": {
+              "class": "High",
+              "driver": "Single supplier (SPOF)"
+            },
+            "performance": {
+              "class": "High",
+              "driver": "1 non-compliant, avg score 60%"
+            }
+          }
+        },
+        "owner": "PM-1",
+        "contractorId": ""
+      },
+      "position": {
+        "x": 156.0,
+        "y": 1017.0
+      }
+    },
+    {
+      "id": "WP-0024",
+      "type": "workPackage",
+      "data": {
+        "label": "WP-0024: Work Package 24: Bridge Rehabilitation",
+        "subtitle": "Construction \u00b7 Greenwich",
+        "status": "In Progress",
+        "priority": "Low",
+        "riskScore": 0.85,
+        "severity": "critical",
+        "metrics": {
+          "completionPct": 68.45,
+          "plannedCost": 36058122.82,
+          "actualCost": 0,
+          "budgetVariance": 0,
+          "cpi": 1.009,
+          "spi": 0.908
+        },
+        "deliveryRisk": {
+          "class": "High",
+          "driver": "Backlog 100%, 0 on hold",
+          "subComponents": {
+            "milestoneDelay": {
+              "class": "Medium",
+              "driver": "Delay or at-risk signals present"
+            },
+            "completionSlippage": {
+              "class": "Low",
+              "driver": "On track"
+            },
+            "soBacklog": {
+              "class": "High",
+              "driver": "Backlog 100%, 0 on hold"
+            },
+            "operational": {
+              "class": "Low",
+              "driver": "No operational incidents"
+            }
+          }
+        },
+        "costRisk": {
+          "class": "High",
+          "driver": "Cashflow deviation -22.0%",
+          "subComponents": {
+            "costVariance": {
+              "class": "Low",
+              "driver": "Within budget"
+            },
+            "cpiSpi": {
+              "class": "Medium",
+              "driver": "CPI=1.01, SPI=0.91"
+            },
+            "cashflow": {
+              "class": "High",
+              "driver": "Cashflow deviation -22.0%"
+            }
+          }
+        },
+        "supplierRisk": {
+          "class": "High",
+          "driver": "Single supplier (SPOF)",
+          "subComponents": {
+            "concentration": {
+              "class": "High",
+              "driver": "Single supplier (SPOF)"
+            },
+            "performance": {
+              "class": "High",
+              "driver": "1 non-compliant, avg score 63%"
+            }
+          }
+        },
+        "owner": "PM-2",
+        "contractorId": "CONTRACTOR-13"
+      },
+      "position": {
+        "x": 228.0,
+        "y": 1017.0
+      }
+    },
+    {
+      "id": "WP-0025",
+      "type": "workPackage",
+      "data": {
+        "label": "WP-0025: Work Package 25: Documentation",
+        "subtitle": "Engineering \u00b7 Stratford",
+        "status": "In Progress",
+        "priority": "Low",
+        "riskScore": 0.85,
+        "severity": "critical",
+        "metrics": {
+          "completionPct": 83.23,
+          "plannedCost": 21623667.46,
+          "actualCost": 0,
+          "budgetVariance": 0,
+          "cpi": 1.135,
+          "spi": 1.014
+        },
+        "deliveryRisk": {
+          "class": "Medium",
+          "driver": "Backlog 75%",
+          "subComponents": {
+            "milestoneDelay": {
+              "class": "Low",
+              "driver": "No delays detected"
+            },
+            "completionSlippage": {
+              "class": "Low",
+              "driver": "On track"
+            },
+            "soBacklog": {
+              "class": "Medium",
+              "driver": "Backlog 75%"
+            },
+            "operational": {
+              "class": "Medium",
+              "driver": "3 unresolved"
+            }
+          }
+        },
+        "costRisk": {
+          "class": "Medium",
+          "driver": "Minor cashflow deviation 12.9%",
+          "subComponents": {
+            "costVariance": {
+              "class": "Low",
+              "driver": "Within budget"
+            },
+            "cpiSpi": {
+              "class": "Low",
+              "driver": "CPI=1.14, SPI=1.01"
+            },
+            "cashflow": {
+              "class": "Medium",
+              "driver": "Minor cashflow deviation 12.9%"
+            }
+          }
+        },
+        "supplierRisk": {
+          "class": "High",
+          "driver": "Single supplier (SPOF)",
+          "subComponents": {
+            "concentration": {
+              "class": "High",
+              "driver": "Single supplier (SPOF)"
+            },
+            "performance": {
+              "class": "High",
+              "driver": "1 non-compliant, avg score 60%"
+            }
+          }
+        },
+        "owner": "PM-8",
+        "contractorId": ""
+      },
+      "position": {
+        "x": 669.0,
+        "y": -370.0
+      }
+    },
+    {
+      "id": "WP-0026",
+      "type": "workPackage",
+      "data": {
+        "label": "WP-0026: Work Package 26: Safety Systems",
+        "subtitle": "Infrastructure \u00b7 Thames Gateway",
+        "status": "In Progress",
+        "priority": "High",
+        "riskScore": 0.85,
+        "severity": "critical",
+        "metrics": {
+          "completionPct": 45.26,
+          "plannedCost": 7966117.57,
+          "actualCost": 7075516.12,
+          "budgetVariance": -11.18,
+          "cpi": 1.021,
+          "spi": 1.078
+        },
+        "deliveryRisk": {
+          "class": "High",
+          "driver": "Slippage ratio 17%",
+          "subComponents": {
+            "milestoneDelay": {
+              "class": "Medium",
+              "driver": "Delay or at-risk signals present"
+            },
+            "completionSlippage": {
+              "class": "High",
+              "driver": "Slippage ratio 17%"
+            },
+            "soBacklog": {
+              "class": "High",
+              "driver": "Backlog 100%, 2 on hold"
+            },
+            "operational": {
+              "class": "High",
+              "driver": "2 emergencies"
+            }
+          }
+        },
+        "costRisk": {
+          "class": "Medium",
+          "driver": "Minor cashflow deviation 8.5%",
+          "subComponents": {
+            "costVariance": {
+              "class": "Low",
+              "driver": "Within budget"
+            },
+            "cpiSpi": {
+              "class": "Low",
+              "driver": "CPI=1.02, SPI=1.08"
+            },
+            "cashflow": {
+              "class": "Medium",
+              "driver": "Minor cashflow deviation 8.5%"
+            }
+          }
+        },
+        "supplierRisk": {
+          "class": "Low",
+          "driver": "No data",
+          "subComponents": {
+            "concentration": {
+              "class": "Low",
+              "driver": "No data"
+            },
+            "performance": {
+              "class": "Low",
+              "driver": "No data"
+            }
+          }
+        },
+        "owner": "PM-10",
+        "contractorId": "CONTRACTOR-1"
+      },
+      "position": {
+        "x": 1354.0,
+        "y": 702.0
+      }
+    },
+    {
+      "id": "WP-0027",
+      "type": "workPackage",
+      "data": {
+        "label": "WP-0027: Work Package 27: Site Preparation",
+        "subtitle": "Engineering \u00b7 Greenwich",
+        "status": "In Progress",
+        "priority": "Low",
+        "riskScore": 0.85,
+        "severity": "critical",
+        "metrics": {
+          "completionPct": 72.44,
+          "plannedCost": 19804339.08,
+          "actualCost": 20037761.61,
+          "budgetVariance": 1.18,
+          "cpi": 0.752,
+          "spi": 0.731
+        },
+        "deliveryRisk": {
+          "class": "High",
+          "driver": "2 emergencies",
+          "subComponents": {
+            "milestoneDelay": {
+              "class": "Medium",
+              "driver": "Delay or at-risk signals present"
+            },
+            "completionSlippage": {
+              "class": "Low",
+              "driver": "On track"
+            },
+            "soBacklog": {
+              "class": "Medium",
+              "driver": "Backlog 71%"
+            },
+            "operational": {
+              "class": "High",
+              "driver": "2 emergencies"
+            }
+          }
+        },
+        "costRisk": {
+          "class": "High",
+          "driver": "CPI=0.75, SPI=0.73",
+          "subComponents": {
+            "costVariance": {
+              "class": "Low",
+              "driver": "Within budget"
+            },
+            "cpiSpi": {
+              "class": "High",
+              "driver": "CPI=0.75, SPI=0.73"
+            },
+            "cashflow": {
+              "class": "Low",
+              "driver": "Cashflow on track"
+            }
+          }
+        },
+        "supplierRisk": {
+          "class": "Low",
+          "driver": "No data",
+          "subComponents": {
+            "concentration": {
+              "class": "Low",
+              "driver": "No data"
+            },
+            "performance": {
+              "class": "Low",
+              "driver": "No data"
+            }
+          }
+        },
+        "owner": "PM-6",
+        "contractorId": "CONTRACTOR-13"
+      },
+      "position": {
+        "x": 1186.0,
+        "y": 976.0
+      }
+    },
+    {
+      "id": "WP-0028",
+      "type": "workPackage",
+      "data": {
+        "label": "WP-0028: Work Package 28: Documentation",
+        "subtitle": "Engineering \u00b7 Greenwich",
+        "status": "In Progress",
+        "priority": "Low",
+        "riskScore": 0.85,
+        "severity": "critical",
+        "metrics": {
+          "completionPct": 46.43,
+          "plannedCost": 45392978.7,
+          "actualCost": 0,
+          "budgetVariance": 0,
+          "cpi": 0.994,
+          "spi": 0.863
+        },
+        "deliveryRisk": {
+          "class": "High",
+          "driver": "2 emergencies",
+          "subComponents": {
+            "milestoneDelay": {
+              "class": "Low",
+              "driver": "No delays detected"
+            },
+            "completionSlippage": {
+              "class": "Medium",
+              "driver": "Completion at 46%"
+            },
+            "soBacklog": {
+              "class": "Medium",
+              "driver": "Backlog 50%"
+            },
+            "operational": {
+              "class": "High",
+              "driver": "2 emergencies"
+            }
+          }
+        },
+        "costRisk": {
+          "class": "High",
+          "driver": "Cashflow deviation -19.6%",
+          "subComponents": {
+            "costVariance": {
+              "class": "Low",
+              "driver": "Within budget"
+            },
+            "cpiSpi": {
+              "class": "Medium",
+              "driver": "CPI=0.99, SPI=0.86"
+            },
+            "cashflow": {
+              "class": "High",
+              "driver": "Cashflow deviation -19.6%"
+            }
+          }
+        },
+        "supplierRisk": {
+          "class": "Low",
+          "driver": "No data",
+          "subComponents": {
+            "concentration": {
+              "class": "Low",
+              "driver": "No data"
+            },
+            "performance": {
+              "class": "Low",
+              "driver": "No data"
+            }
+          }
+        },
+        "owner": "PM-6",
+        "contractorId": "CONTRACTOR-15"
+      },
+      "position": {
+        "x": 663.0,
+        "y": 1188.0
+      }
+    },
+    {
+      "id": "WP-0029",
+      "type": "workPackage",
+      "data": {
+        "label": "WP-0029: Work Package 29: Road Construction",
+        "subtitle": "Construction \u00b7 Thames Gateway",
+        "status": "In Progress",
+        "priority": "Critical",
+        "riskScore": 0.85,
+        "severity": "critical",
+        "metrics": {
+          "completionPct": 15.83,
+          "plannedCost": 37576700.92,
+          "actualCost": 0,
+          "budgetVariance": 0,
+          "cpi": 0.729,
+          "spi": 0.858
+        },
+        "deliveryRisk": {
+          "class": "High",
+          "driver": "Backlog 100%, 1 on hold",
+          "subComponents": {
+            "milestoneDelay": {
+              "class": "Medium",
+              "driver": "Delay or at-risk signals present"
+            },
+            "completionSlippage": {
+              "class": "Medium",
+              "driver": "Completion at 16%"
+            },
+            "soBacklog": {
+              "class": "High",
+              "driver": "Backlog 100%, 1 on hold"
+            },
+            "operational": {
+              "class": "High",
+              "driver": "3 emergencies"
+            }
+          }
+        },
+        "costRisk": {
+          "class": "High",
+          "driver": "CPI=0.73, SPI=0.86",
+          "subComponents": {
+            "costVariance": {
+              "class": "Low",
+              "driver": "Within budget"
+            },
+            "cpiSpi": {
+              "class": "High",
+              "driver": "CPI=0.73, SPI=0.86"
+            },
+            "cashflow": {
+              "class": "Medium",
+              "driver": "Minor cashflow deviation 14.7%"
+            }
+          }
+        },
+        "supplierRisk": {
+          "class": "Low",
+          "driver": "No data",
+          "subComponents": {
+            "concentration": {
+              "class": "Low",
+              "driver": "No data"
+            },
+            "performance": {
+              "class": "Low",
+              "driver": "No data"
+            }
+          }
+        },
+        "owner": "PM-3",
+        "contractorId": "CONTRACTOR-2"
+      },
+      "position": {
+        "x": -75.0,
+        "y": -38.0
+      }
+    },
+    {
+      "id": "WP-0030",
+      "type": "workPackage",
+      "data": {
+        "label": "WP-0030: Work Package 30: Environmental Remediation",
+        "subtitle": "Infrastructure \u00b7 Canary Wharf",
+        "status": "Completed",
+        "priority": "Medium",
+        "riskScore": 0.85,
+        "severity": "critical",
+        "metrics": {
+          "completionPct": 100.0,
+          "plannedCost": 30558750.95,
+          "actualCost": 29816987.49,
+          "budgetVariance": -2.43,
+          "cpi": 1.123,
+          "spi": 1.082
+        },
+        "deliveryRisk": {
+          "class": "High",
+          "driver": "Backlog 100%, 0 on hold",
+          "subComponents": {
+            "milestoneDelay": {
+              "class": "Medium",
+              "driver": "Delay or at-risk signals present"
+            },
+            "completionSlippage": {
+              "class": "Low",
+              "driver": "On track"
+            },
+            "soBacklog": {
+              "class": "High",
+              "driver": "Backlog 100%, 0 on hold"
+            },
+            "operational": {
+              "class": "Low",
+              "driver": "No operational incidents"
+            }
+          }
+        },
+        "costRisk": {
+          "class": "Low",
+          "driver": "Within budget",
+          "subComponents": {
+            "costVariance": {
+              "class": "Low",
+              "driver": "Within budget"
+            },
+            "cpiSpi": {
+              "class": "Low",
+              "driver": "CPI=1.12, SPI=1.08"
+            },
+            "cashflow": {
+              "class": "Low",
+              "driver": "Cashflow on track"
+            }
+          }
+        },
+        "supplierRisk": {
+          "class": "High",
+          "driver": "Single supplier (SPOF)",
+          "subComponents": {
+            "concentration": {
+              "class": "High",
+              "driver": "Single supplier (SPOF)"
+            },
+            "performance": {
+              "class": "High",
+              "driver": "1 non-compliant, avg score 61%"
+            }
+          }
+        },
+        "owner": "PM-7",
+        "contractorId": "CONTRACTOR-4"
+      },
+      "position": {
+        "x": -174.0,
+        "y": 201.0
+      }
+    },
+    {
+      "id": "WP-0031",
+      "type": "workPackage",
+      "data": {
+        "label": "WP-0031: Work Package 31: Safety Systems",
+        "subtitle": "Engineering \u00b7 Remote",
+        "status": "In Progress",
+        "priority": "Critical",
+        "riskScore": 0.85,
+        "severity": "critical",
+        "metrics": {
+          "completionPct": 46.41,
+          "plannedCost": 6492225.72,
+          "actualCost": 0,
+          "budgetVariance": 0,
+          "cpi": 0.862,
+          "spi": 0.858
+        },
+        "deliveryRisk": {
+          "class": "High",
+          "driver": "Backlog 86%, 1 on hold",
+          "subComponents": {
+            "milestoneDelay": {
+              "class": "Medium",
+              "driver": "Delay or at-risk signals present"
+            },
+            "completionSlippage": {
+              "class": "Medium",
+              "driver": "Completion at 46%"
+            },
+            "soBacklog": {
+              "class": "High",
+              "driver": "Backlog 86%, 1 on hold"
+            },
+            "operational": {
+              "class": "High",
+              "driver": "3 emergencies"
+            }
+          }
+        },
+        "costRisk": {
+          "class": "High",
+          "driver": "CPI=0.86, SPI=0.86",
+          "subComponents": {
+            "costVariance": {
+              "class": "Low",
+              "driver": "Within budget"
+            },
+            "cpiSpi": {
+              "class": "High",
+              "driver": "CPI=0.86, SPI=0.86"
+            },
+            "cashflow": {
+              "class": "Low",
+              "driver": "Cashflow on track"
+            }
+          }
+        },
+        "supplierRisk": {
+          "class": "High",
+          "driver": "2 non-compliant, avg score 60%",
+          "subComponents": {
+            "concentration": {
+              "class": "Medium",
+              "driver": "2 suppliers"
+            },
+            "performance": {
+              "class": "High",
+              "driver": "2 non-compliant, avg score 60%"
+            }
+          }
+        },
+        "owner": "PM-2",
+        "contractorId": "CONTRACTOR-6"
+      },
+      "position": {
+        "x": 182.0,
+        "y": -234.0
+      }
+    },
+    {
+      "id": "WP-0032",
+      "type": "workPackage",
+      "data": {
+        "label": "WP-0032: Work Package 32: Environmental Remediation",
+        "subtitle": "Infrastructure \u00b7 Greenwich",
+        "status": "In Progress",
+        "priority": "Medium",
+        "riskScore": 0.85,
+        "severity": "critical",
+        "metrics": {
+          "completionPct": 47.02,
+          "plannedCost": 13869078.62,
+          "actualCost": 0,
+          "budgetVariance": 0,
+          "cpi": 1.014,
+          "spi": 1.065
+        },
+        "deliveryRisk": {
+          "class": "High",
+          "driver": "High delay proportion (\u226570%)",
+          "subComponents": {
+            "milestoneDelay": {
+              "class": "High",
+              "driver": "High delay proportion (\u226570%)"
+            },
+            "completionSlippage": {
+              "class": "Medium",
+              "driver": "Completion at 47%"
+            },
+            "soBacklog": {
+              "class": "Medium",
+              "driver": "Backlog 60%"
+            },
+            "operational": {
+              "class": "Medium",
+              "driver": "3 unresolved"
+            }
+          }
+        },
+        "costRisk": {
+          "class": "Medium",
+          "driver": "Minor cashflow deviation -12.0%",
+          "subComponents": {
+            "costVariance": {
+              "class": "Low",
+              "driver": "Within budget"
+            },
+            "cpiSpi": {
+              "class": "Low",
+              "driver": "CPI=1.01, SPI=1.06"
+            },
+            "cashflow": {
+              "class": "Medium",
+              "driver": "Minor cashflow deviation -12.0%"
+            }
+          }
+        },
+        "supplierRisk": {
+          "class": "High",
+          "driver": "Single supplier (SPOF)",
+          "subComponents": {
+            "concentration": {
+              "class": "High",
+              "driver": "Single supplier (SPOF)"
+            },
+            "performance": {
+              "class": "High",
+              "driver": "1 non-compliant, avg score 57%"
+            }
+          }
+        },
+        "owner": "PM-8",
+        "contractorId": "CONTRACTOR-11"
+      },
+      "position": {
+        "x": 1353.0,
+        "y": 192.0
+      }
+    },
+    {
+      "id": "WP-0033",
+      "type": "workPackage",
+      "data": {
+        "label": "WP-0033: Work Package 33: Environmental Remediation",
+        "subtitle": "Construction \u00b7 Remote",
+        "status": "Completed",
+        "priority": "Critical",
+        "riskScore": 0.85,
+        "severity": "critical",
+        "metrics": {
+          "completionPct": 100.0,
+          "plannedCost": 10999932.58,
+          "actualCost": 10857119.82,
+          "budgetVariance": -1.3,
+          "cpi": 1.065,
+          "spi": 0.918
+        },
+        "deliveryRisk": {
+          "class": "High",
+          "driver": "Backlog 100%, 2 on hold",
+          "subComponents": {
+            "milestoneDelay": {
+              "class": "Low",
+              "driver": "No delays detected"
+            },
+            "completionSlippage": {
+              "class": "Low",
+              "driver": "On track"
+            },
+            "soBacklog": {
+              "class": "High",
+              "driver": "Backlog 100%, 2 on hold"
+            },
+            "operational": {
+              "class": "Medium",
+              "driver": "4 unresolved"
+            }
+          }
+        },
+        "costRisk": {
+          "class": "High",
+          "driver": "Cashflow deviation 31.6%",
+          "subComponents": {
+            "costVariance": {
+              "class": "Low",
+              "driver": "Within budget"
+            },
+            "cpiSpi": {
+              "class": "Medium",
+              "driver": "CPI=1.06, SPI=0.92"
+            },
+            "cashflow": {
+              "class": "High",
+              "driver": "Cashflow deviation 31.6%"
+            }
+          }
+        },
+        "supplierRisk": {
+          "class": "High",
+          "driver": "1 non-compliant, avg score 56%",
+          "subComponents": {
+            "concentration": {
+              "class": "Medium",
+              "driver": "2 suppliers"
+            },
+            "performance": {
+              "class": "High",
+              "driver": "1 non-compliant, avg score 56%"
+            }
+          }
+        },
+        "owner": "PM-8",
+        "contractorId": "CONTRACTOR-4"
+      },
+      "position": {
+        "x": -103.0,
+        "y": 663.0
+      }
+    },
+    {
+      "id": "WP-0034",
+      "type": "workPackage",
+      "data": {
+        "label": "WP-0034: Work Package 34: Safety Systems",
+        "subtitle": "Facilities \u00b7 Canary Wharf",
+        "status": "On Hold",
+        "priority": "Medium",
+        "riskScore": 0.85,
+        "severity": "critical",
+        "metrics": {
+          "completionPct": 3.69,
+          "plannedCost": 15064661.28,
+          "actualCost": 14795986.93,
+          "budgetVariance": -1.78,
+          "cpi": 0.875,
+          "spi": 1.039
+        },
+        "deliveryRisk": {
+          "class": "High",
+          "driver": "Status: On Hold",
+          "subComponents": {
+            "milestoneDelay": {
+              "class": "Medium",
+              "driver": "Delay or at-risk signals present"
+            },
+            "completionSlippage": {
+              "class": "High",
+              "driver": "Status: On Hold"
+            },
+            "soBacklog": {
+              "class": "High",
+              "driver": "Backlog 86%, 0 on hold"
+            },
+            "operational": {
+              "class": "High",
+              "driver": "2 emergencies"
+            }
+          }
+        },
+        "costRisk": {
+          "class": "Medium",
+          "driver": "CPI=0.88, SPI=1.04",
+          "subComponents": {
+            "costVariance": {
+              "class": "Low",
+              "driver": "Within budget"
+            },
+            "cpiSpi": {
+              "class": "Medium",
+              "driver": "CPI=0.88, SPI=1.04"
+            },
+            "cashflow": {
+              "class": "Low",
+              "driver": "Cashflow on track"
+            }
+          }
+        },
+        "supplierRisk": {
+          "class": "Low",
+          "driver": "No data",
+          "subComponents": {
+            "concentration": {
+              "class": "Low",
+              "driver": "No data"
+            },
+            "performance": {
+              "class": "Low",
+              "driver": "No data"
+            }
+          }
+        },
+        "owner": "PM-5",
+        "contractorId": "CONTRACTOR-4"
+      },
+      "position": {
+        "x": 89.0,
+        "y": 1008.0
+      }
+    },
+    {
+      "id": "WP-0035",
+      "type": "workPackage",
+      "data": {
+        "label": "WP-0035: Work Package 35: Environmental Remediation",
+        "subtitle": "Engineering \u00b7 Stratford",
+        "status": "In Progress",
+        "priority": "High",
+        "riskScore": 0.85,
+        "severity": "critical",
+        "metrics": {
+          "completionPct": 60.11,
+          "plannedCost": 34663095.93,
+          "actualCost": 0,
+          "budgetVariance": 0,
+          "cpi": 0.941,
+          "spi": 0.934
+        },
+        "deliveryRisk": {
+          "class": "High",
+          "driver": "Backlog 100%, 1 on hold",
+          "subComponents": {
+            "milestoneDelay": {
+              "class": "Low",
+              "driver": "No delays detected"
+            },
+            "completionSlippage": {
+              "class": "Low",
+              "driver": "On track"
+            },
+            "soBacklog": {
+              "class": "High",
+              "driver": "Backlog 100%, 1 on hold"
+            },
+            "operational": {
+              "class": "High",
+              "driver": "1 emergencies"
+            }
+          }
+        },
+        "costRisk": {
+          "class": "Medium",
+          "driver": "CPI=0.94, SPI=0.93",
+          "subComponents": {
+            "costVariance": {
+              "class": "Low",
+              "driver": "Within budget"
+            },
+            "cpiSpi": {
+              "class": "Medium",
+              "driver": "CPI=0.94, SPI=0.93"
+            },
+            "cashflow": {
+              "class": "Low",
+              "driver": "No data"
+            }
+          }
+        },
+        "supplierRisk": {
+          "class": "Low",
+          "driver": "No data",
+          "subComponents": {
+            "concentration": {
+              "class": "Low",
+              "driver": "No data"
+            },
+            "performance": {
+              "class": "Low",
+              "driver": "No data"
+            }
+          }
+        },
+        "owner": "PM-1",
+        "contractorId": "CONTRACTOR-3"
+      },
+      "position": {
+        "x": 281.0,
+        "y": 1157.0
+      }
+    },
+    {
+      "id": "WP-0036",
+      "type": "workPackage",
+      "data": {
+        "label": "WP-0036: Work Package 36: Documentation",
+        "subtitle": "Infrastructure \u00b7 Greenwich",
+        "status": "In Progress",
+        "priority": "Medium",
+        "riskScore": 0.85,
+        "severity": "critical",
+        "metrics": {
+          "completionPct": 49.9,
+          "plannedCost": 43488829.26,
+          "actualCost": 44081842.36,
+          "budgetVariance": 1.36,
+          "cpi": 0.846,
+          "spi": 0.865
+        },
+        "deliveryRisk": {
+          "class": "High",
+          "driver": "High delay proportion (\u226570%)",
+          "subComponents": {
+            "milestoneDelay": {
+              "class": "High",
+              "driver": "High delay proportion (\u226570%)"
+            },
+            "completionSlippage": {
+              "class": "High",
+              "driver": "Slippage ratio 19%"
+            },
+            "soBacklog": {
+              "class": "Medium",
+              "driver": "Backlog 75%"
+            },
+            "operational": {
+              "class": "Medium",
+              "driver": "3 unresolved"
+            }
+          }
+        },
+        "costRisk": {
+          "class": "High",
+          "driver": "CPI=0.85, SPI=0.86",
+          "subComponents": {
+            "costVariance": {
+              "class": "Low",
+              "driver": "Within budget"
+            },
+            "cpiSpi": {
+              "class": "High",
+              "driver": "CPI=0.85, SPI=0.86"
+            },
+            "cashflow": {
+              "class": "Low",
+              "driver": "Cashflow on track"
+            }
+          }
+        },
+        "supplierRisk": {
+          "class": "Low",
+          "driver": "No data",
+          "subComponents": {
+            "concentration": {
+              "class": "Low",
+              "driver": "No data"
+            },
+            "performance": {
+              "class": "Low",
+              "driver": "No data"
+            }
+          }
+        },
+        "owner": "PM-2",
+        "contractorId": "CONTRACTOR-7"
+      },
+      "position": {
+        "x": 1065.0,
+        "y": -238.0
+      }
+    },
+    {
+      "id": "WP-0037",
+      "type": "workPackage",
+      "data": {
+        "label": "WP-0037: Work Package 37: Quality Assurance",
+        "subtitle": "IT Systems \u00b7 Thames Gateway",
+        "status": "In Progress",
+        "priority": "Low",
+        "riskScore": 0.85,
+        "severity": "critical",
+        "metrics": {
+          "completionPct": 57.44,
+          "plannedCost": 40651532.78,
+          "actualCost": 39605123.52,
+          "budgetVariance": -2.57,
+          "cpi": 0.901,
+          "spi": 1.068
+        },
+        "deliveryRisk": {
+          "class": "High",
+          "driver": "Multiple at-risk milestones",
+          "subComponents": {
+            "milestoneDelay": {
+              "class": "High",
+              "driver": "Multiple at-risk milestones"
+            },
+            "completionSlippage": {
+              "class": "Medium",
+              "driver": "Completion at 57%"
+            },
+            "soBacklog": {
+              "class": "High",
+              "driver": "Backlog 89%, 1 on hold"
+            },
+            "operational": {
+              "class": "High",
+              "driver": "2 emergencies"
+            }
+          }
+        },
+        "costRisk": {
+          "class": "Medium",
+          "driver": "CPI=0.90, SPI=1.07",
+          "subComponents": {
+            "costVariance": {
+              "class": "Low",
+              "driver": "Within budget"
+            },
+            "cpiSpi": {
+              "class": "Medium",
+              "driver": "CPI=0.90, SPI=1.07"
+            },
+            "cashflow": {
+              "class": "Low",
+              "driver": "Cashflow on track"
+            }
+          }
+        },
+        "supplierRisk": {
+          "class": "High",
+          "driver": "Single supplier (SPOF)",
+          "subComponents": {
+            "concentration": {
+              "class": "High",
+              "driver": "Single supplier (SPOF)"
+            },
+            "performance": {
+              "class": "High",
+              "driver": "1 non-compliant, avg score 62%"
+            }
+          }
+        },
+        "owner": "PM-10",
+        "contractorId": "CONTRACTOR-5"
+      },
+      "position": {
+        "x": -165.0,
+        "y": 679.0
+      }
+    },
+    {
+      "id": "WP-0038",
+      "type": "workPackage",
+      "data": {
+        "label": "WP-0038: Work Package 38: Road Construction",
+        "subtitle": "Facilities \u00b7 Greenwich",
+        "status": "In Progress",
+        "priority": "Low",
+        "riskScore": 0.85,
+        "severity": "critical",
+        "metrics": {
+          "completionPct": 16.38,
+          "plannedCost": 10945747.17,
+          "actualCost": 10703330.11,
+          "budgetVariance": -2.21,
+          "cpi": 0.959,
+          "spi": 1.044
+        },
+        "deliveryRisk": {
+          "class": "High",
+          "driver": "High delay proportion (\u226570%)",
+          "subComponents": {
+            "milestoneDelay": {
+              "class": "High",
+              "driver": "High delay proportion (\u226570%)"
+            },
+            "completionSlippage": {
+              "class": "Medium",
+              "driver": "Completion at 16%"
+            },
+            "soBacklog": {
+              "class": "Medium",
+              "driver": "Backlog 67%"
+            },
+            "operational": {
+              "class": "Medium",
+              "driver": "3 unresolved"
+            }
+          }
+        },
+        "costRisk": {
+          "class": "High",
+          "driver": "Cashflow deviation 42.2%",
+          "subComponents": {
+            "costVariance": {
+              "class": "Low",
+              "driver": "Within budget"
+            },
+            "cpiSpi": {
+              "class": "Medium",
+              "driver": "CPI=0.96, SPI=1.04"
+            },
+            "cashflow": {
+              "class": "High",
+              "driver": "Cashflow deviation 42.2%"
+            }
+          }
+        },
+        "supplierRisk": {
+          "class": "Low",
+          "driver": "No data",
+          "subComponents": {
+            "concentration": {
+              "class": "Low",
+              "driver": "No data"
+            },
+            "performance": {
+              "class": "Low",
+              "driver": "No data"
+            }
+          }
+        },
+        "owner": "PM-5",
+        "contractorId": "CONTRACTOR-12"
+      },
+      "position": {
+        "x": 1108.0,
+        "y": 979.0
+      }
+    },
+    {
+      "id": "WP-0039",
+      "type": "workPackage",
+      "data": {
+        "label": "WP-0039: Work Package 39: Utility Installation",
+        "subtitle": "Infrastructure \u00b7 Stratford",
+        "status": "In Progress",
+        "priority": "Critical",
+        "riskScore": 0.85,
+        "severity": "critical",
+        "metrics": {
+          "completionPct": 56.29,
+          "plannedCost": 31440371.35,
+          "actualCost": 0,
+          "budgetVariance": 0,
+          "cpi": 0.741,
+          "spi": 0.888
+        },
+        "deliveryRisk": {
+          "class": "Medium",
+          "driver": "Completion at 56%",
+          "subComponents": {
+            "milestoneDelay": {
+              "class": "Low",
+              "driver": "No data"
+            },
+            "completionSlippage": {
+              "class": "Medium",
+              "driver": "Completion at 56%"
+            },
+            "soBacklog": {
+              "class": "Medium",
+              "driver": "Backlog 50%"
+            },
+            "operational": {
+              "class": "Medium",
+              "driver": "2 unresolved"
+            }
+          }
+        },
+        "costRisk": {
+          "class": "High",
+          "driver": "CPI=0.74, SPI=0.89",
+          "subComponents": {
+            "costVariance": {
+              "class": "Low",
+              "driver": "Within budget"
+            },
+            "cpiSpi": {
+              "class": "High",
+              "driver": "CPI=0.74, SPI=0.89"
+            },
+            "cashflow": {
+              "class": "Medium",
+              "driver": "Minor cashflow deviation -9.4%"
+            }
+          }
+        },
+        "supplierRisk": {
+          "class": "Low",
+          "driver": "No data",
+          "subComponents": {
+            "concentration": {
+              "class": "Low",
+              "driver": "No data"
+            },
+            "performance": {
+              "class": "Low",
+              "driver": "No data"
+            }
+          }
+        },
+        "owner": "PM-10",
+        "contractorId": "CONTRACTOR-10"
+      },
+      "position": {
+        "x": 1032.0,
+        "y": -282.0
+      }
+    },
+    {
+      "id": "WP-0040",
+      "type": "workPackage",
+      "data": {
+        "label": "WP-0040: Work Package 40: Quality Assurance",
+        "subtitle": "Engineering \u00b7 Canary Wharf",
+        "status": "In Progress",
+        "priority": "Critical",
+        "riskScore": 0.85,
+        "severity": "critical",
+        "metrics": {
+          "completionPct": 13.39,
+          "plannedCost": 47162473.92,
+          "actualCost": 0,
+          "budgetVariance": 0,
+          "cpi": 0.906,
+          "spi": 1.057
+        },
+        "deliveryRisk": {
+          "class": "High",
+          "driver": "Completion shortfall 87%",
+          "subComponents": {
+            "milestoneDelay": {
+              "class": "Medium",
+              "driver": "Delay or at-risk signals present"
+            },
+            "completionSlippage": {
+              "class": "High",
+              "driver": "Completion shortfall 87%"
+            },
+            "soBacklog": {
+              "class": "Medium",
+              "driver": "Backlog 50%"
+            },
+            "operational": {
+              "class": "Medium",
+              "driver": "2 unresolved"
+            }
+          }
+        },
+        "costRisk": {
+          "class": "High",
+          "driver": "Cashflow deviation -18.1%",
+          "subComponents": {
+            "costVariance": {
+              "class": "Low",
+              "driver": "Within budget"
+            },
+            "cpiSpi": {
+              "class": "Medium",
+              "driver": "CPI=0.91, SPI=1.06"
+            },
+            "cashflow": {
+              "class": "High",
+              "driver": "Cashflow deviation -18.1%"
+            }
+          }
+        },
+        "supplierRisk": {
+          "class": "Low",
+          "driver": "No data",
+          "subComponents": {
+            "concentration": {
+              "class": "Low",
+              "driver": "No data"
+            },
+            "performance": {
+              "class": "Low",
+              "driver": "No data"
+            }
+          }
+        },
+        "owner": "PM-11",
+        "contractorId": "CONTRACTOR-10"
+      },
+      "position": {
+        "x": 543.0,
+        "y": -380.0
+      }
+    },
+    {
+      "id": "WP-0041",
+      "type": "workPackage",
+      "data": {
+        "label": "WP-0041: Work Package 41: Safety Systems",
+        "subtitle": "Engineering \u00b7 Remote",
+        "status": "In Progress",
+        "priority": "Critical",
+        "riskScore": 0.85,
+        "severity": "critical",
+        "metrics": {
+          "completionPct": 17.76,
+          "plannedCost": 9483712.79,
+          "actualCost": 0,
+          "budgetVariance": 0,
+          "cpi": 1.081,
+          "spi": 0.986
+        },
+        "deliveryRisk": {
+          "class": "High",
+          "driver": "2 emergencies",
+          "subComponents": {
+            "milestoneDelay": {
+              "class": "Low",
+              "driver": "No delays detected"
+            },
+            "completionSlippage": {
+              "class": "Medium",
+              "driver": "Completion at 18%"
+            },
+            "soBacklog": {
+              "class": "Medium",
+              "driver": "Backlog 62%"
+            },
+            "operational": {
+              "class": "High",
+              "driver": "2 emergencies"
+            }
+          }
+        },
+        "costRisk": {
+          "class": "High",
+          "driver": "Cashflow deviation -18.3%",
+          "subComponents": {
+            "costVariance": {
+              "class": "Low",
+              "driver": "Within budget"
+            },
+            "cpiSpi": {
+              "class": "Medium",
+              "driver": "CPI=1.08, SPI=0.99"
+            },
+            "cashflow": {
+              "class": "High",
+              "driver": "Cashflow deviation -18.3%"
+            }
+          }
+        },
+        "supplierRisk": {
+          "class": "Low",
+          "driver": "No data",
+          "subComponents": {
+            "concentration": {
+              "class": "Low",
+              "driver": "No data"
+            },
+            "performance": {
+              "class": "Low",
+              "driver": "No data"
+            }
+          }
+        },
+        "owner": "PM-7",
+        "contractorId": "CONTRACTOR-5"
+      },
+      "position": {
+        "x": 1293.0,
+        "y": 766.0
+      }
+    },
+    {
+      "id": "WP-0042",
+      "type": "workPackage",
+      "data": {
+        "label": "WP-0042: Work Package 42: Documentation",
+        "subtitle": "Construction \u00b7 King's Cross",
+        "status": "In Progress",
+        "priority": "Medium",
+        "riskScore": 0.85,
+        "severity": "critical",
+        "metrics": {
+          "completionPct": 93.99,
+          "plannedCost": 16502052.42,
+          "actualCost": 16340476.75,
+          "budgetVariance": -0.98,
+          "cpi": 0.818,
+          "spi": 0.926
+        },
+        "deliveryRisk": {
+          "class": "Medium",
+          "driver": "Delay or at-risk signals present",
+          "subComponents": {
+            "milestoneDelay": {
+              "class": "Medium",
+              "driver": "Delay or at-risk signals present"
+            },
+            "completionSlippage": {
+              "class": "Low",
+              "driver": "On track"
+            },
+            "soBacklog": {
+              "class": "Medium",
+              "driver": "Backlog 75%"
+            },
+            "operational": {
+              "class": "Medium",
+              "driver": "3 unresolved"
+            }
+          }
+        },
+        "costRisk": {
+          "class": "Medium",
+          "driver": "CPI=0.82, SPI=0.93",
+          "subComponents": {
+            "costVariance": {
+              "class": "Low",
+              "driver": "Within budget"
+            },
+            "cpiSpi": {
+              "class": "Medium",
+              "driver": "CPI=0.82, SPI=0.93"
+            },
+            "cashflow": {
+              "class": "Low",
+              "driver": "Cashflow on track"
+            }
+          }
+        },
+        "supplierRisk": {
+          "class": "High",
+          "driver": "Single supplier (SPOF)",
+          "subComponents": {
+            "concentration": {
+              "class": "High",
+              "driver": "Single supplier (SPOF)"
+            },
+            "performance": {
+              "class": "High",
+              "driver": "1 non-compliant, avg score 63%"
+            }
+          }
+        },
+        "owner": "PM-11",
+        "contractorId": "CONTRACTOR-1"
+      },
+      "position": {
+        "x": 495.0,
+        "y": -389.0
+      }
+    },
+    {
+      "id": "WP-0043",
+      "type": "workPackage",
+      "data": {
+        "label": "WP-0043: Work Package 43: Utility Installation",
+        "subtitle": "Infrastructure \u00b7 King's Cross",
+        "status": "In Progress",
+        "priority": "Low",
+        "riskScore": 0.85,
+        "severity": "critical",
+        "metrics": {
+          "completionPct": 30.34,
+          "plannedCost": 35063376.44,
+          "actualCost": 0,
+          "budgetVariance": 0,
+          "cpi": 0.781,
+          "spi": 0.832
+        },
+        "deliveryRisk": {
+          "class": "High",
+          "driver": "2 emergencies",
+          "subComponents": {
+            "milestoneDelay": {
+              "class": "Low",
+              "driver": "No delays detected"
+            },
+            "completionSlippage": {
+              "class": "Medium",
+              "driver": "Completion at 30%"
+            },
+            "soBacklog": {
+              "class": "Medium",
+              "driver": "Backlog 67%"
+            },
+            "operational": {
+              "class": "High",
+              "driver": "2 emergencies"
+            }
+          }
+        },
+        "costRisk": {
+          "class": "High",
+          "driver": "CPI=0.78, SPI=0.83",
+          "subComponents": {
+            "costVariance": {
+              "class": "Low",
+              "driver": "Within budget"
+            },
+            "cpiSpi": {
+              "class": "High",
+              "driver": "CPI=0.78, SPI=0.83"
+            },
+            "cashflow": {
+              "class": "High",
+              "driver": "Cashflow deviation 24.4%"
+            }
+          }
+        },
+        "supplierRisk": {
+          "class": "High",
+          "driver": "Single supplier (SPOF)",
+          "subComponents": {
+            "concentration": {
+              "class": "High",
+              "driver": "Single supplier (SPOF)"
+            },
+            "performance": {
+              "class": "High",
+              "driver": "1 non-compliant, avg score 63%"
+            }
+          }
+        },
+        "owner": "PM-8",
+        "contractorId": "CONTRACTOR-11"
+      },
+      "position": {
+        "x": 60.0,
+        "y": -134.0
+      }
+    },
+    {
+      "id": "WP-0044",
+      "type": "workPackage",
+      "data": {
+        "label": "WP-0044: Work Package 44: Utility Installation",
+        "subtitle": "IT Systems \u00b7 Thames Gateway",
+        "status": "In Progress",
+        "priority": "Medium",
+        "riskScore": 0.85,
+        "severity": "critical",
+        "metrics": {
+          "completionPct": 26.2,
+          "plannedCost": 24383729.06,
+          "actualCost": 0,
+          "budgetVariance": 0,
+          "cpi": 0.901,
+          "spi": 0.821
+        },
+        "deliveryRisk": {
+          "class": "High",
+          "driver": "Backlog 100%, 1 on hold",
+          "subComponents": {
+            "milestoneDelay": {
+              "class": "Medium",
+              "driver": "Delay or at-risk signals present"
+            },
+            "completionSlippage": {
+              "class": "Medium",
+              "driver": "Completion at 26%"
+            },
+            "soBacklog": {
+              "class": "High",
+              "driver": "Backlog 100%, 1 on hold"
+            },
+            "operational": {
+              "class": "Medium",
+              "driver": "2 unresolved"
+            }
+          }
+        },
+        "costRisk": {
+          "class": "Medium",
+          "driver": "CPI=0.90, SPI=0.82",
+          "subComponents": {
+            "costVariance": {
+              "class": "Low",
+              "driver": "Within budget"
+            },
+            "cpiSpi": {
+              "class": "Medium",
+              "driver": "CPI=0.90, SPI=0.82"
+            },
+            "cashflow": {
+              "class": "Medium",
+              "driver": "Minor cashflow deviation 13.0%"
+            }
+          }
+        },
+        "supplierRisk": {
+          "class": "Low",
+          "driver": "No data",
+          "subComponents": {
+            "concentration": {
+              "class": "Low",
+              "driver": "No data"
+            },
+            "performance": {
+              "class": "Low",
+              "driver": "No data"
+            }
+          }
+        },
+        "owner": "PM-1",
+        "contractorId": "CONTRACTOR-5"
+      },
+      "position": {
+        "x": 1152.0,
+        "y": 926.0
+      }
+    },
+    {
+      "id": "WP-0045",
+      "type": "workPackage",
+      "data": {
+        "label": "WP-0045: Work Package 45: Site Preparation",
+        "subtitle": "IT Systems \u00b7 Greenwich",
+        "status": "In Progress",
+        "priority": "Critical",
+        "riskScore": 0.85,
+        "severity": "critical",
+        "metrics": {
+          "completionPct": 26.04,
+          "plannedCost": 27819912.15,
+          "actualCost": 27618697.14,
+          "budgetVariance": -0.72,
+          "cpi": 0.661,
+          "spi": 0.789
+        },
+        "deliveryRisk": {
+          "class": "Medium",
+          "driver": "Delay or at-risk signals present",
+          "subComponents": {
+            "milestoneDelay": {
+              "class": "Medium",
+              "driver": "Delay or at-risk signals present"
+            },
+            "completionSlippage": {
+              "class": "Medium",
+              "driver": "Completion at 26%"
+            },
+            "soBacklog": {
+              "class": "Medium",
+              "driver": "Backlog 75%"
+            },
+            "operational": {
+              "class": "Medium",
+              "driver": "6 unresolved"
+            }
+          }
+        },
+        "costRisk": {
+          "class": "High",
+          "driver": "CPI=0.66, SPI=0.79",
+          "subComponents": {
+            "costVariance": {
+              "class": "Low",
+              "driver": "Within budget"
+            },
+            "cpiSpi": {
+              "class": "High",
+              "driver": "CPI=0.66, SPI=0.79"
+            },
+            "cashflow": {
+              "class": "High",
+              "driver": "Cashflow deviation 23.3%"
+            }
+          }
+        },
+        "supplierRisk": {
+          "class": "High",
+          "driver": "Single supplier (SPOF)",
+          "subComponents": {
+            "concentration": {
+              "class": "High",
+              "driver": "Single supplier (SPOF)"
+            },
+            "performance": {
+              "class": "High",
+              "driver": "1 non-compliant, avg score 63%"
+            }
+          }
+        },
+        "owner": "PM-12",
+        "contractorId": "CONTRACTOR-7"
+      },
+      "position": {
+        "x": 1386.0,
+        "y": 360.0
+      }
+    },
+    {
+      "id": "MILESTONE-0003",
+      "type": "milestone",
+      "data": {
+        "label": "Substantial Completion - 3",
+        "subtitle": "WP-0004 \u00b7 Go-Live",
+        "status": "Delayed",
+        "riskScore": 0.88,
+        "severity": "critical",
+        "metrics": {
+          "plannedDate": "2024-05-23T00:00:00",
+          "forecastDate": "2024-06-29T00:00:00",
+          "delayDays": 37.0,
+          "isCritical": false
+        },
+        "workPackageId": "WP-0004"
+      },
+      "position": {
+        "x": -115.0,
+        "y": 736.0
+      }
+    },
+    {
+      "id": "MILESTONE-0010",
+      "type": "milestone",
+      "data": {
+        "label": "Go-Live - 10",
+        "subtitle": "WP-0019 \u00b7 Final Inspection",
+        "status": "Delayed",
+        "riskScore": 0.88,
+        "severity": "critical",
+        "metrics": {
+          "plannedDate": "2025-01-24T00:00:00",
+          "forecastDate": "2025-04-17T00:00:00",
+          "delayDays": 83.0,
+          "isCritical": true
+        },
+        "workPackageId": "WP-0019"
+      },
+      "position": {
+        "x": 1336.0,
+        "y": 607.0
+      }
+    },
+    {
+      "id": "MILESTONE-0012",
+      "type": "milestone",
+      "data": {
+        "label": "Final Inspection - 12",
+        "subtitle": "WP-0036 \u00b7 Construction Start",
+        "status": "Delayed",
+        "riskScore": 0.88,
+        "severity": "critical",
+        "metrics": {
+          "plannedDate": "2025-08-21T00:00:00",
+          "forecastDate": "2025-10-13T00:00:00",
+          "delayDays": 53.0,
+          "isCritical": true
+        },
+        "workPackageId": "WP-0036"
+      },
+      "position": {
+        "x": 1355.0,
+        "y": 279.0
+      }
+    },
+    {
+      "id": "MILESTONE-0018",
+      "type": "milestone",
+      "data": {
+        "label": "Final Inspection - 18",
+        "subtitle": "WP-0040 \u00b7 Handover",
+        "status": "At Risk",
+        "riskScore": 0.65,
+        "severity": "high",
+        "metrics": {
+          "plannedDate": "2025-06-23T00:00:00",
+          "forecastDate": "2025-08-07T00:00:00",
+          "delayDays": 45.0,
+          "isCritical": true
+        },
+        "workPackageId": "WP-0040"
+      },
+      "position": {
+        "x": 1110.0,
+        "y": -109.0
+      }
+    },
+    {
+      "id": "MILESTONE-0019",
+      "type": "milestone",
+      "data": {
+        "label": "Design Review - 19",
+        "subtitle": "WP-0045 \u00b7 Planning Permission",
+        "status": "At Risk",
+        "riskScore": 0.65,
+        "severity": "high",
+        "metrics": {
+          "plannedDate": "2024-08-19T00:00:00",
+          "forecastDate": "2024-08-29T00:00:00",
+          "delayDays": 10.0,
+          "isCritical": false
+        },
+        "workPackageId": "WP-0045"
+      },
+      "position": {
+        "x": 1.0,
+        "y": -164.0
+      }
+    },
+    {
+      "id": "MILESTONE-0021",
+      "type": "milestone",
+      "data": {
+        "label": "Planning Permission - 21",
+        "subtitle": "WP-0045 \u00b7 Final Inspection",
+        "status": "Delayed",
+        "riskScore": 0.88,
+        "severity": "critical",
+        "metrics": {
+          "plannedDate": "2025-08-03T00:00:00",
+          "forecastDate": "2025-08-08T00:00:00",
+          "delayDays": 5.0,
+          "isCritical": false
+        },
+        "workPackageId": "WP-0045"
+      },
+      "position": {
+        "x": -181.0,
+        "y": 570.0
+      }
+    },
+    {
+      "id": "MILESTONE-0022",
+      "type": "milestone",
+      "data": {
+        "label": "Planning Permission - 22",
+        "subtitle": "WP-0002 \u00b7 Final Inspection",
+        "status": "Delayed",
+        "riskScore": 0.88,
+        "severity": "critical",
+        "metrics": {
+          "plannedDate": "2024-07-31T00:00:00",
+          "forecastDate": "2024-09-19T00:00:00",
+          "delayDays": 50.0,
+          "isCritical": true
+        },
+        "workPackageId": "WP-0002"
+      },
+      "position": {
+        "x": -124.0,
+        "y": 394.0
+      }
+    },
+    {
+      "id": "MILESTONE-0023",
+      "type": "milestone",
+      "data": {
+        "label": "Design Review - 23",
+        "subtitle": "WP-0045 \u00b7 Planning Permission",
+        "status": "Delayed",
+        "riskScore": 0.88,
+        "severity": "critical",
+        "metrics": {
+          "plannedDate": "2024-03-21T00:00:00",
+          "forecastDate": "2024-05-04T00:00:00",
+          "delayDays": 44.0,
+          "isCritical": false
+        },
+        "workPackageId": "WP-0045"
+      },
+      "position": {
+        "x": 1357.0,
+        "y": 143.0
+      }
+    },
+    {
+      "id": "MILESTONE-0027",
+      "type": "milestone",
+      "data": {
+        "label": "Design Review - 27",
+        "subtitle": "WP-0036 \u00b7 Planning Permission",
+        "status": "Delayed",
+        "riskScore": 0.88,
+        "severity": "critical",
+        "metrics": {
+          "plannedDate": "2025-07-22T00:00:00",
+          "forecastDate": "2025-08-04T00:00:00",
+          "delayDays": 13.0,
+          "isCritical": false
+        },
+        "workPackageId": "WP-0036"
+      },
+      "position": {
+        "x": 492.0,
+        "y": 1153.0
+      }
+    },
+    {
+      "id": "MILESTONE-0028",
+      "type": "milestone",
+      "data": {
+        "label": "Substantial Completion - 28",
+        "subtitle": "WP-0019 \u00b7 Construction Start",
+        "status": "At Risk",
+        "riskScore": 0.65,
+        "severity": "high",
+        "metrics": {
+          "plannedDate": "2025-02-27T00:00:00",
+          "forecastDate": "2025-03-09T00:00:00",
+          "delayDays": 10.0,
+          "isCritical": false
+        },
+        "workPackageId": "WP-0019"
+      },
+      "position": {
+        "x": 157.0,
+        "y": -271.0
+      }
+    },
+    {
+      "id": "MILESTONE-0032",
+      "type": "milestone",
+      "data": {
+        "label": "Handover - 32",
+        "subtitle": "WP-0037 \u00b7 Go-Live",
+        "status": "At Risk",
+        "riskScore": 0.65,
+        "severity": "high",
+        "metrics": {
+          "plannedDate": "2024-09-05T00:00:00",
+          "forecastDate": "2024-10-10T00:00:00",
+          "delayDays": 35.0,
+          "isCritical": true
+        },
+        "workPackageId": "WP-0037"
+      },
+      "position": {
+        "x": 114.0,
+        "y": -216.0
+      }
+    },
+    {
+      "id": "MILESTONE-0033",
+      "type": "milestone",
+      "data": {
+        "label": "Planning Permission - 33",
+        "subtitle": "WP-0030 \u00b7 Handover",
+        "status": "At Risk",
+        "riskScore": 0.65,
+        "severity": "high",
+        "metrics": {
+          "plannedDate": "2024-08-02T00:00:00",
+          "forecastDate": "2024-09-08T00:00:00",
+          "delayDays": 37.0,
+          "isCritical": false
+        },
+        "workPackageId": "WP-0030"
+      },
+      "position": {
+        "x": 1271.0,
+        "y": 856.0
+      }
+    },
+    {
+      "id": "MILESTONE-0035",
+      "type": "milestone",
+      "data": {
+        "label": "Planning Permission - 35",
+        "subtitle": "WP-0024 \u00b7 Substantial Completion",
+        "status": "Delayed",
+        "riskScore": 0.88,
+        "severity": "critical",
+        "metrics": {
+          "plannedDate": "2025-07-03T00:00:00",
+          "forecastDate": "2025-07-13T00:00:00",
+          "delayDays": 10.0,
+          "isCritical": false
+        },
+        "workPackageId": "WP-0024"
+      },
+      "position": {
+        "x": 750.0,
+        "y": 1169.0
+      }
+    },
+    {
+      "id": "MILESTONE-0037",
+      "type": "milestone",
+      "data": {
+        "label": "Handover - 37",
+        "subtitle": "WP-0023 \u00b7 Planning Permission",
+        "status": "Delayed",
+        "riskScore": 0.88,
+        "severity": "critical",
+        "metrics": {
+          "plannedDate": "2024-01-26T00:00:00",
+          "forecastDate": "2024-03-03T00:00:00",
+          "delayDays": 37.0,
+          "isCritical": true
+        },
+        "workPackageId": "WP-0023"
+      },
+      "position": {
+        "x": 1139.0,
+        "y": -185.0
+      }
+    },
+    {
+      "id": "MILESTONE-0040",
+      "type": "milestone",
+      "data": {
+        "label": "Handover - 40",
+        "subtitle": "WP-0034 \u00b7 Financial Close",
+        "status": "Delayed",
+        "riskScore": 0.88,
+        "severity": "critical",
+        "metrics": {
+          "plannedDate": "2024-06-27T00:00:00",
+          "forecastDate": "2024-08-08T00:00:00",
+          "delayDays": 42.0,
+          "isCritical": true
+        },
+        "workPackageId": "WP-0034"
+      },
+      "position": {
+        "x": 1386.0,
+        "y": 463.0
+      }
+    },
+    {
+      "id": "MILESTONE-0043",
+      "type": "milestone",
+      "data": {
+        "label": "Handover - 43",
+        "subtitle": "WP-0034 \u00b7 Planning Permission",
+        "status": "Delayed",
+        "riskScore": 0.88,
+        "severity": "critical",
+        "metrics": {
+          "plannedDate": "2024-11-16T00:00:00",
+          "forecastDate": "2025-02-02T00:00:00",
+          "delayDays": 78.0,
+          "isCritical": false
+        },
+        "workPackageId": "WP-0034"
+      },
+      "position": {
+        "x": 980.0,
+        "y": 1108.0
+      }
+    },
+    {
+      "id": "MILESTONE-0044",
+      "type": "milestone",
+      "data": {
+        "label": "Final Inspection - 44",
+        "subtitle": "WP-0044 \u00b7 Planning Permission",
+        "status": "At Risk",
+        "riskScore": 0.65,
+        "severity": "high",
+        "metrics": {
+          "plannedDate": "2024-05-17T00:00:00",
+          "forecastDate": "2024-06-16T00:00:00",
+          "delayDays": 30.0,
+          "isCritical": true
+        },
+        "workPackageId": "WP-0044"
+      },
+      "position": {
+        "x": 366.0,
+        "y": -355.0
+      }
+    },
+    {
+      "id": "MILESTONE-0045",
+      "type": "milestone",
+      "data": {
+        "label": "Construction Start - 45",
+        "subtitle": "WP-0037 \u00b7 Construction Start",
+        "status": "At Risk",
+        "riskScore": 0.65,
+        "severity": "high",
+        "metrics": {
+          "plannedDate": "2025-01-27T00:00:00",
+          "forecastDate": "2025-03-30T00:00:00",
+          "delayDays": 62.0,
+          "isCritical": false
+        },
+        "workPackageId": "WP-0037"
+      },
+      "position": {
+        "x": -144.0,
+        "y": 234.0
+      }
+    },
+    {
+      "id": "MILESTONE-0046",
+      "type": "milestone",
+      "data": {
+        "label": "Handover - 46",
+        "subtitle": "WP-0023 \u00b7 Financial Close",
+        "status": "Delayed",
+        "riskScore": 0.88,
+        "severity": "critical",
+        "metrics": {
+          "plannedDate": "2024-01-10T00:00:00",
+          "forecastDate": "2024-02-03T00:00:00",
+          "delayDays": 24.0,
+          "isCritical": false
+        },
+        "workPackageId": "WP-0023"
+      },
+      "position": {
+        "x": 1038.0,
+        "y": 1070.0
+      }
+    },
+    {
+      "id": "MILESTONE-0048",
+      "type": "milestone",
+      "data": {
+        "label": "Planning Permission - 48",
+        "subtitle": "WP-0037 \u00b7 Final Inspection",
+        "status": "Delayed",
+        "riskScore": 0.88,
+        "severity": "critical",
+        "metrics": {
+          "plannedDate": "2025-05-22T00:00:00",
+          "forecastDate": "2025-06-05T00:00:00",
+          "delayDays": 14.0,
+          "isCritical": false
+        },
+        "workPackageId": "WP-0037"
+      },
+      "position": {
+        "x": -200.0,
+        "y": 378.0
+      }
+    },
+    {
+      "id": "MILESTONE-0051",
+      "type": "milestone",
+      "data": {
+        "label": "Construction Start - 51",
+        "subtitle": "WP-0037 \u00b7 Go-Live",
+        "status": "Delayed",
+        "riskScore": 0.88,
+        "severity": "critical",
+        "metrics": {
+          "plannedDate": "2024-12-25T00:00:00",
+          "forecastDate": "2025-03-11T00:00:00",
+          "delayDays": 76.0,
+          "isCritical": false
+        },
+        "workPackageId": "WP-0037"
+      },
+      "position": {
+        "x": 461.0,
+        "y": -354.0
+      }
+    },
+    {
+      "id": "MILESTONE-0053",
+      "type": "milestone",
+      "data": {
+        "label": "Handover - 53",
+        "subtitle": "WP-0032 \u00b7 Handover",
+        "status": "Delayed",
+        "riskScore": 0.88,
+        "severity": "critical",
+        "metrics": {
+          "plannedDate": "2024-05-25T00:00:00",
+          "forecastDate": "2024-06-28T00:00:00",
+          "delayDays": 34.0,
+          "isCritical": false
+        },
+        "workPackageId": "WP-0032"
+      },
+      "position": {
+        "x": -145.0,
+        "y": 150.0
+      }
+    },
+    {
+      "id": "MILESTONE-0054",
+      "type": "milestone",
+      "data": {
+        "label": "Go-Live - 54",
+        "subtitle": "WP-0045 \u00b7 Design Review",
+        "status": "Delayed",
+        "riskScore": 0.88,
+        "severity": "critical",
+        "metrics": {
+          "plannedDate": "2025-01-12T00:00:00",
+          "forecastDate": "2025-03-15T00:00:00",
+          "delayDays": 62.0,
+          "isCritical": false
+        },
+        "workPackageId": "WP-0045"
+      },
+      "position": {
+        "x": 1385.0,
+        "y": 241.0
+      }
+    },
+    {
+      "id": "MILESTONE-0055",
+      "type": "milestone",
+      "data": {
+        "label": "Substantial Completion - 55",
+        "subtitle": "WP-0005 \u00b7 Financial Close",
+        "status": "At Risk",
+        "riskScore": 0.65,
+        "severity": "high",
+        "metrics": {
+          "plannedDate": "2025-07-01T00:00:00",
+          "forecastDate": "2025-08-24T00:00:00",
+          "delayDays": 54.0,
+          "isCritical": true
+        },
+        "workPackageId": "WP-0005"
+      },
+      "position": {
+        "x": 627.0,
+        "y": 1149.0
+      }
+    },
+    {
+      "id": "MILESTONE-0057",
+      "type": "milestone",
+      "data": {
+        "label": "Handover - 57",
+        "subtitle": "WP-0008 \u00b7 Substantial Completion",
+        "status": "At Risk",
+        "riskScore": 0.65,
+        "severity": "high",
+        "metrics": {
+          "plannedDate": "2024-06-10T00:00:00",
+          "forecastDate": "2024-06-10T00:00:00",
+          "delayDays": 0,
+          "isCritical": false
+        },
+        "workPackageId": "WP-0008"
+      },
+      "position": {
+        "x": 447.0,
+        "y": 1186.0
+      }
+    },
+    {
+      "id": "MILESTONE-0063",
+      "type": "milestone",
+      "data": {
+        "label": "Substantial Completion - 63",
+        "subtitle": "WP-0023 \u00b7 Final Inspection",
+        "status": "At Risk",
+        "riskScore": 0.65,
+        "severity": "high",
+        "metrics": {
+          "plannedDate": "2025-03-15T00:00:00",
+          "forecastDate": "2025-04-01T00:00:00",
+          "delayDays": 17.0,
+          "isCritical": false
+        },
+        "workPackageId": "WP-0023"
+      },
+      "position": {
+        "x": 1345.0,
+        "y": 81.0
+      }
+    },
+    {
+      "id": "MILESTONE-0065",
+      "type": "milestone",
+      "data": {
+        "label": "Planning Permission - 65",
+        "subtitle": "WP-0008 \u00b7 Design Review",
+        "status": "Delayed",
+        "riskScore": 0.88,
+        "severity": "critical",
+        "metrics": {
+          "plannedDate": "2024-09-03T00:00:00",
+          "forecastDate": "2024-11-18T00:00:00",
+          "delayDays": 76.0,
+          "isCritical": false
+        },
+        "workPackageId": "WP-0008"
+      },
+      "position": {
+        "x": 733.0,
+        "y": -333.0
+      }
+    },
+    {
+      "id": "MILESTONE-0067",
+      "type": "milestone",
+      "data": {
+        "label": "Handover - 67",
+        "subtitle": "WP-0026 \u00b7 Handover",
+        "status": "At Risk",
+        "riskScore": 0.65,
+        "severity": "high",
+        "metrics": {
+          "plannedDate": "2025-06-02T00:00:00",
+          "forecastDate": "2025-08-05T00:00:00",
+          "delayDays": 64.0,
+          "isCritical": false
+        },
+        "workPackageId": "WP-0026"
+      },
+      "position": {
+        "x": 306.0,
+        "y": -350.0
+      }
+    },
+    {
+      "id": "MILESTONE-0074",
+      "type": "milestone",
+      "data": {
+        "label": "Construction Start - 74",
+        "subtitle": "WP-0031 \u00b7 Design Review",
+        "status": "At Risk",
+        "riskScore": 0.65,
+        "severity": "high",
+        "metrics": {
+          "plannedDate": "2025-01-07T00:00:00",
+          "forecastDate": "2025-01-26T00:00:00",
+          "delayDays": 19.0,
+          "isCritical": false
+        },
+        "workPackageId": "WP-0031"
+      },
+      "position": {
+        "x": 1334.0,
+        "y": 467.0
+      }
+    },
+    {
+      "id": "MILESTONE-0077",
+      "type": "milestone",
+      "data": {
+        "label": "Substantial Completion - 77",
+        "subtitle": "WP-0006 \u00b7 Final Inspection",
+        "status": "Delayed",
+        "riskScore": 0.88,
+        "severity": "critical",
+        "metrics": {
+          "plannedDate": "2025-07-20T00:00:00",
+          "forecastDate": "2025-09-05T00:00:00",
+          "delayDays": 47.0,
+          "isCritical": false
+        },
+        "workPackageId": "WP-0006"
+      },
+      "position": {
+        "x": -135.0,
+        "y": 79.0
+      }
+    },
+    {
+      "id": "MILESTONE-0082",
+      "type": "milestone",
+      "data": {
+        "label": "Substantial Completion - 82",
+        "subtitle": "WP-0026 \u00b7 Planning Permission",
+        "status": "At Risk",
+        "riskScore": 0.65,
+        "severity": "high",
+        "metrics": {
+          "plannedDate": "2024-11-30T00:00:00",
+          "forecastDate": "2025-01-03T00:00:00",
+          "delayDays": 34.0,
+          "isCritical": false
+        },
+        "workPackageId": "WP-0026"
+      },
+      "position": {
+        "x": 1276.0,
+        "y": -34.0
+      }
+    },
+    {
+      "id": "MILESTONE-0083",
+      "type": "milestone",
+      "data": {
+        "label": "Planning Permission - 83",
+        "subtitle": "WP-0011 \u00b7 Go-Live",
+        "status": "Delayed",
+        "riskScore": 0.88,
+        "severity": "critical",
+        "metrics": {
+          "plannedDate": "2025-04-05T00:00:00",
+          "forecastDate": "2025-05-27T00:00:00",
+          "delayDays": 52.0,
+          "isCritical": false
+        },
+        "workPackageId": "WP-0011"
+      },
+      "position": {
+        "x": -172.0,
+        "y": 328.0
+      }
+    },
+    {
+      "id": "MILESTONE-0087",
+      "type": "milestone",
+      "data": {
+        "label": "Planning Permission - 87",
+        "subtitle": "WP-0013 \u00b7 Final Inspection",
+        "status": "At Risk",
+        "riskScore": 0.65,
+        "severity": "high",
+        "metrics": {
+          "plannedDate": "2025-02-14T00:00:00",
+          "forecastDate": "2025-05-05T00:00:00",
+          "delayDays": 80.0,
+          "isCritical": false
+        },
+        "workPackageId": "WP-0013"
+      },
+      "position": {
+        "x": 1322.0,
+        "y": 19.0
+      }
+    },
+    {
+      "id": "MILESTONE-0090",
+      "type": "milestone",
+      "data": {
+        "label": "Financial Close - 90",
+        "subtitle": "WP-0042 \u00b7 Design Review",
+        "status": "Delayed",
+        "riskScore": 0.88,
+        "severity": "critical",
+        "metrics": {
+          "plannedDate": "2024-10-29T00:00:00",
+          "forecastDate": "2025-01-07T00:00:00",
+          "delayDays": 70.0,
+          "isCritical": true
+        },
+        "workPackageId": "WP-0042"
+      },
+      "position": {
+        "x": 939.0,
+        "y": 1092.0
+      }
+    },
+    {
+      "id": "MILESTONE-0094",
+      "type": "milestone",
+      "data": {
+        "label": "Construction Start - 94",
+        "subtitle": "WP-0037 \u00b7 Substantial Completion",
+        "status": "At Risk",
+        "riskScore": 0.65,
+        "severity": "high",
+        "metrics": {
+          "plannedDate": "2025-02-01T00:00:00",
+          "forecastDate": "2025-02-23T00:00:00",
+          "delayDays": 22.0,
+          "isCritical": false
+        },
+        "workPackageId": "WP-0037"
+      },
+      "position": {
+        "x": 255.0,
+        "y": 1088.0
+      }
+    },
+    {
+      "id": "MILESTONE-0097",
+      "type": "milestone",
+      "data": {
+        "label": "Planning Permission - 97",
+        "subtitle": "WP-0002 \u00b7 Go-Live",
+        "status": "Delayed",
+        "riskScore": 0.88,
+        "severity": "critical",
+        "metrics": {
+          "plannedDate": "2024-05-31T00:00:00",
+          "forecastDate": "2024-06-18T00:00:00",
+          "delayDays": 18.0,
+          "isCritical": false
+        },
+        "workPackageId": "WP-0002"
+      },
+      "position": {
+        "x": 413.0,
+        "y": 1118.0
+      }
+    },
+    {
+      "id": "MILESTONE-0098",
+      "type": "milestone",
+      "data": {
+        "label": "Handover - 98",
+        "subtitle": "WP-0022 \u00b7 Financial Close",
+        "status": "At Risk",
+        "riskScore": 0.65,
+        "severity": "high",
+        "metrics": {
+          "plannedDate": "2024-11-05T00:00:00",
+          "forecastDate": "2024-11-25T00:00:00",
+          "delayDays": 20.0,
+          "isCritical": false
+        },
+        "workPackageId": "WP-0022"
+      },
+      "position": {
+        "x": 1270.0,
+        "y": 708.0
+      }
+    },
+    {
+      "id": "MILESTONE-0104",
+      "type": "milestone",
+      "data": {
+        "label": "Planning Permission - 104",
+        "subtitle": "WP-0002 \u00b7 Go-Live",
+        "status": "At Risk",
+        "riskScore": 0.65,
+        "severity": "high",
+        "metrics": {
+          "plannedDate": "2024-11-22T00:00:00",
+          "forecastDate": "2024-12-05T00:00:00",
+          "delayDays": 13.0,
+          "isCritical": true
+        },
+        "workPackageId": "WP-0002"
+      },
+      "position": {
+        "x": -60.0,
+        "y": 863.0
+      }
+    },
+    {
+      "id": "MILESTONE-0107",
+      "type": "milestone",
+      "data": {
+        "label": "Planning Permission - 107",
+        "subtitle": "WP-0010 \u00b7 Final Inspection",
+        "status": "At Risk",
+        "riskScore": 0.65,
+        "severity": "high",
+        "metrics": {
+          "plannedDate": "2024-02-25T00:00:00",
+          "forecastDate": "2024-04-19T00:00:00",
+          "delayDays": 54.0,
+          "isCritical": false
+        },
+        "workPackageId": "WP-0010"
+      },
+      "position": {
+        "x": 221.0,
+        "y": -281.0
+      }
+    },
+    {
+      "id": "MILESTONE-0110",
+      "type": "milestone",
+      "data": {
+        "label": "Design Review - 110",
+        "subtitle": "WP-0029 \u00b7 Construction Start",
+        "status": "At Risk",
+        "riskScore": 0.65,
+        "severity": "high",
+        "metrics": {
+          "plannedDate": "2025-04-21T00:00:00",
+          "forecastDate": "2025-05-25T00:00:00",
+          "delayDays": 34.0,
+          "isCritical": false
+        },
+        "workPackageId": "WP-0029"
+      },
+      "position": {
+        "x": -191.0,
+        "y": 488.0
+      }
+    },
+    {
+      "id": "MILESTONE-0111",
+      "type": "milestone",
+      "data": {
+        "label": "Handover - 111",
+        "subtitle": "WP-0038 \u00b7 Financial Close",
+        "status": "Delayed",
+        "riskScore": 0.88,
+        "severity": "critical",
+        "metrics": {
+          "plannedDate": "2024-08-20T00:00:00",
+          "forecastDate": "2024-10-08T00:00:00",
+          "delayDays": 49.0,
+          "isCritical": false
+        },
+        "workPackageId": "WP-0038"
+      },
+      "position": {
+        "x": 940.0,
+        "y": -333.0
+      }
+    },
+    {
+      "id": "MILESTONE-0114",
+      "type": "milestone",
+      "data": {
+        "label": "Go-Live - 114",
+        "subtitle": "WP-0006 \u00b7 Final Inspection",
+        "status": "Delayed",
+        "riskScore": 0.88,
+        "severity": "critical",
+        "metrics": {
+          "plannedDate": "2025-02-01T00:00:00",
+          "forecastDate": "2025-04-12T00:00:00",
+          "delayDays": 70.0,
+          "isCritical": false
+        },
+        "workPackageId": "WP-0006"
+      },
+      "position": {
+        "x": 588.0,
+        "y": -364.0
+      }
+    },
+    {
+      "id": "MILESTONE-0116",
+      "type": "milestone",
+      "data": {
+        "label": "Financial Close - 116",
+        "subtitle": "WP-0027 \u00b7 Design Review",
+        "status": "At Risk",
+        "riskScore": 0.65,
+        "severity": "high",
+        "metrics": {
+          "plannedDate": "2024-09-27T00:00:00",
+          "forecastDate": "2024-11-28T00:00:00",
+          "delayDays": 62.0,
+          "isCritical": true
+        },
+        "workPackageId": "WP-0027"
+      },
+      "position": {
+        "x": 983.0,
+        "y": -280.0
+      }
+    },
+    {
+      "id": "CONTRACT-0001",
+      "type": "contract",
+      "data": {
+        "label": "CN-14847 \u00b7 National Solutions Ltd.",
+        "subtitle": "Time & Materials \u00b7 \u00a349,042,877",
+        "status": "Active",
+        "riskScore": 0.65,
+        "severity": "high",
+        "metrics": {
+          "contractValue": 49042877.37,
+          "supplierTier": "Tier 1",
+          "complianceStatus": "Pending",
+          "isKeySupplier": false
+        },
+        "supplierId": "SUPPLIER-006",
+        "workPackageId": "WP-0021"
+      },
+      "position": {
+        "x": 1252.0,
+        "y": 14.0
+      }
+    },
+    {
+      "id": "CONTRACT-0002",
+      "type": "contract",
+      "data": {
+        "label": "CN-45811 \u00b7 ABC Services Ltd.",
+        "subtitle": "Fixed Price \u00b7 \u00a31,927,376",
+        "status": "Active",
+        "riskScore": 0.65,
+        "severity": "high",
+        "metrics": {
+          "contractValue": 1927376.5,
+          "supplierTier": "Tier 2",
+          "complianceStatus": "Under Review",
+          "isKeySupplier": false
+        },
+        "supplierId": "SUPPLIER-018",
+        "workPackageId": "WP-0025"
+      },
+      "position": {
+        "x": 1197.0,
+        "y": -160.0
+      }
+    },
+    {
+      "id": "CONTRACT-0003",
+      "type": "contract",
+      "data": {
+        "label": "CN-81496 \u00b7 Regional Engineering Ltd.",
+        "subtitle": "Time & Materials \u00b7 \u00a313,409,363",
+        "status": "Active",
+        "riskScore": 0.65,
+        "severity": "high",
+        "metrics": {
+          "contractValue": 13409362.72,
+          "supplierTier": "Tier 2",
+          "complianceStatus": "Pending",
+          "isKeySupplier": false
+        },
+        "supplierId": "SUPPLIER-016",
+        "workPackageId": "WP-0019"
+      },
+      "position": {
+        "x": 414.0,
+        "y": -366.0
+      }
+    },
+    {
+      "id": "CONTRACT-0004",
+      "type": "contract",
+      "data": {
+        "label": "CN-19835 \u00b7 Global Construction Ltd.",
+        "subtitle": "Unit Price \u00b7 \u00a32,213,523",
+        "status": "Completed",
+        "riskScore": 0.65,
+        "severity": "high",
+        "metrics": {
+          "contractValue": 2213522.63,
+          "supplierTier": "Tier 2",
+          "complianceStatus": "Pending",
+          "isKeySupplier": true
+        },
+        "supplierId": "SUPPLIER-015",
+        "workPackageId": "WP-0002"
+      },
+      "position": {
+        "x": 1106.0,
+        "y": 1039.0
+      }
+    },
+    {
+      "id": "CONTRACT-0005",
+      "type": "contract",
+      "data": {
+        "label": "CN-99006 \u00b7 Elite Engineering Ltd.",
+        "subtitle": "Unit Price \u00b7 \u00a338,947,917",
+        "status": "Active",
+        "riskScore": 0.91,
+        "severity": "critical",
+        "metrics": {
+          "contractValue": 38947917.14,
+          "supplierTier": "Tier 2",
+          "complianceStatus": "Non-Compliant",
+          "isKeySupplier": true
+        },
+        "supplierId": "SUPPLIER-005",
+        "workPackageId": "WP-0037"
+      },
+      "position": {
+        "x": -62.0,
+        "y": 781.0
+      }
+    },
+    {
+      "id": "CONTRACT-0006",
+      "type": "contract",
+      "data": {
+        "label": "CN-25435 \u00b7 Premier Group Ltd.",
+        "subtitle": "Time & Materials \u00b7 \u00a312,555,621",
+        "status": "Active",
+        "riskScore": 0.65,
+        "severity": "high",
+        "metrics": {
+          "contractValue": 12555621.49,
+          "supplierTier": "Tier 2",
+          "complianceStatus": "Pending",
+          "isKeySupplier": false
+        },
+        "supplierId": "SUPPLIER-011",
+        "workPackageId": "WP-0019"
+      },
+      "position": {
+        "x": 1366.0,
+        "y": 519.0
+      }
+    },
+    {
+      "id": "CONTRACT-0007",
+      "type": "contract",
+      "data": {
+        "label": "CN-97535 \u00b7 National Services Ltd.",
+        "subtitle": "Time & Materials \u00b7 \u00a322,656,930",
+        "status": "Completed",
+        "riskScore": 0.65,
+        "severity": "high",
+        "metrics": {
+          "contractValue": 22656929.99,
+          "supplierTier": "Tier 3",
+          "complianceStatus": "Under Review",
+          "isKeySupplier": false
+        },
+        "supplierId": "SUPPLIER-004",
+        "workPackageId": "WP-0020"
+      },
+      "position": {
+        "x": 918.0,
+        "y": -289.0
+      }
+    },
+    {
+      "id": "CONTRACT-0009",
+      "type": "contract",
+      "data": {
+        "label": "CN-68979 \u00b7 Global Construction Ltd.",
+        "subtitle": "Unit Price \u00b7 \u00a326,332,213",
+        "status": "On Hold",
+        "riskScore": 0.65,
+        "severity": "high",
+        "metrics": {
+          "contractValue": 26332213.18,
+          "supplierTier": "Tier 3",
+          "complianceStatus": "Under Review",
+          "isKeySupplier": false
+        },
+        "supplierId": "SUPPLIER-013",
+        "workPackageId": ""
+      },
+      "position": {
+        "x": 195.0,
+        "y": 1102.0
+      }
+    },
+    {
+      "id": "CONTRACT-0010",
+      "type": "contract",
+      "data": {
+        "label": "CN-52291 \u00b7 XYZ Engineering Ltd.",
+        "subtitle": "Cost Plus \u00b7 \u00a345,544,542",
+        "status": "Active",
+        "riskScore": 0.91,
+        "severity": "critical",
+        "metrics": {
+          "contractValue": 45544542.32,
+          "supplierTier": "Tier 2",
+          "complianceStatus": "Non-Compliant",
+          "isKeySupplier": true
+        },
+        "supplierId": "SUPPLIER-005",
+        "workPackageId": "WP-0017"
+      },
+      "position": {
+        "x": 1372.0,
+        "y": 576.0
+      }
+    },
+    {
+      "id": "CONTRACT-0011",
+      "type": "contract",
+      "data": {
+        "label": "CN-89316 \u00b7 XYZ Group Ltd.",
+        "subtitle": "Time & Materials \u00b7 \u00a34,762,078",
+        "status": "Active",
+        "riskScore": 0.91,
+        "severity": "critical",
+        "metrics": {
+          "contractValue": 4762077.5,
+          "supplierTier": "Tier 3",
+          "complianceStatus": "Non-Compliant",
+          "isKeySupplier": false
+        },
+        "supplierId": "SUPPLIER-010",
+        "workPackageId": ""
+      },
+      "position": {
+        "x": -52.0,
+        "y": 29.0
+      }
+    },
+    {
+      "id": "CONTRACT-0012",
+      "type": "contract",
+      "data": {
+        "label": "CN-73300 \u00b7 Global Services Ltd.",
+        "subtitle": "Cost Plus \u00b7 \u00a320,887,680",
+        "status": "Active",
+        "riskScore": 0.65,
+        "severity": "high",
+        "metrics": {
+          "contractValue": 20887680.5,
+          "supplierTier": "Tier 3",
+          "complianceStatus": "Pending",
+          "isKeySupplier": true
+        },
+        "supplierId": "SUPPLIER-007",
+        "workPackageId": "WP-0045"
+      },
+      "position": {
+        "x": 890.0,
+        "y": 1141.0
+      }
+    },
+    {
+      "id": "CONTRACT-0014",
+      "type": "contract",
+      "data": {
+        "label": "CN-52917 \u00b7 XYZ Engineering Ltd.",
+        "subtitle": "Lump Sum \u00b7 \u00a34,930,901",
+        "status": "Active",
+        "riskScore": 0.65,
+        "severity": "high",
+        "metrics": {
+          "contractValue": 4930901.46,
+          "supplierTier": "Tier 3",
+          "complianceStatus": "Pending",
+          "isKeySupplier": false
+        },
+        "supplierId": "SUPPLIER-015",
+        "workPackageId": "WP-0032"
+      },
+      "position": {
+        "x": 1219.0,
+        "y": 908.0
+      }
+    },
+    {
+      "id": "CONTRACT-0015",
+      "type": "contract",
+      "data": {
+        "label": "CN-16377 \u00b7 Elite Services Ltd.",
+        "subtitle": "Fixed Price \u00b7 \u00a34,593,450",
+        "status": "Active",
+        "riskScore": 0.91,
+        "severity": "critical",
+        "metrics": {
+          "contractValue": 4593449.84,
+          "supplierTier": "Tier 2",
+          "complianceStatus": "Non-Compliant",
+          "isKeySupplier": false
+        },
+        "supplierId": "SUPPLIER-010",
+        "workPackageId": "WP-0042"
+      },
+      "position": {
+        "x": 876.0,
+        "y": -346.0
+      }
+    },
+    {
+      "id": "CONTRACT-0016",
+      "type": "contract",
+      "data": {
+        "label": "CN-16705 \u00b7 ABC Solutions Ltd.",
+        "subtitle": "Lump Sum \u00b7 \u00a36,783,354",
+        "status": "Active",
+        "riskScore": 0.65,
+        "severity": "high",
+        "metrics": {
+          "contractValue": 6783353.71,
+          "supplierTier": "Tier 3",
+          "complianceStatus": "Pending",
+          "isKeySupplier": false
+        },
+        "supplierId": "SUPPLIER-001",
+        "workPackageId": "WP-0005"
+      },
+      "position": {
+        "x": 373.0,
+        "y": 1165.0
+      }
+    },
+    {
+      "id": "CONTRACT-0018",
+      "type": "contract",
+      "data": {
+        "label": "CN-31299 \u00b7 Elite Services Ltd.",
+        "subtitle": "Unit Price \u00b7 \u00a326,014,702",
+        "status": "Active",
+        "riskScore": 0.91,
+        "severity": "critical",
+        "metrics": {
+          "contractValue": 26014702.25,
+          "supplierTier": "Tier 3",
+          "complianceStatus": "Non-Compliant",
+          "isKeySupplier": false
+        },
+        "supplierId": "SUPPLIER-011",
+        "workPackageId": "WP-0033"
+      },
+      "position": {
+        "x": 717.0,
+        "y": -397.0
+      }
+    },
+    {
+      "id": "CONTRACT-0019",
+      "type": "contract",
+      "data": {
+        "label": "CN-88238 \u00b7 National Construction Ltd.",
+        "subtitle": "Unit Price \u00b7 \u00a333,722,939",
+        "status": "Terminated",
+        "riskScore": 0.65,
+        "severity": "high",
+        "metrics": {
+          "contractValue": 33722938.98,
+          "supplierTier": "Tier 2",
+          "complianceStatus": "Pending",
+          "isKeySupplier": true
+        },
+        "supplierId": "SUPPLIER-001",
+        "workPackageId": ""
+      },
+      "position": {
+        "x": -157.0,
+        "y": 620.0
+      }
+    },
+    {
+      "id": "CONTRACT-0020",
+      "type": "contract",
+      "data": {
+        "label": "CN-35006 \u00b7 Elite Construction Ltd.",
+        "subtitle": "Fixed Price \u00b7 \u00a338,752,846",
+        "status": "Active",
+        "riskScore": 0.65,
+        "severity": "high",
+        "metrics": {
+          "contractValue": 38752845.88,
+          "supplierTier": "Tier 2",
+          "complianceStatus": "Pending",
+          "isKeySupplier": false
+        },
+        "supplierId": "SUPPLIER-017",
+        "workPackageId": ""
+      },
+      "position": {
+        "x": -121.0,
+        "y": 11.0
+      }
+    },
+    {
+      "id": "CONTRACT-0021",
+      "type": "contract",
+      "data": {
+        "label": "CN-59391 \u00b7 Premier Group Ltd.",
+        "subtitle": "Time & Materials \u00b7 \u00a335,318,184",
+        "status": "Active",
+        "riskScore": 0.91,
+        "severity": "critical",
+        "metrics": {
+          "contractValue": 35318184.08,
+          "supplierTier": "Tier 1",
+          "complianceStatus": "Non-Compliant",
+          "isKeySupplier": false
+        },
+        "supplierId": "SUPPLIER-020",
+        "workPackageId": "WP-0023"
+      },
+      "position": {
+        "x": 703.0,
+        "y": 1142.0
+      }
+    },
+    {
+      "id": "CONTRACT-0022",
+      "type": "contract",
+      "data": {
+        "label": "CN-37168 \u00b7 Regional Services Ltd.",
+        "subtitle": "Unit Price \u00b7 \u00a314,022,419",
+        "status": "Active",
+        "riskScore": 0.65,
+        "severity": "high",
+        "metrics": {
+          "contractValue": 14022419.16,
+          "supplierTier": "Tier 2",
+          "complianceStatus": "Pending",
+          "isKeySupplier": true
+        },
+        "supplierId": "SUPPLIER-016",
+        "workPackageId": "WP-0018"
+      },
+      "position": {
+        "x": 1091.0,
+        "y": -196.0
+      }
+    },
+    {
+      "id": "CONTRACT-0023",
+      "type": "contract",
+      "data": {
+        "label": "CN-55398 \u00b7 National Construction Ltd.",
+        "subtitle": "Unit Price \u00b7 \u00a347,734,982",
+        "status": "Completed",
+        "riskScore": 0.91,
+        "severity": "critical",
+        "metrics": {
+          "contractValue": 47734982.28,
+          "supplierTier": "Tier 3",
+          "complianceStatus": "Non-Compliant",
+          "isKeySupplier": false
+        },
+        "supplierId": "SUPPLIER-013",
+        "workPackageId": "WP-0013"
+      },
+      "position": {
+        "x": 1195.0,
+        "y": -98.0
+      }
+    },
+    {
+      "id": "CONTRACT-0024",
+      "type": "contract",
+      "data": {
+        "label": "CN-39579 \u00b7 National Group Ltd.",
+        "subtitle": "Cost Plus \u00b7 \u00a36,949,920",
+        "status": "Active",
+        "riskScore": 0.65,
+        "severity": "high",
+        "metrics": {
+          "contractValue": 6949920.44,
+          "supplierTier": "Tier 1",
+          "complianceStatus": "Under Review",
+          "isKeySupplier": true
+        },
+        "supplierId": "SUPPLIER-018",
+        "workPackageId": "WP-0031"
+      },
+      "position": {
+        "x": 321.0,
+        "y": 1112.0
+      }
+    },
+    {
+      "id": "CONTRACT-0026",
+      "type": "contract",
+      "data": {
+        "label": "CN-14910 \u00b7 XYZ Services Ltd.",
+        "subtitle": "Fixed Price \u00b7 \u00a346,702,738",
+        "status": "Draft",
+        "riskScore": 0.91,
+        "severity": "critical",
+        "metrics": {
+          "contractValue": 46702738.27,
+          "supplierTier": "Tier 2",
+          "complianceStatus": "Non-Compliant",
+          "isKeySupplier": false
+        },
+        "supplierId": "SUPPLIER-006",
+        "workPackageId": ""
+      },
+      "position": {
+        "x": 807.0,
+        "y": 1154.0
+      }
+    },
+    {
+      "id": "CONTRACT-0027",
+      "type": "contract",
+      "data": {
+        "label": "CN-53343 \u00b7 Regional Construction Ltd.",
+        "subtitle": "Cost Plus \u00b7 \u00a344,474,072",
+        "status": "Active",
+        "riskScore": 0.91,
+        "severity": "critical",
+        "metrics": {
+          "contractValue": 44474072.19,
+          "supplierTier": "Tier 3",
+          "complianceStatus": "Non-Compliant",
+          "isKeySupplier": true
+        },
+        "supplierId": "SUPPLIER-018",
+        "workPackageId": ""
+      },
+      "position": {
+        "x": 1016.0,
+        "y": 1011.0
+      }
+    },
+    {
+      "id": "CONTRACT-0028",
+      "type": "contract",
+      "data": {
+        "label": "CN-21368 \u00b7 Elite Services Ltd.",
+        "subtitle": "Unit Price \u00b7 \u00a38,857,196",
+        "status": "Completed",
+        "riskScore": 0.65,
+        "severity": "high",
+        "metrics": {
+          "contractValue": 8857196.2,
+          "supplierTier": "Tier 3",
+          "complianceStatus": "Under Review",
+          "isKeySupplier": false
+        },
+        "supplierId": "SUPPLIER-010",
+        "workPackageId": "WP-0031"
+      },
+      "position": {
+        "x": -178.0,
+        "y": 276.0
+      }
+    },
+    {
+      "id": "CONTRACT-0029",
+      "type": "contract",
+      "data": {
+        "label": "CN-44282 \u00b7 Elite Construction Ltd.",
+        "subtitle": "Time & Materials \u00b7 \u00a322,392,103",
+        "status": "Active",
+        "riskScore": 0.65,
+        "severity": "high",
+        "metrics": {
+          "contractValue": 22392102.54,
+          "supplierTier": "Tier 3",
+          "complianceStatus": "Pending",
+          "isKeySupplier": false
+        },
+        "supplierId": "SUPPLIER-009",
+        "workPackageId": "WP-0030"
+      },
+      "position": {
+        "x": -25.0,
+        "y": -56.0
+      }
+    },
+    {
+      "id": "CONTRACT-0030",
+      "type": "contract",
+      "data": {
+        "label": "CN-27507 \u00b7 XYZ Engineering Ltd.",
+        "subtitle": "Unit Price \u00b7 \u00a334,545,490",
+        "status": "Active",
+        "riskScore": 0.65,
+        "severity": "high",
+        "metrics": {
+          "contractValue": 34545489.83,
+          "supplierTier": "Tier 1",
+          "complianceStatus": "Pending",
+          "isKeySupplier": false
+        },
+        "supplierId": "SUPPLIER-017",
+        "workPackageId": "WP-0024"
+      },
+      "position": {
+        "x": 1399.0,
+        "y": 316.0
+      }
+    },
+    {
+      "id": "CONTRACT-0031",
+      "type": "contract",
+      "data": {
+        "label": "CN-79228 \u00b7 Elite Solutions Ltd.",
+        "subtitle": "Time & Materials \u00b7 \u00a338,116,795",
+        "status": "Pending Approval",
+        "riskScore": 0.65,
+        "severity": "high",
+        "metrics": {
+          "contractValue": 38116795.04,
+          "supplierTier": "Tier 1",
+          "complianceStatus": "Under Review",
+          "isKeySupplier": false
+        },
+        "supplierId": "SUPPLIER-018",
+        "workPackageId": ""
+      },
+      "position": {
+        "x": 1348.0,
+        "y": 654.0
+      }
+    },
+    {
+      "id": "CONTRACT-0033",
+      "type": "contract",
+      "data": {
+        "label": "CN-15936 \u00b7 Elite Construction Ltd.",
+        "subtitle": "Unit Price \u00b7 \u00a336,191,676",
+        "status": "Active",
+        "riskScore": 0.65,
+        "severity": "high",
+        "metrics": {
+          "contractValue": 36191675.98,
+          "supplierTier": "Tier 2",
+          "complianceStatus": "Pending",
+          "isKeySupplier": false
+        },
+        "supplierId": "SUPPLIER-015",
+        "workPackageId": "WP-0005"
+      },
+      "position": {
+        "x": 1370.0,
+        "y": 408.0
+      }
+    },
+    {
+      "id": "CONTRACT-0034",
+      "type": "contract",
+      "data": {
+        "label": "CN-60132 \u00b7 Premier Services Ltd.",
+        "subtitle": "Unit Price \u00b7 \u00a338,471,706",
+        "status": "On Hold",
+        "riskScore": 0.65,
+        "severity": "high",
+        "metrics": {
+          "contractValue": 38471705.92,
+          "supplierTier": "Tier 2",
+          "complianceStatus": "Under Review",
+          "isKeySupplier": false
+        },
+        "supplierId": "SUPPLIER-010",
+        "workPackageId": "WP-0043"
+      },
+      "position": {
+        "x": 738.0,
+        "y": 979.0
+      }
+    },
+    {
+      "id": "CONTRACT-0035",
+      "type": "contract",
+      "data": {
+        "label": "CN-12979 \u00b7 Regional Construction Ltd.",
+        "subtitle": "Time & Materials \u00b7 \u00a349,643,054",
+        "status": "Active",
+        "riskScore": 0.91,
+        "severity": "critical",
+        "metrics": {
+          "contractValue": 49643054.13,
+          "supplierTier": "Tier 2",
+          "complianceStatus": "Non-Compliant",
+          "isKeySupplier": true
+        },
+        "supplierId": "SUPPLIER-012",
+        "workPackageId": "WP-0015"
+      },
+      "position": {
+        "x": 27.0,
+        "y": 928.0
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "e-CONTRACT-0001-WP-0021",
+      "source": "CONTRACT-0001",
+      "target": "WP-0021",
+      "type": "causal",
+      "data": {
+        "relationship": "funds",
+        "weight": 0.4,
+        "description": "Pending supplier contract"
+      },
+      "animated": false,
+      "style": {
+        "stroke": "#6366f1"
+      }
+    },
+    {
+      "id": "e-CONTRACT-0002-WP-0025",
+      "source": "CONTRACT-0002",
+      "target": "WP-0025",
+      "type": "causal",
+      "data": {
+        "relationship": "funds",
+        "weight": 0.91,
+        "description": "Under Review supplier contract"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#ef4444"
+      }
+    },
+    {
+      "id": "e-CONTRACT-0003-WP-0019",
+      "source": "CONTRACT-0003",
+      "target": "WP-0019",
+      "type": "causal",
+      "data": {
+        "relationship": "funds",
+        "weight": 0.4,
+        "description": "Pending supplier contract"
+      },
+      "animated": false,
+      "style": {
+        "stroke": "#6366f1"
+      }
+    },
+    {
+      "id": "e-CONTRACT-0004-WP-0002",
+      "source": "CONTRACT-0004",
+      "target": "WP-0002",
+      "type": "causal",
+      "data": {
+        "relationship": "funds",
+        "weight": 0.4,
+        "description": "Pending supplier contract"
+      },
+      "animated": false,
+      "style": {
+        "stroke": "#6366f1"
+      }
+    },
+    {
+      "id": "e-CONTRACT-0005-WP-0037",
+      "source": "CONTRACT-0005",
+      "target": "WP-0037",
+      "type": "causal",
+      "data": {
+        "relationship": "funds",
+        "weight": 0.91,
+        "description": "Non-Compliant supplier contract"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#ef4444"
+      }
+    },
+    {
+      "id": "e-CONTRACT-0006-WP-0019",
+      "source": "CONTRACT-0006",
+      "target": "WP-0019",
+      "type": "causal",
+      "data": {
+        "relationship": "funds",
+        "weight": 0.4,
+        "description": "Pending supplier contract"
+      },
+      "animated": false,
+      "style": {
+        "stroke": "#6366f1"
+      }
+    },
+    {
+      "id": "e-CONTRACT-0007-WP-0020",
+      "source": "CONTRACT-0007",
+      "target": "WP-0020",
+      "type": "causal",
+      "data": {
+        "relationship": "funds",
+        "weight": 0.91,
+        "description": "Under Review supplier contract"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#ef4444"
+      }
+    },
+    {
+      "id": "e-CONTRACT-0010-WP-0017",
+      "source": "CONTRACT-0010",
+      "target": "WP-0017",
+      "type": "causal",
+      "data": {
+        "relationship": "funds",
+        "weight": 0.91,
+        "description": "Non-Compliant supplier contract"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#ef4444"
+      }
+    },
+    {
+      "id": "e-CONTRACT-0012-WP-0045",
+      "source": "CONTRACT-0012",
+      "target": "WP-0045",
+      "type": "causal",
+      "data": {
+        "relationship": "funds",
+        "weight": 0.4,
+        "description": "Pending supplier contract"
+      },
+      "animated": false,
+      "style": {
+        "stroke": "#6366f1"
+      }
+    },
+    {
+      "id": "e-CONTRACT-0014-WP-0032",
+      "source": "CONTRACT-0014",
+      "target": "WP-0032",
+      "type": "causal",
+      "data": {
+        "relationship": "funds",
+        "weight": 0.4,
+        "description": "Pending supplier contract"
+      },
+      "animated": false,
+      "style": {
+        "stroke": "#6366f1"
+      }
+    },
+    {
+      "id": "e-CONTRACT-0015-WP-0042",
+      "source": "CONTRACT-0015",
+      "target": "WP-0042",
+      "type": "causal",
+      "data": {
+        "relationship": "funds",
+        "weight": 0.91,
+        "description": "Non-Compliant supplier contract"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#ef4444"
+      }
+    },
+    {
+      "id": "e-CONTRACT-0016-WP-0005",
+      "source": "CONTRACT-0016",
+      "target": "WP-0005",
+      "type": "causal",
+      "data": {
+        "relationship": "funds",
+        "weight": 0.4,
+        "description": "Pending supplier contract"
+      },
+      "animated": false,
+      "style": {
+        "stroke": "#6366f1"
+      }
+    },
+    {
+      "id": "e-CONTRACT-0018-WP-0033",
+      "source": "CONTRACT-0018",
+      "target": "WP-0033",
+      "type": "causal",
+      "data": {
+        "relationship": "funds",
+        "weight": 0.91,
+        "description": "Non-Compliant supplier contract"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#ef4444"
+      }
+    },
+    {
+      "id": "e-CONTRACT-0021-WP-0023",
+      "source": "CONTRACT-0021",
+      "target": "WP-0023",
+      "type": "causal",
+      "data": {
+        "relationship": "funds",
+        "weight": 0.91,
+        "description": "Non-Compliant supplier contract"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#ef4444"
+      }
+    },
+    {
+      "id": "e-CONTRACT-0022-WP-0018",
+      "source": "CONTRACT-0022",
+      "target": "WP-0018",
+      "type": "causal",
+      "data": {
+        "relationship": "funds",
+        "weight": 0.4,
+        "description": "Pending supplier contract"
+      },
+      "animated": false,
+      "style": {
+        "stroke": "#6366f1"
+      }
+    },
+    {
+      "id": "e-CONTRACT-0023-WP-0013",
+      "source": "CONTRACT-0023",
+      "target": "WP-0013",
+      "type": "causal",
+      "data": {
+        "relationship": "funds",
+        "weight": 0.91,
+        "description": "Non-Compliant supplier contract"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#ef4444"
+      }
+    },
+    {
+      "id": "e-CONTRACT-0024-WP-0031",
+      "source": "CONTRACT-0024",
+      "target": "WP-0031",
+      "type": "causal",
+      "data": {
+        "relationship": "funds",
+        "weight": 0.91,
+        "description": "Under Review supplier contract"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#ef4444"
+      }
+    },
+    {
+      "id": "e-CONTRACT-0028-WP-0031",
+      "source": "CONTRACT-0028",
+      "target": "WP-0031",
+      "type": "causal",
+      "data": {
+        "relationship": "funds",
+        "weight": 0.91,
+        "description": "Under Review supplier contract"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#ef4444"
+      }
+    },
+    {
+      "id": "e-CONTRACT-0029-WP-0030",
+      "source": "CONTRACT-0029",
+      "target": "WP-0030",
+      "type": "causal",
+      "data": {
+        "relationship": "funds",
+        "weight": 0.4,
+        "description": "Pending supplier contract"
+      },
+      "animated": false,
+      "style": {
+        "stroke": "#6366f1"
+      }
+    },
+    {
+      "id": "e-CONTRACT-0030-WP-0024",
+      "source": "CONTRACT-0030",
+      "target": "WP-0024",
+      "type": "causal",
+      "data": {
+        "relationship": "funds",
+        "weight": 0.4,
+        "description": "Pending supplier contract"
+      },
+      "animated": false,
+      "style": {
+        "stroke": "#6366f1"
+      }
+    },
+    {
+      "id": "e-CONTRACT-0033-WP-0005",
+      "source": "CONTRACT-0033",
+      "target": "WP-0005",
+      "type": "causal",
+      "data": {
+        "relationship": "funds",
+        "weight": 0.4,
+        "description": "Pending supplier contract"
+      },
+      "animated": false,
+      "style": {
+        "stroke": "#6366f1"
+      }
+    },
+    {
+      "id": "e-CONTRACT-0034-WP-0043",
+      "source": "CONTRACT-0034",
+      "target": "WP-0043",
+      "type": "causal",
+      "data": {
+        "relationship": "funds",
+        "weight": 0.91,
+        "description": "Under Review supplier contract"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#ef4444"
+      }
+    },
+    {
+      "id": "e-CONTRACT-0035-WP-0015",
+      "source": "CONTRACT-0035",
+      "target": "WP-0015",
+      "type": "causal",
+      "data": {
+        "relationship": "funds",
+        "weight": 0.91,
+        "description": "Non-Compliant supplier contract"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#ef4444"
+      }
+    },
+    {
+      "id": "e-WP-0004-MILESTONE-0003",
+      "source": "WP-0004",
+      "target": "MILESTONE-0003",
+      "type": "causal",
+      "data": {
+        "relationship": "delivers",
+        "weight": 0.88,
+        "description": "WP delivers milestone (Delayed)"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#f97316"
+      }
+    },
+    {
+      "id": "e-WP-0019-MILESTONE-0010",
+      "source": "WP-0019",
+      "target": "MILESTONE-0010",
+      "type": "causal",
+      "data": {
+        "relationship": "delivers",
+        "weight": 0.88,
+        "description": "WP delivers milestone (Delayed)"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#f97316"
+      }
+    },
+    {
+      "id": "e-WP-0036-MILESTONE-0012",
+      "source": "WP-0036",
+      "target": "MILESTONE-0012",
+      "type": "causal",
+      "data": {
+        "relationship": "delivers",
+        "weight": 0.88,
+        "description": "WP delivers milestone (Delayed)"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#f97316"
+      }
+    },
+    {
+      "id": "e-WP-0040-MILESTONE-0018",
+      "source": "WP-0040",
+      "target": "MILESTONE-0018",
+      "type": "causal",
+      "data": {
+        "relationship": "delivers",
+        "weight": 0.88,
+        "description": "WP delivers milestone (At Risk)"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#f97316"
+      }
+    },
+    {
+      "id": "e-WP-0045-MILESTONE-0019",
+      "source": "WP-0045",
+      "target": "MILESTONE-0019",
+      "type": "causal",
+      "data": {
+        "relationship": "delivers",
+        "weight": 0.88,
+        "description": "WP delivers milestone (At Risk)"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#f97316"
+      }
+    },
+    {
+      "id": "e-WP-0045-MILESTONE-0021",
+      "source": "WP-0045",
+      "target": "MILESTONE-0021",
+      "type": "causal",
+      "data": {
+        "relationship": "delivers",
+        "weight": 0.88,
+        "description": "WP delivers milestone (Delayed)"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#f97316"
+      }
+    },
+    {
+      "id": "e-WP-0002-MILESTONE-0022",
+      "source": "WP-0002",
+      "target": "MILESTONE-0022",
+      "type": "causal",
+      "data": {
+        "relationship": "delivers",
+        "weight": 0.88,
+        "description": "WP delivers milestone (Delayed)"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#f97316"
+      }
+    },
+    {
+      "id": "e-WP-0045-MILESTONE-0023",
+      "source": "WP-0045",
+      "target": "MILESTONE-0023",
+      "type": "causal",
+      "data": {
+        "relationship": "delivers",
+        "weight": 0.88,
+        "description": "WP delivers milestone (Delayed)"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#f97316"
+      }
+    },
+    {
+      "id": "e-WP-0036-MILESTONE-0027",
+      "source": "WP-0036",
+      "target": "MILESTONE-0027",
+      "type": "causal",
+      "data": {
+        "relationship": "delivers",
+        "weight": 0.88,
+        "description": "WP delivers milestone (Delayed)"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#f97316"
+      }
+    },
+    {
+      "id": "e-WP-0019-MILESTONE-0028",
+      "source": "WP-0019",
+      "target": "MILESTONE-0028",
+      "type": "causal",
+      "data": {
+        "relationship": "delivers",
+        "weight": 0.88,
+        "description": "WP delivers milestone (At Risk)"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#f97316"
+      }
+    },
+    {
+      "id": "e-WP-0037-MILESTONE-0032",
+      "source": "WP-0037",
+      "target": "MILESTONE-0032",
+      "type": "causal",
+      "data": {
+        "relationship": "delivers",
+        "weight": 0.88,
+        "description": "WP delivers milestone (At Risk)"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#f97316"
+      }
+    },
+    {
+      "id": "e-WP-0030-MILESTONE-0033",
+      "source": "WP-0030",
+      "target": "MILESTONE-0033",
+      "type": "causal",
+      "data": {
+        "relationship": "delivers",
+        "weight": 0.88,
+        "description": "WP delivers milestone (At Risk)"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#f97316"
+      }
+    },
+    {
+      "id": "e-WP-0024-MILESTONE-0035",
+      "source": "WP-0024",
+      "target": "MILESTONE-0035",
+      "type": "causal",
+      "data": {
+        "relationship": "delivers",
+        "weight": 0.88,
+        "description": "WP delivers milestone (Delayed)"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#f97316"
+      }
+    },
+    {
+      "id": "e-WP-0023-MILESTONE-0037",
+      "source": "WP-0023",
+      "target": "MILESTONE-0037",
+      "type": "causal",
+      "data": {
+        "relationship": "delivers",
+        "weight": 0.88,
+        "description": "WP delivers milestone (Delayed)"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#f97316"
+      }
+    },
+    {
+      "id": "e-WP-0034-MILESTONE-0040",
+      "source": "WP-0034",
+      "target": "MILESTONE-0040",
+      "type": "causal",
+      "data": {
+        "relationship": "delivers",
+        "weight": 0.88,
+        "description": "WP delivers milestone (Delayed)"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#f97316"
+      }
+    },
+    {
+      "id": "e-WP-0034-MILESTONE-0043",
+      "source": "WP-0034",
+      "target": "MILESTONE-0043",
+      "type": "causal",
+      "data": {
+        "relationship": "delivers",
+        "weight": 0.88,
+        "description": "WP delivers milestone (Delayed)"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#f97316"
+      }
+    },
+    {
+      "id": "e-WP-0044-MILESTONE-0044",
+      "source": "WP-0044",
+      "target": "MILESTONE-0044",
+      "type": "causal",
+      "data": {
+        "relationship": "delivers",
+        "weight": 0.88,
+        "description": "WP delivers milestone (At Risk)"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#f97316"
+      }
+    },
+    {
+      "id": "e-WP-0037-MILESTONE-0045",
+      "source": "WP-0037",
+      "target": "MILESTONE-0045",
+      "type": "causal",
+      "data": {
+        "relationship": "delivers",
+        "weight": 0.88,
+        "description": "WP delivers milestone (At Risk)"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#f97316"
+      }
+    },
+    {
+      "id": "e-WP-0023-MILESTONE-0046",
+      "source": "WP-0023",
+      "target": "MILESTONE-0046",
+      "type": "causal",
+      "data": {
+        "relationship": "delivers",
+        "weight": 0.88,
+        "description": "WP delivers milestone (Delayed)"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#f97316"
+      }
+    },
+    {
+      "id": "e-WP-0037-MILESTONE-0048",
+      "source": "WP-0037",
+      "target": "MILESTONE-0048",
+      "type": "causal",
+      "data": {
+        "relationship": "delivers",
+        "weight": 0.88,
+        "description": "WP delivers milestone (Delayed)"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#f97316"
+      }
+    },
+    {
+      "id": "e-WP-0037-MILESTONE-0051",
+      "source": "WP-0037",
+      "target": "MILESTONE-0051",
+      "type": "causal",
+      "data": {
+        "relationship": "delivers",
+        "weight": 0.88,
+        "description": "WP delivers milestone (Delayed)"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#f97316"
+      }
+    },
+    {
+      "id": "e-WP-0032-MILESTONE-0053",
+      "source": "WP-0032",
+      "target": "MILESTONE-0053",
+      "type": "causal",
+      "data": {
+        "relationship": "delivers",
+        "weight": 0.88,
+        "description": "WP delivers milestone (Delayed)"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#f97316"
+      }
+    },
+    {
+      "id": "e-WP-0045-MILESTONE-0054",
+      "source": "WP-0045",
+      "target": "MILESTONE-0054",
+      "type": "causal",
+      "data": {
+        "relationship": "delivers",
+        "weight": 0.88,
+        "description": "WP delivers milestone (Delayed)"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#f97316"
+      }
+    },
+    {
+      "id": "e-WP-0005-MILESTONE-0055",
+      "source": "WP-0005",
+      "target": "MILESTONE-0055",
+      "type": "causal",
+      "data": {
+        "relationship": "delivers",
+        "weight": 0.88,
+        "description": "WP delivers milestone (At Risk)"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#f97316"
+      }
+    },
+    {
+      "id": "e-WP-0008-MILESTONE-0057",
+      "source": "WP-0008",
+      "target": "MILESTONE-0057",
+      "type": "causal",
+      "data": {
+        "relationship": "delivers",
+        "weight": 0.88,
+        "description": "WP delivers milestone (At Risk)"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#f97316"
+      }
+    },
+    {
+      "id": "e-WP-0023-MILESTONE-0063",
+      "source": "WP-0023",
+      "target": "MILESTONE-0063",
+      "type": "causal",
+      "data": {
+        "relationship": "delivers",
+        "weight": 0.88,
+        "description": "WP delivers milestone (At Risk)"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#f97316"
+      }
+    },
+    {
+      "id": "e-WP-0008-MILESTONE-0065",
+      "source": "WP-0008",
+      "target": "MILESTONE-0065",
+      "type": "causal",
+      "data": {
+        "relationship": "delivers",
+        "weight": 0.88,
+        "description": "WP delivers milestone (Delayed)"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#f97316"
+      }
+    },
+    {
+      "id": "e-WP-0026-MILESTONE-0067",
+      "source": "WP-0026",
+      "target": "MILESTONE-0067",
+      "type": "causal",
+      "data": {
+        "relationship": "delivers",
+        "weight": 0.88,
+        "description": "WP delivers milestone (At Risk)"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#f97316"
+      }
+    },
+    {
+      "id": "e-WP-0031-MILESTONE-0074",
+      "source": "WP-0031",
+      "target": "MILESTONE-0074",
+      "type": "causal",
+      "data": {
+        "relationship": "delivers",
+        "weight": 0.88,
+        "description": "WP delivers milestone (At Risk)"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#f97316"
+      }
+    },
+    {
+      "id": "e-WP-0006-MILESTONE-0077",
+      "source": "WP-0006",
+      "target": "MILESTONE-0077",
+      "type": "causal",
+      "data": {
+        "relationship": "delivers",
+        "weight": 0.88,
+        "description": "WP delivers milestone (Delayed)"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#f97316"
+      }
+    },
+    {
+      "id": "e-WP-0026-MILESTONE-0082",
+      "source": "WP-0026",
+      "target": "MILESTONE-0082",
+      "type": "causal",
+      "data": {
+        "relationship": "delivers",
+        "weight": 0.88,
+        "description": "WP delivers milestone (At Risk)"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#f97316"
+      }
+    },
+    {
+      "id": "e-WP-0011-MILESTONE-0083",
+      "source": "WP-0011",
+      "target": "MILESTONE-0083",
+      "type": "causal",
+      "data": {
+        "relationship": "delivers",
+        "weight": 0.88,
+        "description": "WP delivers milestone (Delayed)"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#f97316"
+      }
+    },
+    {
+      "id": "e-WP-0013-MILESTONE-0087",
+      "source": "WP-0013",
+      "target": "MILESTONE-0087",
+      "type": "causal",
+      "data": {
+        "relationship": "delivers",
+        "weight": 0.88,
+        "description": "WP delivers milestone (At Risk)"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#f97316"
+      }
+    },
+    {
+      "id": "e-WP-0042-MILESTONE-0090",
+      "source": "WP-0042",
+      "target": "MILESTONE-0090",
+      "type": "causal",
+      "data": {
+        "relationship": "delivers",
+        "weight": 0.88,
+        "description": "WP delivers milestone (Delayed)"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#f97316"
+      }
+    },
+    {
+      "id": "e-WP-0037-MILESTONE-0094",
+      "source": "WP-0037",
+      "target": "MILESTONE-0094",
+      "type": "causal",
+      "data": {
+        "relationship": "delivers",
+        "weight": 0.88,
+        "description": "WP delivers milestone (At Risk)"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#f97316"
+      }
+    },
+    {
+      "id": "e-WP-0002-MILESTONE-0097",
+      "source": "WP-0002",
+      "target": "MILESTONE-0097",
+      "type": "causal",
+      "data": {
+        "relationship": "delivers",
+        "weight": 0.88,
+        "description": "WP delivers milestone (Delayed)"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#f97316"
+      }
+    },
+    {
+      "id": "e-WP-0022-MILESTONE-0098",
+      "source": "WP-0022",
+      "target": "MILESTONE-0098",
+      "type": "causal",
+      "data": {
+        "relationship": "delivers",
+        "weight": 0.88,
+        "description": "WP delivers milestone (At Risk)"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#f97316"
+      }
+    },
+    {
+      "id": "e-WP-0002-MILESTONE-0104",
+      "source": "WP-0002",
+      "target": "MILESTONE-0104",
+      "type": "causal",
+      "data": {
+        "relationship": "delivers",
+        "weight": 0.88,
+        "description": "WP delivers milestone (At Risk)"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#f97316"
+      }
+    },
+    {
+      "id": "e-WP-0010-MILESTONE-0107",
+      "source": "WP-0010",
+      "target": "MILESTONE-0107",
+      "type": "causal",
+      "data": {
+        "relationship": "delivers",
+        "weight": 0.88,
+        "description": "WP delivers milestone (At Risk)"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#f97316"
+      }
+    },
+    {
+      "id": "e-WP-0029-MILESTONE-0110",
+      "source": "WP-0029",
+      "target": "MILESTONE-0110",
+      "type": "causal",
+      "data": {
+        "relationship": "delivers",
+        "weight": 0.88,
+        "description": "WP delivers milestone (At Risk)"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#f97316"
+      }
+    },
+    {
+      "id": "e-WP-0038-MILESTONE-0111",
+      "source": "WP-0038",
+      "target": "MILESTONE-0111",
+      "type": "causal",
+      "data": {
+        "relationship": "delivers",
+        "weight": 0.88,
+        "description": "WP delivers milestone (Delayed)"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#f97316"
+      }
+    },
+    {
+      "id": "e-WP-0006-MILESTONE-0114",
+      "source": "WP-0006",
+      "target": "MILESTONE-0114",
+      "type": "causal",
+      "data": {
+        "relationship": "delivers",
+        "weight": 0.88,
+        "description": "WP delivers milestone (Delayed)"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#f97316"
+      }
+    },
+    {
+      "id": "e-WP-0027-MILESTONE-0116",
+      "source": "WP-0027",
+      "target": "MILESTONE-0116",
+      "type": "causal",
+      "data": {
+        "relationship": "delivers",
+        "weight": 0.88,
+        "description": "WP delivers milestone (At Risk)"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#f97316"
+      }
+    },
+    {
+      "id": "e-MILESTONE-0010-MILESTONE-0012",
+      "source": "MILESTONE-0010",
+      "target": "MILESTONE-0012",
+      "type": "causal",
+      "data": {
+        "relationship": "blocks",
+        "weight": 0.75,
+        "description": "Milestone dependency"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#ef4444"
+      }
+    },
+    {
+      "id": "e-MILESTONE-0003-MILESTONE-0035",
+      "source": "MILESTONE-0003",
+      "target": "MILESTONE-0035",
+      "type": "causal",
+      "data": {
+        "relationship": "blocks",
+        "weight": 0.75,
+        "description": "Milestone dependency"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#ef4444"
+      }
+    },
+    {
+      "id": "e-MILESTONE-0021-MILESTONE-0045",
+      "source": "MILESTONE-0021",
+      "target": "MILESTONE-0045",
+      "type": "causal",
+      "data": {
+        "relationship": "blocks",
+        "weight": 0.75,
+        "description": "Milestone dependency"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#ef4444"
+      }
+    },
+    {
+      "id": "e-MILESTONE-0037-MILESTONE-0051",
+      "source": "MILESTONE-0037",
+      "target": "MILESTONE-0051",
+      "type": "causal",
+      "data": {
+        "relationship": "blocks",
+        "weight": 0.75,
+        "description": "Milestone dependency"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#ef4444"
+      }
+    },
+    {
+      "id": "e-MILESTONE-0032-MILESTONE-0077",
+      "source": "MILESTONE-0032",
+      "target": "MILESTONE-0077",
+      "type": "causal",
+      "data": {
+        "relationship": "blocks",
+        "weight": 0.75,
+        "description": "Milestone dependency"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#ef4444"
+      }
+    },
+    {
+      "id": "e-MILESTONE-0040-MILESTONE-0083",
+      "source": "MILESTONE-0040",
+      "target": "MILESTONE-0083",
+      "type": "causal",
+      "data": {
+        "relationship": "blocks",
+        "weight": 0.75,
+        "description": "Milestone dependency"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#ef4444"
+      }
+    },
+    {
+      "id": "e-MILESTONE-0054-MILESTONE-0090",
+      "source": "MILESTONE-0054",
+      "target": "MILESTONE-0090",
+      "type": "causal",
+      "data": {
+        "relationship": "blocks",
+        "weight": 0.75,
+        "description": "Milestone dependency"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#ef4444"
+      }
+    },
+    {
+      "id": "e-MILESTONE-0094-MILESTONE-0104",
+      "source": "MILESTONE-0094",
+      "target": "MILESTONE-0104",
+      "type": "causal",
+      "data": {
+        "relationship": "blocks",
+        "weight": 0.75,
+        "description": "Milestone dependency"
+      },
+      "animated": true,
+      "style": {
+        "stroke": "#ef4444"
+      }
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "scenario-compound-failure",
+      "title": "WP-0002 Compound Risk Failure",
+      "triggerNodeId": "WP-0002",
+      "severity": "critical",
+      "summary": "WP-0002 (Work Package 2: Safety Systems) shows High risk across 3 pillars. Blast radius reaches 3 downstream entities with \u00a3821,689 total exposure.",
+      "blastRadius": {
+        "impactedNodeIds": [
+          "MILESTONE-0097",
+          "MILESTONE-0104",
+          "MILESTONE-0022"
+        ],
+        "totalFinancialExposure": 821688.6,
+        "affectedWorkPackages": 1,
+        "maxCascadeDepth": 3
+      },
+      "agentAnalysis": {
+        "executiveSummary": "WP-0002 represents a critical compound failure point. Delivery risk is High (Backlog 100%, 1 on hold), Cost risk is High (CPI=0.76, SPI=0.83), Supplier risk is High (Single supplier (SPOF)).",
+        "impactNarrative": [
+          "**Immediate:** Backlog 100%, 1 on hold threaten project timeline.",
+          "**Short-term:** CPI=0.76, SPI=0.83 compound budget pressure.",
+          "**Medium-term:** Cascade impacts 3 downstream entities.",
+          "**Long-term:** Portfolio-level risk escalation if unmitigated."
+        ],
+        "remediationSteps": [
+          {
+            "id": "r1",
+            "priority": "P0",
+            "action": "Immediate project review for WP-0002",
+            "owner": "PM-10",
+            "riskReduction": 0.35
+          },
+          {
+            "id": "r2",
+            "priority": "P1",
+            "action": "Escalate supplier compliance issues",
+            "owner": "Procurement Lead",
+            "riskReduction": 0.25
+          },
+          {
+            "id": "r3",
+            "priority": "P1",
+            "action": "Re-baseline schedule and cost forecasts",
+            "owner": "PMO",
+            "riskReduction": 0.2
+          }
+        ],
+        "confidenceScore": 0.87
+      }
+    },
+    {
+      "id": "scenario-supplier-cascade",
+      "title": "Elite Services Ltd. Compliance Failure Cascade",
+      "triggerNodeId": "CONTRACT-0015",
+      "severity": "critical",
+      "summary": "Elite Services Ltd. (SUPPLIER-010) has compliance issues across 3 contracts affecting 3 work packages. Total contract value at risk: \u00a351,922,352.",
+      "blastRadius": {
+        "impactedNodeIds": [
+          "WP-0042",
+          "WP-0031",
+          "WP-0043",
+          "CONTRACT-0015",
+          "CONTRACT-0028",
+          "CONTRACT-0034"
+        ],
+        "totalFinancialExposure": 51922351.96,
+        "affectedWorkPackages": 3,
+        "maxCascadeDepth": 3
+      },
+      "agentAnalysis": {
+        "executiveSummary": "Elite Services Ltd. represents a supplier concentration risk. Non-compliant status across 3 contracts with \u00a351,922,352 total value threatens 3 work packages.",
+        "impactNarrative": [
+          "**Immediate:** Compliance suspension freezes payments across 3 contracts.",
+          "**Short-term:** 3 work packages face resource stoppage.",
+          "**Medium-term:** Milestone delays cascade through dependency chains.",
+          "**Long-term:** Alternative supplier mobilization required (est. 4-6 weeks)."
+        ],
+        "remediationSteps": [
+          {
+            "id": "r1",
+            "priority": "P0",
+            "action": "48-hour compliance ultimatum to Elite Services Ltd.",
+            "owner": "Procurement Lead",
+            "riskReduction": 0.35
+          },
+          {
+            "id": "r2",
+            "priority": "P0",
+            "action": "Activate standby supplier for critical WPs",
+            "owner": "PMO",
+            "riskReduction": 0.3
+          },
+          {
+            "id": "r3",
+            "priority": "P1",
+            "action": "Re-route non-critical WPs to alternate suppliers",
+            "owner": "Procurement Lead",
+            "riskReduction": 0.15
+          }
+        ],
+        "confidenceScore": 0.82
+      }
+    },
+    {
+      "id": "scenario-cost-schedule-spiral",
+      "title": "WP-0002 Cost-Schedule Spiral",
+      "triggerNodeId": "WP-0002",
+      "severity": "critical",
+      "summary": "WP-0002 shows dual CPI/SPI failure (CPI=0.76, SPI=0.83) combined with delivery risk. Budget at risk: \u00a3821,689.",
+      "blastRadius": {
+        "impactedNodeIds": [
+          "MILESTONE-0097",
+          "MILESTONE-0104",
+          "MILESTONE-0022"
+        ],
+        "totalFinancialExposure": 821688.6,
+        "affectedWorkPackages": 1,
+        "maxCascadeDepth": 3
+      },
+      "agentAnalysis": {
+        "executiveSummary": "WP-0002 is in a cost-schedule death spiral. CPI of 0.76 and SPI of 0.83 indicate both budget and timeline are deteriorating simultaneously.",
+        "impactNarrative": [
+          "**Immediate:** EAC overrun requires budget reallocation.",
+          "**Short-term:** Schedule compression needed to recover SPI.",
+          "**Medium-term:** Earned value collapse threatens portfolio metrics.",
+          "**Long-term:** Board escalation likely if trend continues."
+        ],
+        "remediationSteps": [
+          {
+            "id": "r1",
+            "priority": "P0",
+            "action": "Conduct earned value deep-dive and re-baseline",
+            "owner": "PM-10",
+            "riskReduction": 0.3
+          },
+          {
+            "id": "r2",
+            "priority": "P1",
+            "action": "Fast-track critical path activities",
+            "owner": "Schedule Manager",
+            "riskReduction": 0.25
+          }
+        ],
+        "confidenceScore": 0.79
+      }
+    }
+  ]
+}

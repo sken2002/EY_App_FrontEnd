@@ -1,65 +1,112 @@
-import Image from "next/image";
+'use client';
+
+import { useSpiderState } from '@/hooks/useSpiderState';
+import { LeftPanel } from '@/components/layout/LeftPanel';
+import { CenterCanvas } from '@/components/canvas/CenterCanvas';
+import { RightPanel } from '@/components/layout/RightPanel';
+import { Header } from '@/components/layout/Header';
+import { useState, useCallback } from 'react';
+
+export type DrillLevel = 'portfolio' | 'pillar' | 'entity';
+export type PillarKey = 'delivery' | 'cost' | 'supplier';
+
+export interface DrillState {
+  level: DrillLevel;
+  activePillar: PillarKey | null;
+  activeEntityId: string | null;
+}
 
 export default function Home() {
+  const { data, loading, error } = useSpiderState();
+  const [activeScenarioId, setActiveScenarioId] = useState<string | null>(null);
+  
+  // Drill-down navigation state
+  const [drill, setDrill] = useState<DrillState>({
+    level: 'portfolio',
+    activePillar: null,
+    activeEntityId: null,
+  });
+
+  // Navigation handlers
+  const drillIntoPillar = useCallback((pillar: PillarKey) => {
+    setDrill({ level: 'pillar', activePillar: pillar, activeEntityId: null });
+  }, []);
+
+  const drillIntoEntity = useCallback((entityId: string) => {
+    setDrill(prev => ({ ...prev, level: 'entity', activeEntityId: entityId }));
+  }, []);
+
+  const navigateBack = useCallback(() => {
+    setDrill(prev => {
+      if (prev.level === 'entity') return { ...prev, level: 'pillar', activeEntityId: null };
+      if (prev.level === 'pillar') return { level: 'portfolio', activePillar: null, activeEntityId: null };
+      return prev;
+    });
+  }, []);
+
+  // Set default scenario when data loads
+  if (data && !activeScenarioId && data.scenarios.length > 0) {
+    setActiveScenarioId(data.scenarios[0].id);
+  }
+
+  if (loading) {
+    return (
+      <div className="flex h-screen w-screen items-center justify-center bg-[#0a0a0f] text-white">
+        <div className="flex flex-col items-center gap-4">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-emerald-500 border-t-transparent" />
+          <p className="text-sm text-gray-400">Loading Project Spider Data...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !data) {
+    return (
+      <div className="flex h-screen w-screen items-center justify-center bg-[#0a0a0f] text-red-500">
+        <p>Error loading state: {error?.message || 'Unknown error'}</p>
+      </div>
+    );
+  }
+
+  const activeScenario = data.scenarios.find(s => s.id === activeScenarioId) || data.scenarios[0];
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <main className="flex h-screen w-screen flex-col overflow-hidden bg-[#0a0a0f] text-white">
+      <Header 
+        scenarios={data.scenarios} 
+        activeScenarioId={activeScenarioId}
+        onScenarioChange={setActiveScenarioId}
+        meta={data.meta}
+      />
+      
+      <div className="flex flex-1 overflow-hidden">
+        {/* Left Panel: Risk Index (280px) */}
+        <LeftPanel 
+          riskIndex={data.riskIndex} 
+          activePillar={drill.activePillar}
+          onPillarClick={drillIntoPillar}
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+
+        {/* Center Panel: Progressive Drill-Down Canvas (Flex) */}
+        <CenterCanvas 
+          nodes={data.nodes} 
+          edges={data.edges}
+          riskIndex={data.riskIndex}
+          scenario={activeScenario}
+          drill={drill}
+          onDrillIntoPillar={drillIntoPillar}
+          onDrillIntoEntity={drillIntoEntity}
+          onNavigateBack={navigateBack}
+        />
+
+        {/* Right Panel: Strategist Agent (360px) */}
+        <RightPanel 
+          scenario={activeScenario} 
+          selectedNodeId={drill.activeEntityId}
+          nodes={data.nodes}
+          drill={drill}
+        />
+      </div>
+    </main>
   );
 }

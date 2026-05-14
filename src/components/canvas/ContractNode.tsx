@@ -7,8 +7,9 @@ export function ContractNode({ data }: { data: SpiderNodeData & { isSelected?: b
 
   return (
     <div className={`relative flex items-center gap-3 rounded-full border bg-[#111116] p-2 pr-4 shadow-lg transition-all
-      ${data.isSelected ? 'ring-2 ring-white scale-105' : ''}
-      ${data.isTrigger ? 'border-red-500 shadow-red-500/20' : 
+      ${data.isSelected ? 'ring-2 ring-white scale-105' :
+        data.isInBlast ? 'ring-2 ring-amber-300 ring-offset-2 ring-offset-black' : ''}
+      ${data.isTrigger ? 'border-red-500 shadow-red-500/20' :
         isNonCompliant ? 'border-orange-500/50' : 'border-white/10'}`}>
       
       {data.isTrigger && (

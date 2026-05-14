@@ -264,17 +264,108 @@ def compute_layout(nodes, edges):
                 }
 
     return nodes
+# Edge weights for blast radius propagation.
+# Higher = stronger causal impact when the source side fails.
+EDGE_WEIGHTS = {
+    'funds':    1.0,   # contract funds WP → if funding fails, WP halts hard
+    'blocks':   0.9,   # milestone gating → direct causal block
+    'delivers': 0.6,   # WP delivers milestone → impact is partial
+}
 
+# Cumulative impact below this is considered too weak to include in blast radius.
+# Tuned so we get a meaningful radius without polluting it with distant ripples.
+BLAST_MIN_IMPACT = 0.3
+
+# Hard cap to prevent runaway BFS on dense graphs.
+BLAST_MAX_DEPTH = 4
+
+
+def compute_blast_radius(edges, trigger_id, node_ids):
+    """
+    Compute the blast radius from a trigger node using weighted bidirectional BFS.
+
+    Walks the graph in both directions because real cascades aren't strictly
+    downstream — e.g. a non-compliant supplier (upstream of a WP) takes out
+    the WPs it funds, AND the milestones those WPs deliver.
+
+    Edge types are weighted (see EDGE_WEIGHTS); cumulative impact decays
+    multiplicatively along each path. Nodes with impact < BLAST_MIN_IMPACT
+    are excluded.
+
+    Returns:
+        {
+          'direct':   [ids reachable in 1 hop with strong edge],
+          'indirect': [ids reachable further out, or via weaker edges],
+          'all':      [direct + indirect, ordered by impact strength desc],
+          'max_depth': int,   # furthest hop count we kept
+        }
+    """
+    if trigger_id not in node_ids:
+        return {'direct': [], 'indirect': [], 'all': [], 'max_depth': 0}
+
+    # Build adjacency in both directions. For each (a, b, type):
+    #   - downstream[a] gets (b, weight)  ← walking a→b
+    #   - upstream[b]  gets (a, weight)   ← walking b→a (contagion back)
+    downstream = {}
+    upstream = {}
+    for e in edges:
+        s, t, etype = e['source'], e['target'], e.get('type', 'delivers')
+        w = EDGE_WEIGHTS.get(etype, 0.5)
+        downstream.setdefault(s, []).append((t, w))
+        upstream.setdefault(t, []).append((s, w))
+
+    # BFS from trigger. Track best (highest) cumulative impact for each node;
+    # if we reach it again with stronger impact, update.
+    best_impact = {trigger_id: 1.0}
+    depth_of   = {trigger_id: 0}
+    from collections import deque
+    queue = deque([trigger_id])
+    max_depth_seen = 0
+
+    while queue:
+        node = queue.popleft()
+        current_impact = best_impact[node]
+        current_depth = depth_of[node]
+        if current_depth >= BLAST_MAX_DEPTH:
+            continue
+
+        # Walk both directions
+        neighbors = downstream.get(node, []) + upstream.get(node, [])
+        for nbr, edge_weight in neighbors:
+            new_impact = current_impact * edge_weight
+            if new_impact < BLAST_MIN_IMPACT:
+                continue  # too weak to propagate further
+            if new_impact > best_impact.get(nbr, 0):
+                best_impact[nbr] = new_impact
+                depth_of[nbr] = current_depth + 1
+                max_depth_seen = max(max_depth_seen, depth_of[nbr])
+                queue.append(nbr)
+
+    # Strip the trigger itself; classify the rest
+    impacted = {k: v for k, v in best_impact.items()
+                if k != trigger_id and k in node_ids}
+
+    direct   = [k for k, v in impacted.items() if depth_of[k] == 1]
+    indirect = [k for k, v in impacted.items() if depth_of[k] > 1]
+
+    # Sort each bucket by impact strength (strongest first)
+    direct.sort(key=lambda k: -impacted[k])
+    indirect.sort(key=lambda k: -impacted[k])
+
+    return {
+        'direct': direct,
+        'indirect': indirect,
+        'all': direct + indirect,
+        'max_depth': max_depth_seen,
+    }
 
 def build_scenarios(wp_master, nodes, edges, ms_df, contracts_df):
     """Curate 2-3 compelling demo scenarios with blast radius."""
     scenarios = []
     node_ids = {n['id'] for n in nodes}
 
-    # Build graph for blast radius
-    G = nx.DiGraph()
-    for e in edges:
-        G.add_edge(e['source'], e['target'])
+# Blast radius is computed by compute_blast_radius() below;
+    # no plain graph build needed here.
 
     # Scenario A: Highest overall risk WP (compound failure)
     high_risk_wps = wp_master[wp_master['overall_risk_class'] == 'High'].copy()
@@ -286,12 +377,10 @@ def build_scenarios(wp_master, nodes, edges, ms_df, contracts_df):
         worst = high_risk_wps.sort_values('high_count', ascending=False).iloc[0]
         wp_id = worst['WorkPackageID']
         
-        # Blast radius
-        blast_nodes = []
-        if wp_id in G:
-            blast_nodes = list(nx.descendants(G, wp_id))
-        
-        impacted = [n for n in blast_nodes if n in node_ids]
+# Blast radius (weighted bidirectional propagation)
+        blast = compute_blast_radius(edges, wp_id, node_ids)
+        impacted = blast['all']
+        direct = blast['direct']
         
         # Financial exposure
         impacted_wps = wp_master[wp_master['WorkPackageID'].isin(impacted + [wp_id])]
@@ -398,8 +487,9 @@ def build_scenarios(wp_master, nodes, edges, ms_df, contracts_df):
         worst_dual = dual_fail.iloc[0]
         wp_id = worst_dual['WorkPackageID']
         
-        blast_nodes = list(nx.descendants(G, wp_id)) if wp_id in G else []
-        impacted = [n for n in blast_nodes if n in node_ids]
+        blast = compute_blast_radius(edges, wp_id, node_ids)
+        impacted = blast['all']
+        direct = blast['direct']
 
         scenarios.append({
             'id': 'scenario-cost-schedule-spiral',

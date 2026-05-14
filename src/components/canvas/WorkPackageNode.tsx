@@ -6,9 +6,10 @@ export function WorkPackageNode({ data }: { data: SpiderNodeData & { isSelected?
   const isCritical = data.severity === 'critical';
   
   return (
-    <div className={`relative w-[280px] rounded-xl border bg-black/80 p-4 shadow-xl backdrop-blur-md transition-all
-      ${data.isSelected ? 'ring-2 ring-white scale-105' : ''}
-      ${data.isTrigger ? 'border-red-500 shadow-red-500/20' : 
+   <div className={`relative w-[280px] rounded-xl border bg-black/80 p-4 shadow-xl backdrop-blur-md transition-all
+      ${data.isSelected ? 'ring-2 ring-white scale-105' :
+        data.isInBlast ? 'ring-2 ring-amber-300 ring-offset-2 ring-offset-black' : ''}
+      ${data.isTrigger ? 'border-red-500 shadow-red-500/20' :
         isCritical ? 'border-orange-500/50' : 'border-white/10'}`}>
       
       {/* Node styling effects */}

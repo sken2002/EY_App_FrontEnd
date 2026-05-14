@@ -7,8 +7,9 @@ export function MilestoneNode({ data }: { data: SpiderNodeData & { isSelected?: 
 
   return (
     <div className={`relative flex items-center gap-2 rounded bg-black/60 px-3 py-2 border backdrop-blur transition-all
-      ${data.isSelected ? 'ring-2 ring-white scale-105' : ''}
-      ${data.isTrigger ? 'border-red-500 shadow-red-500/20' : 
+      ${data.isSelected ? 'ring-2 ring-white scale-105' :
+        data.isInBlast ? 'ring-2 ring-amber-300 ring-offset-2 ring-offset-black' : ''}
+      ${data.isTrigger ? 'border-red-500 shadow-red-500/20' :
         isDelayed ? 'border-orange-500/50' : 'border-white/10'}`}>
       
       {data.isTrigger && (

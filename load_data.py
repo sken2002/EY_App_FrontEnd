@@ -5,8 +5,7 @@ Loads all CSVs, parses dates, validates foreign keys.
 import pandas as pd
 import os
 
-DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
-
+DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data')
 def load_all():
     """Load and parse all CSV files. Returns dict of DataFrames."""
     

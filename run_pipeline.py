@@ -32,7 +32,7 @@ def main():
     # Step 3: Export state.json
     print("\n[3/3] Exporting state.json...")
     output_path = os.path.join(
-        os.path.dirname(os.path.dirname(__file__)),
+        os.path.dirname(os.path.abspath(__file__)),
         'public', 'data', 'state.json'
     )
     state = export_state_json(wp_master, data, output_path)

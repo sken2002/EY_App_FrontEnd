@@ -1,50 +1,71 @@
-import { PillarRisk } from '@/lib/types';
-import { PillarKey } from '@/app/page';
-import { RiskPillarCard } from '../risk-index/RiskPillarCard';
+import { RiskIndex, DimensionKey } from '@/lib/types';
+import { RiskDimensionCard } from '../risk-index/RiskDimensionCard';
+import { Shield } from 'lucide-react';
 
 interface LeftPanelProps {
-  riskIndex: {
-    delivery: PillarRisk;
-    cost: PillarRisk;
-    supplier: PillarRisk;
-  };
-  activePillar: PillarKey | null;
-  onPillarClick: (pillar: PillarKey) => void;
+  riskIndex: RiskIndex;
+  activePillar: DimensionKey | null;
+  onPillarClick: (pillar: DimensionKey) => void;
 }
 
-const PILLAR_KEYS: PillarKey[] = ['delivery', 'cost', 'supplier'];
+const DIMENSION_KEYS: DimensionKey[] = ['costFinancial', 'cashflow', 'schedule', 'operational', 'supplier'];
 
 export function LeftPanel({ riskIndex, activePillar, onPillarClick }: LeftPanelProps) {
-  const scores = [riskIndex.delivery.overallScore, riskIndex.cost.overallScore, riskIndex.supplier.overallScore];
-  const maxScore = Math.max(...scores);
-  const severity = maxScore >= 0.65 ? 'Critical' : maxScore >= 0.45 ? 'High' : 'Medium';
-  const color = severity === 'Critical' ? 'text-red-500' : severity === 'High' ? 'text-orange-500' : 'text-emerald-500';
+  const cri = riskIndex.compositeRiskIndex;
+  const dq = riskIndex.dataQuality;
+  
+  const color = cri.severity === 'critical' ? 'text-red-500' : cri.severity === 'high' ? 'text-orange-500' : 'text-emerald-500';
+  const severityLabel = cri.severity === 'critical' ? 'Critical' : cri.severity === 'high' ? 'High' : 'Medium';
 
   return (
     <aside className="flex w-[280px] shrink-0 flex-col border-r border-white/10 bg-[#0f0f15] overflow-y-auto">
+      {/* CRI Header */}
       <div className="border-b border-white/10 p-5">
-        <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-400">Portfolio Risk Profile</h2>
+        <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-400">Composite Risk Index</h2>
         <div className="mt-3 flex items-end gap-3">
           <div className={`text-4xl font-bold tracking-tight ${color}`}>
-            {(maxScore * 100).toFixed(0)}
+            {cri.weightedScore.toFixed(0)}
           </div>
           <div className="mb-1 text-sm font-medium text-gray-400">/ 100</div>
         </div>
         <div className="mt-2 flex items-center gap-2">
-          <div className={`h-2 w-2 rounded-full ${severity === 'Critical' ? 'bg-red-500' : severity === 'High' ? 'bg-orange-500' : 'bg-emerald-500'} animate-pulse`} />
-          <span className="text-sm font-medium text-white">{severity} Posture</span>
+          <div className={`h-2 w-2 rounded-full ${cri.severity === 'critical' ? 'bg-red-500' : cri.severity === 'high' ? 'bg-orange-500' : 'bg-emerald-500'} animate-pulse`} />
+          <span className="text-sm font-medium text-white">{severityLabel} Posture</span>
         </div>
+        
+        {/* Data Quality Confidence Badge */}
+        <div className="mt-3 flex items-center gap-2 rounded-lg bg-white/5 px-3 py-2">
+          <Shield size={14} className="text-blue-400" />
+          <div className="flex-1">
+            <div className="text-xs text-gray-400">Data Confidence</div>
+            <div className="flex items-center gap-2">
+              <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-black/50">
+                <div 
+                  className="h-full rounded-full bg-blue-400 transition-all"
+                  style={{ width: `${dq.confidenceModifier * 100}%` }}
+                />
+              </div>
+              <span className="text-xs font-medium text-blue-400">{(dq.confidenceModifier * 100).toFixed(0)}%</span>
+            </div>
+          </div>
+        </div>
+        {dq.criticalIssues > 0 && (
+          <div className="mt-2 text-[10px] text-orange-400">
+            ⚠ {dq.totalIssues} quality issues ({dq.criticalIssues} critical)
+          </div>
+        )}
       </div>
 
-      <div className="flex flex-col gap-4 p-5">
-        <h3 className="text-sm font-semibold text-white">Risk Pillars</h3>
-        {PILLAR_KEYS.map(key => (
+      {/* 6-Dimension Risk Cards */}
+      <div className="flex flex-col gap-3 p-5">
+        <h3 className="text-sm font-semibold text-white">Risk Dimensions</h3>
+        {DIMENSION_KEYS.map(key => (
           <div 
             key={key} 
             onClick={() => onPillarClick(key)}
             className={`rounded-xl transition-all cursor-pointer ${activePillar === key ? 'ring-2 ring-emerald-500' : ''}`}
           >
-            <RiskPillarCard pillar={riskIndex[key]} />
+            <RiskDimensionCard dimension={riskIndex[key]} />
           </div>
         ))}
       </div>

@@ -47,20 +47,19 @@ export function WorkPackageNode({ data }: { data: SpiderNodeData & { isSelected?
         </div>
       </div>
 
-      {/* Mini Pillar Badges */}
+      {/* Mini Dimension Badges */}
       <div className="mt-3 flex gap-1">
-        <div className={`flex flex-1 items-center justify-center rounded py-0.5 text-[9px] font-bold uppercase
-          ${data.deliveryRisk?.class === 'High' ? 'bg-red-500/20 text-red-400' : 'bg-white/5 text-gray-500'}`}>
-          Del
-        </div>
-        <div className={`flex flex-1 items-center justify-center rounded py-0.5 text-[9px] font-bold uppercase
-          ${data.costRisk?.class === 'High' ? 'bg-red-500/20 text-red-400' : 'bg-white/5 text-gray-500'}`}>
-          Cost
-        </div>
-        <div className={`flex flex-1 items-center justify-center rounded py-0.5 text-[9px] font-bold uppercase
-          ${data.supplierRisk?.class === 'High' ? 'bg-red-500/20 text-red-400' : 'bg-white/5 text-gray-500'}`}>
-          Sup
-        </div>
+        {(['costFinancial', 'cashflow', 'schedule', 'operational', 'supplier'] as const).map(dk => {
+          const dim = data.dimensions?.[dk];
+          const isHigh = dim?.class === 'High';
+          const label = dk === 'costFinancial' ? 'Cost' : dk === 'cashflow' ? 'CF' : dk === 'schedule' ? 'Sched' : dk === 'operational' ? 'Ops' : 'Sup';
+          return (
+            <div key={dk} className={`flex flex-1 items-center justify-center rounded py-0.5 text-[8px] font-bold uppercase
+              ${isHigh ? 'bg-red-500/20 text-red-400' : dim?.class === 'Medium' ? 'bg-orange-500/15 text-orange-400' : 'bg-white/5 text-gray-500'}`}>
+              {label}
+            </div>
+          );
+        })}
       </div>
     </div>
   );

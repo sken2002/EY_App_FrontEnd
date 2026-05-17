@@ -6,13 +6,13 @@ import { CenterCanvas } from '@/components/canvas/CenterCanvas';
 import { RightPanel } from '@/components/layout/RightPanel';
 import { Header } from '@/components/layout/Header';
 import { useState, useCallback } from 'react';
+import { DimensionKey } from '@/lib/types';
 
 export type DrillLevel = 'portfolio' | 'pillar' | 'entity';
-export type PillarKey = 'delivery' | 'cost' | 'supplier';
 
 export interface DrillState {
   level: DrillLevel;
-  activePillar: PillarKey | null;
+  activePillar: DimensionKey | null;
   activeEntityId: string | null;
 }
 
@@ -28,7 +28,7 @@ export default function Home() {
   });
 
   // Navigation handlers
-  const drillIntoPillar = useCallback((pillar: PillarKey) => {
+  const drillIntoPillar = useCallback((pillar: DimensionKey) => {
     setDrill({ level: 'pillar', activePillar: pillar, activeEntityId: null });
   }, []);
 

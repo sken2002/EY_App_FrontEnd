@@ -127,15 +127,24 @@ export function RightPanel({ scenario, selectedNodeId, nodes, drill }: RightPane
                   <p className="text-sm font-medium text-white">{selectedNode.data.label}</p>
                   <p className="mt-1 text-xs text-gray-400">{selectedNode.data.subtitle}</p>
                   
-                  {selectedNode.type === 'workPackage' && selectedNode.data.deliveryRisk && (
+                  {selectedNode.type === 'workPackage' && selectedNode.data.dimensions && (
                     <div className="mt-3 space-y-2 text-xs">
-                      <div className="flex justify-between">
-                        <span className="text-gray-500">Delivery Risk:</span>
-                        <span className={selectedNode.data.deliveryRisk.class === 'High' ? 'text-red-400' : 'text-emerald-400'}>{selectedNode.data.deliveryRisk.driver}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-500">Cost Risk:</span>
-                        <span className={selectedNode.data.costRisk?.class === 'High' ? 'text-red-400' : 'text-emerald-400'}>{selectedNode.data.costRisk?.driver}</span>
+                      {Object.entries(selectedNode.data.dimensions).map(([dimKey, dim]) => {
+                        const riskColor = dim.class === 'High' ? 'text-red-400' : dim.class === 'Medium' ? 'text-orange-400' : 'text-emerald-400';
+                        return (
+                          <div key={dimKey} className="flex justify-between items-center">
+                            <span className="text-gray-500 capitalize">{dimKey}:</span>
+                            <div className="flex items-center gap-2">
+                              <span className={riskColor}>{dim.class}</span>
+                              <span className="text-gray-600 tabular-nums">{dim.score}</span>
+                            </div>
+                          </div>
+                        );
+                      })}
+                      {/* CRI Score */}
+                      <div className="flex justify-between items-center pt-2 border-t border-white/10">
+                        <span className="text-gray-400 font-medium">CRI Score:</span>
+                        <span className="text-white font-bold">{selectedNode.data.riskScore}</span>
                       </div>
                     </div>
                   )}

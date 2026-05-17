@@ -2,13 +2,12 @@
 
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { PillarRisk, SpiderNode } from '@/lib/types';
-import { PillarKey } from '@/app/page';
+import { DimensionRiskIndex, SpiderNode, DimensionKey } from '@/lib/types';
 import { ChevronRight, ChevronDown, AlertTriangle, Search, Filter, FolderKanban, UserCircle2 } from 'lucide-react';
 
 interface PillarViewProps {
-  pillarKey: PillarKey;
-  pillar: PillarRisk;
+  pillarKey: DimensionKey;
+  pillar: DimensionRiskIndex;
   workPackages: (SpiderNode & { pillarRiskClass: string; pillarRiskDriver: string })[];
   onEntityClick: (entityId: string) => void;
 }
@@ -17,6 +16,7 @@ const RISK_BADGE: Record<string, { bg: string; text: string; dot: string }> = {
   High:   { bg: 'bg-red-500/10 border-red-500/20', text: 'text-red-400', dot: 'bg-red-500' },
   Medium: { bg: 'bg-orange-500/10 border-orange-500/20', text: 'text-orange-400', dot: 'bg-orange-500' },
   Low:    { bg: 'bg-emerald-500/10 border-emerald-500/20', text: 'text-emerald-400', dot: 'bg-emerald-500' },
+  'No Data': { bg: 'bg-gray-500/10 border-gray-500/20', text: 'text-gray-400', dot: 'bg-gray-500' },
 };
 
 export function PillarView({ pillarKey, pillar, workPackages, onEntityClick }: PillarViewProps) {

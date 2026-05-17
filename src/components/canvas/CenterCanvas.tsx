@@ -2,8 +2,8 @@
 
 import { useMemo } from 'react';
 import { AnimatePresence } from 'framer-motion';
-import { SpiderNode, SpiderEdge as SpiderEdgeType, Scenario, PillarRisk } from '@/lib/types';
-import { DrillState, PillarKey } from '@/app/page';
+import { SpiderNode, SpiderEdge as SpiderEdgeType, Scenario, RiskIndex, DimensionKey } from '@/lib/types';
+import { DrillState } from '@/app/page';
 import { PortfolioView } from './PortfolioView';
 import { PillarView } from './PillarView';
 import { EntityGraph } from './EntityGraph';
@@ -12,39 +12,33 @@ import { Breadcrumbs } from './Breadcrumbs';
 interface CenterCanvasProps {
   nodes: SpiderNode[];
   edges: SpiderEdgeType[];
-  riskIndex: { delivery: PillarRisk; cost: PillarRisk; supplier: PillarRisk };
+  riskIndex: RiskIndex;
   scenario: Scenario;
   drill: DrillState;
-  onDrillIntoPillar: (pillar: PillarKey) => void;
+  onDrillIntoPillar: (pillar: DimensionKey) => void;
   onDrillIntoEntity: (entityId: string) => void;
   onNavigateBack: () => void;
 }
-
-const PILLAR_RISK_KEY_MAP: Record<PillarKey, string> = {
-  delivery: 'deliveryRisk',
-  cost: 'costRisk',
-  supplier: 'supplierRisk',
-};
 
 export function CenterCanvas({ 
   nodes, edges, riskIndex, scenario, drill, 
   onDrillIntoPillar, onDrillIntoEntity, onNavigateBack 
 }: CenterCanvasProps) {
 
-  // Filter WP nodes for the active pillar, sorted by severity
+  // Filter WP nodes for the active dimension, sorted by severity
   const pillarWPs = useMemo(() => {
     if (!drill.activePillar) return [];
-    const riskKey = PILLAR_RISK_KEY_MAP[drill.activePillar];
+    const dimKey = drill.activePillar;
     
     return nodes
       .filter(n => n.type === 'workPackage')
       .map(n => {
-        const riskData = (n.data as any)[riskKey];
-        return { ...n, pillarRiskClass: riskData?.class || 'Low', pillarRiskDriver: riskData?.driver || '' };
+        const dimData = n.data.dimensions?.[dimKey];
+        return { ...n, pillarRiskClass: dimData?.class || 'Low', pillarRiskDriver: dimData?.driver || '' };
       })
       .sort((a, b) => {
-        const order = { High: 0, Medium: 1, Low: 2 };
-        return (order[a.pillarRiskClass as keyof typeof order] || 2) - (order[b.pillarRiskClass as keyof typeof order] || 2);
+        const order: Record<string, number> = { High: 0, Medium: 1, Low: 2, 'No Data': 3 };
+        return (order[a.pillarRiskClass] ?? 2) - (order[b.pillarRiskClass] ?? 2);
       });
   }, [nodes, drill.activePillar]);
 
@@ -76,7 +70,6 @@ export function CenterCanvas({
     const graphNodes = nodes
       .filter(n => connectedNodeIds.has(n.id))
       .map((n, idx) => {
-        // Re-layout: place the target node in center, others around it
         const isCenter = n.id === targetId;
         const angle = (idx / connectedNodeIds.size) * 2 * Math.PI;
         const radius = isCenter ? 0 : 280;
@@ -98,17 +91,21 @@ export function CenterCanvas({
     return { nodes: graphNodes, edges: allEdges };
   }, [drill.activeEntityId, nodes, edges, scenario]);
 
-  // Get the selected entity name for breadcrumbs
+  // Get labels for breadcrumbs
   const selectedEntityLabel = drill.activeEntityId 
     ? nodes.find(n => n.id === drill.activeEntityId)?.data.label || drill.activeEntityId
     : null;
+  
+  const activeDimLabel = drill.activePillar 
+    ? riskIndex[drill.activePillar]?.label 
+    : undefined;
 
   return (
     <div className="flex flex-1 flex-col bg-[#0a0a0f] relative overflow-hidden">
       {/* Breadcrumb Navigation */}
       <Breadcrumbs 
         drill={drill}
-        pillarLabel={drill.activePillar ? riskIndex[drill.activePillar]?.label : undefined}
+        pillarLabel={activeDimLabel}
         entityLabel={selectedEntityLabel || undefined}
         onNavigateBack={onNavigateBack}
       />

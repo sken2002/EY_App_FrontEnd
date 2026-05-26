@@ -38,7 +38,7 @@ export default function Home() {
 
   // Drill-down navigation state
   const [drill, setDrill] = useState<DrillState>({
-    level: 'macro', // Default to the new Macro view
+    level: 'portfolio', // Default to PM Scorecard view
     activePillar: null,
     activeEntityId: null,
   });
@@ -92,13 +92,17 @@ export default function Home() {
       {/* Top Level Tab Navigation */}
       <div className="flex border-b border-white/10 bg-[#0f0f15] px-4">
         <button 
-          onClick={() => { setActiveTopTab('scorecard'); setDrill({ level: 'macro', activePillar: null, activeEntityId: null }); }}
+          onClick={() => { setActiveTopTab('scorecard'); setDrill({ level: 'portfolio', activePillar: null, activeEntityId: null }); }}
           className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors ${activeTopTab === 'scorecard' ? 'border-emerald-500 text-emerald-400' : 'border-transparent text-gray-400 hover:text-white'}`}
         >
           Portfolio Scorecard
         </button>
         <button 
-          onClick={() => setActiveTopTab('topology')}
+          onClick={() => { 
+            setActiveTopTab('topology'); 
+            const firstWp = data.nodes.find(n => n.type === 'workPackage')?.id;
+            setDrill({ level: 'entity', activePillar: null, activeEntityId: firstWp || null }); 
+          }}
           className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors ${activeTopTab === 'topology' ? 'border-emerald-500 text-emerald-400' : 'border-transparent text-gray-400 hover:text-white'}`}
         >
           Topology & Simulation

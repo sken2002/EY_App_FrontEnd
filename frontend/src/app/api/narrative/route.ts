@@ -12,41 +12,24 @@ function generateMockNarrative(nodeData: SpiderNodeData, state: WPRiskState, cri
   const highRisks = Object.entries(state.detected).filter(([_, d]) => d.class === 'High').map(([dim]) => dim);
   const mitigations = state.mitigations.filter(m => m.active);
   
-  let narrative = `Analysis complete for ${nodeData.label}. `;
+  const mockJson = {
+    summary: `Analysis complete for ${nodeData.label}. ${criDelta !== 0 ? `Recent levers shifted CRI by ${criDelta > 0 ? '+' : ''}${Math.round(criDelta)}.` : ''}`,
+    tactical_actions: highRisks.length > 0 ? [`Address critical pressure in ${highRisks.join(', ')}`] : ["Maintain current operational metrics"],
+    strategic_shifts: mitigations.length > 0 ? [`Leverage ${mitigations[0].label}`] : ["Monitor downstream exposure"]
+  };
 
-  if (criDelta !== 0) {
-    narrative += `Recent simulation levers have shifted the Composite Risk Index by ${criDelta > 0 ? '+' : ''}${Math.round(criDelta)} points. `;
-  }
-
-  if (highRisks.length > 0) {
-    const formattedRisks = highRisks.map(r => r.replace(/([A-Z])/g, ' $1').trim().toLowerCase()).join(' and ');
-    narrative += `Critical pressure detected in ${formattedRisks}. `;
-    
-    const propCount = Object.keys(state.propagated).filter(k => state.propagated[k as keyof typeof state.propagated] > 0).length;
-    if (propCount > 0) {
-      narrative += `This is cascading into ${propCount} downstream dimensions. `;
-    }
-  } else {
-    narrative += `Primary metrics are operating within acceptable tolerances. `;
-  }
-
-  if (mitigations.length > 0) {
-    narrative += `However, residual risk is buffered by ${mitigations.length} active mitigating factors, notably ${mitigations[0].label.toLowerCase()}. `;
-  }
-
-  if (state.blastRadius.impactedNodeIds.length > 0) {
-    narrative += `Failure to contain this package exposes £${state.blastRadius.totalExposure.toLocaleString()} across ${state.blastRadius.impactedNodeIds.length} connected entities. Immediate remediation focus recommended.`;
-  } else {
-    narrative += `No immediate structural cascade risks identified in the dependency graph.`;
-  }
-
-  return narrative;
+  return JSON.stringify(mockJson);
 }
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { nodeData, state, delta } = body as { nodeData: SpiderNodeData, state: WPRiskState, delta: { criDelta: number } };
+    const { nodeData, state, delta, globalContext } = body as { 
+      nodeData: SpiderNodeData, 
+      state: WPRiskState, 
+      delta: { criDelta: number },
+      globalContext?: { archetype: string, horizon: string }
+    };
 
     if (!nodeData || !state) {
       return NextResponse.json({ error: 'Missing required state payload' }, { status: 400 });
@@ -73,10 +56,27 @@ export async function POST(req: Request) {
     // ============================================================================
     // REAL GEMINI AI INTEGRATION
     // ============================================================================
+    const archetypeStr = globalContext?.archetype || 'Standard Corporate';
+    const horizonStr = globalContext?.horizon || 'Short-term (3mo)';
+    
     const systemPrompt = `You are the Project Spider Strategist Agent, an expert in enterprise risk management.
 You are analyzing a work package risk simulation and must provide a concise, executive-level summary of the cascading risks and mitigations.
+
+CRITICAL CONTEXT:
+- Project Archetype: ${archetypeStr}
+- Time Horizon: ${horizonStr}
+
+Tailor your mitigation strategies based on the Time Horizon (e.g. immediate tactical fixes for Short-term, strategic realignment for Long-term).
+Account for the Project Archetype (e.g. IT projects face different operational realities than Infrastructure projects).
+Explain *how* the blast radius propagates rather than just stating numbers.
+
 Focus on the practical impact of the data provided. Use a professional, slightly urgent tone if risks are high, or a reassuring tone if mitigated.
-Do not use markdown formatting like bolding or lists, just return 2-3 short, punchy sentences.`;
+CRITICAL: You MUST respond ONLY with a valid JSON object in the following format. Do not include markdown code blocks or any other text.
+{
+  "summary": "2-3 short sentences summarizing the risk and blast radius",
+  "tactical_actions": ["Bullet 1 for immediate 48h actions", "Bullet 2"],
+  "strategic_shifts": ["Bullet 1 for long-term realignment based on archetype"]
+}`;
 
     // Filter out 'Low' risk states and extract key details to save context window tokens
     const highAndMediumRisks = Object.entries(state.detected)
@@ -100,15 +100,14 @@ Risk State:
 `;
 
     // Call Gemini using Vercel AI SDK
-    const result = await streamText({
+    const { generateText } = await import('ai');
+    const result = await generateText({
       model: google('gemini-1.5-flash'),
       system: systemPrompt,
       prompt: prompt,
     });
 
-    // We use streamText().toTextStreamResponse() instead of toDataStreamResponse() 
-    // because our frontend hook reads it as raw text chunks right now.
-    return result.toTextStreamResponse();
+    return NextResponse.json({ narrative: result.text });
 
   } catch (error) {
     console.error('LLM API Error:', error);

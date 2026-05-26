@@ -365,7 +365,7 @@ def compute_payment_rejection_risk(cashflow):
 
 def compute_data_quality_modifier(dq_issues, data_inventory):
     """Data Quality dimension: portfolio-level confidence modifier (0.0–1.0).
-    Scales down the final CRI when data quality is poor.
+    Scales UP the final CRI when data quality is poor (penalty).
     """
     # Score from DataQualityIssues: severity distribution
     severity_weights = {'Critical': 1.0, 'High': 0.7, 'Medium': 0.4, 'Low': 0.1}
@@ -549,18 +549,21 @@ def compute_all_risks(data):
     # ── 6-Dimension scoring (replaces old 3-pillar max logic) ──
     for dim_key, dim_def in DIMENSION_DEFS.items():
         subs = dim_def['subs']
+        def compute_dim(r):
+            s, c, d = compute_dimension_score(r, subs)
+            return pd.Series([s, c, d])
         wp_master[[f'{dim_key}_score', f'{dim_key}_class', f'{dim_key}_driver']] = wp_master.apply(
-            lambda r: pd.Series(compute_dimension_score(r, subs)), axis=1)
+            lambda r: compute_dim(r), axis=1)
 
-    # ── Weighted CRI per WP (replaces max-of-3-pillars) ──
+    # ── Perfect Average CRI per WP (requested by Ishika) ──
     def compute_cri(row):
-        cri = 0
-        for dim_key, dim_def in DIMENSION_DEFS.items():
+        cri_raw = 0
+        for dim_key in DIMENSION_DEFS.keys():
             score = row.get(f'{dim_key}_score', 20)
-            cri += score * dim_def['weight']
-        # Apply data quality confidence modifier
-        cri = cri * dq_modifier['confidence']
-        return round(cri, 1)
+            cri_raw += score
+        
+        cri_final = round(cri_raw / 5, 1)
+        return cri_final
 
     wp_master['cri_score'] = wp_master.apply(compute_cri, axis=1)
 

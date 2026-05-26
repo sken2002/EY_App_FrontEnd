@@ -8,7 +8,15 @@ import { Header } from '@/components/layout/Header';
 import { useState, useCallback } from 'react';
 import { DimensionKey } from '@/lib/types';
 
-export type DrillLevel = 'portfolio' | 'pillar' | 'entity';
+export type DrillLevel = 'portfolio' | 'pillar' | 'entity' | 'macro';
+
+export type ProjectArchetype = 'Agile IT' | 'Heavy Infrastructure' | 'Standard Corporate';
+export type TimeHorizon = 'Short-term (3mo)' | 'Long-term (12mo+)';
+
+export interface GlobalContextState {
+  archetype: ProjectArchetype;
+  horizon: TimeHorizon;
+}
 
 export interface DrillState {
   level: DrillLevel;
@@ -19,9 +27,18 @@ export interface DrillState {
 export default function Home() {
   const { data, loading, error } = useSpiderState();
 
+  // Global Context State
+  const [globalContext, setGlobalContext] = useState<GlobalContextState>({
+    archetype: 'Standard Corporate',
+    horizon: 'Short-term (3mo)'
+  });
+
+  // Top-level tabs for layout simplification
+  const [activeTopTab, setActiveTopTab] = useState<'scorecard' | 'topology' | 'pipeline'>('scorecard');
+
   // Drill-down navigation state
   const [drill, setDrill] = useState<DrillState>({
-    level: 'portfolio',
+    level: 'macro', // Default to the new Macro view
     activePillar: null,
     activeEntityId: null,
   });
@@ -64,39 +81,80 @@ export default function Home() {
     );
   }
 
-
   return (
     <main className="flex h-screen w-screen flex-col overflow-hidden bg-[#0a0a0f] text-white">
       <Header 
         meta={data.meta}
+        globalContext={globalContext}
+        setGlobalContext={setGlobalContext}
       />
+
+      {/* Top Level Tab Navigation */}
+      <div className="flex border-b border-white/10 bg-[#0f0f15] px-4">
+        <button 
+          onClick={() => { setActiveTopTab('scorecard'); setDrill({ level: 'macro', activePillar: null, activeEntityId: null }); }}
+          className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors ${activeTopTab === 'scorecard' ? 'border-emerald-500 text-emerald-400' : 'border-transparent text-gray-400 hover:text-white'}`}
+        >
+          Portfolio Scorecard
+        </button>
+        <button 
+          onClick={() => setActiveTopTab('topology')}
+          className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors ${activeTopTab === 'topology' ? 'border-emerald-500 text-emerald-400' : 'border-transparent text-gray-400 hover:text-white'}`}
+        >
+          Topology & Simulation
+        </button>
+        <button 
+          onClick={() => setActiveTopTab('pipeline')}
+          className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors ${activeTopTab === 'pipeline' ? 'border-emerald-500 text-emerald-400' : 'border-transparent text-gray-400 hover:text-white'}`}
+        >
+          Data Pipeline Audit
+        </button>
+      </div>
       
       <div className="flex flex-1 overflow-hidden">
-        {/* Left Panel: Risk Index (280px) */}
-        <LeftPanel 
-          riskIndex={data.riskIndex} 
-          activePillar={drill.activePillar}
-          onPillarClick={drillIntoPillar}
-        />
+        
+        {activeTopTab === 'pipeline' ? (
+          <div className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-[#0a0a0f]">
+             <h2 className="text-xl font-semibold text-emerald-400 mb-2">Backend Pipeline Integration Active</h2>
+             <p className="text-gray-400 max-w-md">
+               The Python Risk Engine (<code>export_state.py</code>) is currently configured to automatically append CRI metrics to <code>history.json</code> on every run.
+               <br/><br/>
+               In a production environment, this tab will display live ingestion logs from the data warehouse.
+             </p>
+          </div>
+        ) : (
+          <>
+            {/* Left Panel: Risk Index (280px) */}
+            <LeftPanel 
+              riskIndex={data.riskIndex} 
+              activePillar={drill.activePillar}
+              onPillarClick={drillIntoPillar}
+            />
 
-        {/* Center Panel: Progressive Drill-Down Canvas (Flex) */}
-        <CenterCanvas 
-          nodes={data.nodes} 
-          edges={data.edges}
-          riskIndex={data.riskIndex}
-          drill={drill}
-          onDrillIntoPillar={drillIntoPillar}
-          onDrillIntoEntity={drillIntoEntity}
-          onNavigateBack={navigateBack}
-        />
+            {/* Center Panel: Progressive Drill-Down Canvas (Flex) */}
+            <CenterCanvas 
+              nodes={data.nodes} 
+              edges={data.edges}
+              riskIndex={data.riskIndex}
+              drill={drill}
+              onDrillIntoPillar={drillIntoPillar}
+              onDrillIntoEntity={drillIntoEntity}
+              onNavigateBack={navigateBack}
+              onDrillIntoPortfolio={() => setDrill({ level: 'portfolio', activePillar: null, activeEntityId: null })}
+            />
 
-        {/* Right Panel: Risk Engine Simulation (380px) */}
-        <RightPanel 
-          selectedNodeId={drill.activeEntityId}
-          nodes={data.nodes}
-          edges={data.edges}
-          dataQualityConfidence={data.riskIndex.dataQuality.confidenceModifier}
-        />
+            {/* Right Panel: Risk Engine Simulation (380px) - Only show in Topology */}
+            {activeTopTab === 'topology' && (
+              <RightPanel 
+                selectedNodeId={drill.activeEntityId}
+                nodes={data.nodes}
+                edges={data.edges}
+                dataQualityConfidence={data.riskIndex.dataQuality.confidenceModifier}
+                globalContext={globalContext}
+              />
+            )}
+          </>
+        )}
       </div>
     </main>
   );

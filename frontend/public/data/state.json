@@ -1,7 +1,7 @@
 {
   "meta": {
     "portfolioId": "PORT-2024-001",
-    "generatedAt": "2026-05-18T14:23:36.721036Z",
+    "generatedAt": "2026-05-25T17:24:31.108579Z",
     "version": "2.0.0",
     "framework": "6-dimension-weighted-CRI",
     "scenarioCount": 0,
@@ -99,13 +99,13 @@
       "issueScore": 0.588
     },
     "compositeRiskIndex": {
-      "weightedScore": 28.0,
+      "weightedScore": 49.7,
       "confidence": 0.591,
-      "severity": "low",
+      "severity": "high",
       "breakdown": {
-        "high": 0,
-        "medium": 1,
-        "low": 44
+        "high": 4,
+        "medium": 34,
+        "low": 7
       }
     }
   },
@@ -118,8 +118,8 @@
         "subtitle": "Construction \u00b7 Remote",
         "status": "In Progress",
         "priority": "High",
-        "riskScore": 23.9,
-        "severity": "low",
+        "riskScore": 46.5,
+        "severity": "high",
         "metrics": {
           "completionPct": 60.19,
           "plannedCost": 7407127.46,
@@ -251,8 +251,8 @@
         "subtitle": "IT Systems \u00b7 Remote",
         "status": "In Progress",
         "priority": "Critical",
-        "riskScore": 41.4,
-        "severity": "high",
+        "riskScore": 69.5,
+        "severity": "critical",
         "metrics": {
           "completionPct": 23.22,
           "plannedCost": 821688.6,
@@ -384,7 +384,7 @@
         "subtitle": "Construction \u00b7 Remote",
         "status": "Completed",
         "priority": "Medium",
-        "riskScore": 18.2,
+        "riskScore": 33.5,
         "severity": "low",
         "metrics": {
           "completionPct": 100.0,
@@ -517,8 +517,8 @@
         "subtitle": "IT Systems \u00b7 Canary Wharf",
         "status": "In Progress",
         "priority": "Medium",
-        "riskScore": 28.8,
-        "severity": "low",
+        "riskScore": 46.5,
+        "severity": "high",
         "metrics": {
           "completionPct": 55.4,
           "plannedCost": 35240105.52,
@@ -650,8 +650,8 @@
         "subtitle": "Construction \u00b7 Thames Gateway",
         "status": "In Progress",
         "priority": "High",
-        "riskScore": 29.9,
-        "severity": "low",
+        "riskScore": 54.0,
+        "severity": "high",
         "metrics": {
           "completionPct": 52.43,
           "plannedCost": 45700238.15,
@@ -783,8 +783,8 @@
         "subtitle": "IT Systems \u00b7 Thames Gateway",
         "status": "In Progress",
         "priority": "Low",
-        "riskScore": 28.8,
-        "severity": "low",
+        "riskScore": 46.5,
+        "severity": "high",
         "metrics": {
           "completionPct": 23.6,
           "plannedCost": 24929033.83,
@@ -916,8 +916,8 @@
         "subtitle": "Facilities \u00b7 Thames Gateway",
         "status": "Cancelled",
         "priority": "High",
-        "riskScore": 26.5,
-        "severity": "low",
+        "riskScore": 50.0,
+        "severity": "high",
         "metrics": {
           "completionPct": 7.62,
           "plannedCost": 660643.15,
@@ -1049,8 +1049,8 @@
         "subtitle": "IT Systems \u00b7 King's Cross",
         "status": "In Progress",
         "priority": "Critical",
-        "riskScore": 26.1,
-        "severity": "low",
+        "riskScore": 47.0,
+        "severity": "high",
         "metrics": {
           "completionPct": 30.47,
           "plannedCost": 18467547.98,
@@ -1182,8 +1182,8 @@
         "subtitle": "IT Systems \u00b7 Thames Gateway",
         "status": "In Progress",
         "priority": "Critical",
-        "riskScore": 22.7,
-        "severity": "low",
+        "riskScore": 43.5,
+        "severity": "high",
         "metrics": {
           "completionPct": 94.59,
           "plannedCost": 27195156.39,
@@ -1315,7 +1315,7 @@
         "subtitle": "Construction \u00b7 Canary Wharf",
         "status": "In Progress",
         "priority": "Low",
-        "riskScore": 20.5,
+        "riskScore": 37.5,
         "severity": "low",
         "metrics": {
           "completionPct": 30.23,
@@ -1448,7 +1448,7 @@
         "subtitle": "Construction \u00b7 Canary Wharf",
         "status": "In Progress",
         "priority": "Low",
-        "riskScore": 17.1,
+        "riskScore": 33.5,
         "severity": "low",
         "metrics": {
           "completionPct": 71.9,
@@ -1581,8 +1581,8 @@
         "subtitle": "Construction \u00b7 Greenwich",
         "status": "In Progress",
         "priority": "Low",
-        "riskScore": 26.9,
-        "severity": "low",
+        "riskScore": 44.0,
+        "severity": "high",
         "metrics": {
           "completionPct": 51.28,
           "plannedCost": 48465314.74,
@@ -1714,8 +1714,8 @@
         "subtitle": "Facilities \u00b7 King's Cross",
         "status": "On Hold",
         "priority": "Low",
-        "riskScore": 34.4,
-        "severity": "low",
+        "riskScore": 60.0,
+        "severity": "high",
         "metrics": {
           "completionPct": 0.61,
           "plannedCost": 9899944.43,
@@ -1847,8 +1847,8 @@
         "subtitle": "Construction \u00b7 Greenwich",
         "status": "In Progress",
         "priority": "Medium",
-        "riskScore": 26.6,
-        "severity": "low",
+        "riskScore": 43.5,
+        "severity": "high",
         "metrics": {
           "completionPct": 62.65,
           "plannedCost": 6434387.39,
@@ -1980,8 +1980,8 @@
         "subtitle": "Engineering \u00b7 Remote",
         "status": "In Progress",
         "priority": "High",
-        "riskScore": 32.7,
-        "severity": "low",
+        "riskScore": 56.5,
+        "severity": "high",
         "metrics": {
           "completionPct": 89.33,
           "plannedCost": 49806774.17,
@@ -2113,7 +2113,7 @@
         "subtitle": "Engineering \u00b7 Canary Wharf",
         "status": "On Hold",
         "priority": "High",
-        "riskScore": 18.0,
+        "riskScore": 36.5,
         "severity": "low",
         "metrics": {
           "completionPct": 1.55,
@@ -2246,8 +2246,8 @@
         "subtitle": "Infrastructure \u00b7 King's Cross",
         "status": "In Progress",
         "priority": "High",
-        "riskScore": 37.6,
-        "severity": "low",
+        "riskScore": 69.5,
+        "severity": "critical",
         "metrics": {
           "completionPct": 47.56,
           "plannedCost": 17011048.66,
@@ -2379,8 +2379,8 @@
         "subtitle": "Construction \u00b7 Greenwich",
         "status": "In Progress",
         "priority": "High",
-        "riskScore": 39.4,
-        "severity": "low",
+        "riskScore": 69.5,
+        "severity": "critical",
         "metrics": {
           "completionPct": 18.74,
           "plannedCost": 43104777.81,
@@ -2512,8 +2512,8 @@
         "subtitle": "Construction \u00b7 Canary Wharf",
         "status": "Completed",
         "priority": "High",
-        "riskScore": 33.7,
-        "severity": "low",
+        "riskScore": 56.5,
+        "severity": "high",
         "metrics": {
           "completionPct": 100.0,
           "plannedCost": 43672255.75,
@@ -2645,8 +2645,8 @@
         "subtitle": "Engineering \u00b7 Greenwich",
         "status": "Completed",
         "priority": "Critical",
-        "riskScore": 29.9,
-        "severity": "low",
+        "riskScore": 53.5,
+        "severity": "high",
         "metrics": {
           "completionPct": 100.0,
           "plannedCost": 42261227.58,
@@ -2778,8 +2778,8 @@
         "subtitle": "Infrastructure \u00b7 Stratford",
         "status": "On Hold",
         "priority": "Medium",
-        "riskScore": 27.0,
-        "severity": "low",
+        "riskScore": 50.0,
+        "severity": "high",
         "metrics": {
           "completionPct": 7.42,
           "plannedCost": 583718.27,
@@ -2911,7 +2911,7 @@
         "subtitle": "Infrastructure \u00b7 Greenwich",
         "status": "On Hold",
         "priority": "Medium",
-        "riskScore": 18.2,
+        "riskScore": 33.5,
         "severity": "low",
         "metrics": {
           "completionPct": 1.74,
@@ -3044,8 +3044,8 @@
         "subtitle": "Engineering \u00b7 Greenwich",
         "status": "In Progress",
         "priority": "High",
-        "riskScore": 34.3,
-        "severity": "low",
+        "riskScore": 56.5,
+        "severity": "high",
         "metrics": {
           "completionPct": 66.43,
           "plannedCost": 48011684.18,
@@ -3177,8 +3177,8 @@
         "subtitle": "Construction \u00b7 Greenwich",
         "status": "In Progress",
         "priority": "Low",
-        "riskScore": 29.5,
-        "severity": "low",
+        "riskScore": 50.0,
+        "severity": "high",
         "metrics": {
           "completionPct": 68.45,
           "plannedCost": 36058122.82,
@@ -3310,8 +3310,8 @@
         "subtitle": "Engineering \u00b7 Stratford",
         "status": "In Progress",
         "priority": "Low",
-        "riskScore": 24.1,
-        "severity": "low",
+        "riskScore": 43.5,
+        "severity": "high",
         "metrics": {
           "completionPct": 83.23,
           "plannedCost": 21623667.46,
@@ -3443,8 +3443,8 @@
         "subtitle": "Infrastructure \u00b7 Thames Gateway",
         "status": "In Progress",
         "priority": "High",
-        "riskScore": 25.9,
-        "severity": "low",
+        "riskScore": 46.5,
+        "severity": "high",
         "metrics": {
           "completionPct": 45.26,
           "plannedCost": 7966117.57,
@@ -3576,8 +3576,8 @@
         "subtitle": "Engineering \u00b7 Greenwich",
         "status": "In Progress",
         "priority": "Low",
-        "riskScore": 27.9,
-        "severity": "low",
+        "riskScore": 50.0,
+        "severity": "high",
         "metrics": {
           "completionPct": 72.44,
           "plannedCost": 19804339.08,
@@ -3709,8 +3709,8 @@
         "subtitle": "Engineering \u00b7 Greenwich",
         "status": "In Progress",
         "priority": "Low",
-        "riskScore": 23.7,
-        "severity": "low",
+        "riskScore": 43.5,
+        "severity": "high",
         "metrics": {
           "completionPct": 46.43,
           "plannedCost": 45392978.7,
@@ -3842,8 +3842,8 @@
         "subtitle": "Construction \u00b7 Thames Gateway",
         "status": "In Progress",
         "priority": "Critical",
-        "riskScore": 32.9,
-        "severity": "low",
+        "riskScore": 60.0,
+        "severity": "high",
         "metrics": {
           "completionPct": 15.83,
           "plannedCost": 37576700.92,
@@ -3975,8 +3975,8 @@
         "subtitle": "Infrastructure \u00b7 Canary Wharf",
         "status": "Completed",
         "priority": "Medium",
-        "riskScore": 23.0,
-        "severity": "low",
+        "riskScore": 40.0,
+        "severity": "high",
         "metrics": {
           "completionPct": 100.0,
           "plannedCost": 30558750.95,
@@ -4108,8 +4108,8 @@
         "subtitle": "Engineering \u00b7 Remote",
         "status": "In Progress",
         "priority": "Critical",
-        "riskScore": 29.0,
-        "severity": "low",
+        "riskScore": 53.5,
+        "severity": "high",
         "metrics": {
           "completionPct": 46.41,
           "plannedCost": 6492225.72,
@@ -4241,8 +4241,8 @@
         "subtitle": "Infrastructure \u00b7 Greenwich",
         "status": "In Progress",
         "priority": "Medium",
-        "riskScore": 30.0,
-        "severity": "low",
+        "riskScore": 53.5,
+        "severity": "high",
         "metrics": {
           "completionPct": 47.02,
           "plannedCost": 13869078.62,
@@ -4374,8 +4374,8 @@
         "subtitle": "Construction \u00b7 Remote",
         "status": "Completed",
         "priority": "Critical",
-        "riskScore": 28.6,
-        "severity": "low",
+        "riskScore": 53.5,
+        "severity": "high",
         "metrics": {
           "completionPct": 100.0,
           "plannedCost": 10999932.58,
@@ -4507,8 +4507,8 @@
         "subtitle": "Facilities \u00b7 Canary Wharf",
         "status": "On Hold",
         "priority": "Medium",
-        "riskScore": 27.5,
-        "severity": "low",
+        "riskScore": 50.0,
+        "severity": "high",
         "metrics": {
           "completionPct": 3.69,
           "plannedCost": 15064661.28,
@@ -4640,7 +4640,7 @@
         "subtitle": "Engineering \u00b7 Stratford",
         "status": "In Progress",
         "priority": "High",
-        "riskScore": 20.5,
+        "riskScore": 36.5,
         "severity": "low",
         "metrics": {
           "completionPct": 60.11,
@@ -4773,8 +4773,8 @@
         "subtitle": "Infrastructure \u00b7 Greenwich",
         "status": "In Progress",
         "priority": "Medium",
-        "riskScore": 26.8,
-        "severity": "low",
+        "riskScore": 46.5,
+        "severity": "high",
         "metrics": {
           "completionPct": 49.9,
           "plannedCost": 43488829.26,
@@ -4906,8 +4906,8 @@
         "subtitle": "IT Systems \u00b7 Thames Gateway",
         "status": "In Progress",
         "priority": "Low",
-        "riskScore": 35.2,
-        "severity": "low",
+        "riskScore": 63.0,
+        "severity": "high",
         "metrics": {
           "completionPct": 57.44,
           "plannedCost": 40651532.78,
@@ -5039,8 +5039,8 @@
         "subtitle": "Facilities \u00b7 Greenwich",
         "status": "In Progress",
         "priority": "Low",
-        "riskScore": 26.7,
-        "severity": "low",
+        "riskScore": 47.0,
+        "severity": "high",
         "metrics": {
           "completionPct": 16.38,
           "plannedCost": 10945747.17,
@@ -5172,8 +5172,8 @@
         "subtitle": "Infrastructure \u00b7 Stratford",
         "status": "In Progress",
         "priority": "Critical",
-        "riskScore": 29.8,
-        "severity": "low",
+        "riskScore": 50.0,
+        "severity": "high",
         "metrics": {
           "completionPct": 56.29,
           "plannedCost": 31440371.35,
@@ -5305,8 +5305,8 @@
         "subtitle": "Engineering \u00b7 Canary Wharf",
         "status": "In Progress",
         "priority": "Critical",
-        "riskScore": 26.7,
-        "severity": "low",
+        "riskScore": 47.0,
+        "severity": "high",
         "metrics": {
           "completionPct": 13.39,
           "plannedCost": 47162473.92,
@@ -5438,8 +5438,8 @@
         "subtitle": "Engineering \u00b7 Remote",
         "status": "In Progress",
         "priority": "Critical",
-        "riskScore": 23.7,
-        "severity": "low",
+        "riskScore": 43.5,
+        "severity": "high",
         "metrics": {
           "completionPct": 17.76,
           "plannedCost": 9483712.79,
@@ -5571,8 +5571,8 @@
         "subtitle": "Construction \u00b7 King's Cross",
         "status": "In Progress",
         "priority": "Medium",
-        "riskScore": 31.5,
-        "severity": "low",
+        "riskScore": 53.5,
+        "severity": "high",
         "metrics": {
           "completionPct": 93.99,
           "plannedCost": 16502052.42,
@@ -5704,8 +5704,8 @@
         "subtitle": "Infrastructure \u00b7 King's Cross",
         "status": "In Progress",
         "priority": "Low",
-        "riskScore": 36.3,
-        "severity": "low",
+        "riskScore": 62.5,
+        "severity": "high",
         "metrics": {
           "completionPct": 30.34,
           "plannedCost": 35063376.44,
@@ -5837,7 +5837,7 @@
         "subtitle": "IT Systems \u00b7 Thames Gateway",
         "status": "In Progress",
         "priority": "Medium",
-        "riskScore": 21.1,
+        "riskScore": 37.5,
         "severity": "low",
         "metrics": {
           "completionPct": 26.2,
@@ -5970,8 +5970,8 @@
         "subtitle": "IT Systems \u00b7 Greenwich",
         "status": "In Progress",
         "priority": "Critical",
-        "riskScore": 38.9,
-        "severity": "low",
+        "riskScore": 67.0,
+        "severity": "critical",
         "metrics": {
           "completionPct": 26.04,
           "plannedCost": 27819912.15,

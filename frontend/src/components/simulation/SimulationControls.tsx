@@ -1,6 +1,14 @@
 import { SimulationLever } from '@/lib/riskEngine/types';
 
-import { DimensionKey } from '@/lib/types';
+import { Info } from 'lucide-react';
+
+const getTooltip = (id: string) => {
+  if (id === 'cpi') return "Cost Performance Index: < 1.0 means project is burning cash faster than it earns value.";
+  if (id === 'spi') return "Schedule Performance Index: < 1.0 means project is falling behind timeline.";
+  if (id === 'budgetVariance') return "Percentage by which actual cost differs from planned cost.";
+  if (id === 'backlogRatio') return "Percentage of Service Orders still pending or unresolved.";
+  return undefined;
+};
 
 interface SimulationControlsProps {
   levers: SimulationLever[];
@@ -13,7 +21,14 @@ export function SimulationControls({ levers, onChange }: SimulationControlsProps
       {levers.map(lever => (
         <div key={lever.id} className="flex flex-col gap-1.5">
           <div className="flex justify-between items-center text-xs">
-            <label className="font-medium text-gray-300">{lever.label}</label>
+            <label className="font-medium text-gray-300 flex items-center gap-1.5">
+              {lever.label}
+              {getTooltip(lever.id) && (
+                <div title={getTooltip(lever.id)} className="cursor-help text-gray-500 hover:text-gray-300">
+                  <Info size={12} />
+                </div>
+              )}
+            </label>
             <span className="text-gray-400 font-mono">
               {lever.simulatedValue.toFixed(lever.step < 1 ? 2 : 0)}{lever.unit}
               {lever.simulatedValue !== lever.currentValue && (

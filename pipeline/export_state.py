@@ -564,6 +564,30 @@ def export_state_json(wp_master, data, output_path, dq_modifier, trends=None):
     with open(output_path, 'w') as f:
         json.dump(state, f, indent=2, default=str)
 
+    # ── Log Historical Data to history.json ──
+    history_path = os.path.join(os.path.dirname(output_path), 'history.json')
+    history = {}
+    if os.path.exists(history_path):
+        try:
+            with open(history_path, 'r') as hf:
+                history = json.load(hf)
+        except Exception:
+            pass
+
+    current_time = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S')
+    for wp in nodes:
+        if wp.get('type') == 'workPackage':
+            wp_id = wp['id']
+            if wp_id not in history:
+                history[wp_id] = []
+            history[wp_id].append({
+                'month': current_time.split('T')[0],  # using date as X-axis label
+                'cri': wp['data'].get('riskScore', 20)
+            })
+
+    with open(history_path, 'w') as hf:
+        json.dump(history, hf, indent=2, default=str)
+
     file_size = os.path.getsize(output_path)
     print(f"\n✅ Exported to {output_path}")
     print(f"   File size: {file_size / 1024:.1f} KB")

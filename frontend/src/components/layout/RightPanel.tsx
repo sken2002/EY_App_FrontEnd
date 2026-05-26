@@ -1,23 +1,34 @@
 import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bot, Zap, Shield, GitBranch, ArrowRight, Activity, RotateCcw, Download, Upload } from 'lucide-react';
+import { Bot, Zap, Shield, GitBranch, ArrowRight, Activity, RotateCcw, Download, Upload, Info } from 'lucide-react';
 import { SpiderNode, SpiderEdge } from '@/lib/types';
+import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, Tooltip as RechartsTooltip, LineChart, Line, XAxis, YAxis, CartesianGrid } from 'recharts';
 import { SimulationLever, WPRiskState } from '@/lib/riskEngine/types';
 import { simulateWPRisk } from '@/lib/riskEngine/simulate';
 import { SimulationControls } from '../simulation/SimulationControls';
+import { GlobalContextState } from '@/app/page';
 
 interface RightPanelProps {
   selectedNodeId: string | null;
   nodes: SpiderNode[];
   edges: SpiderEdge[];
   dataQualityConfidence: number;
+  globalContext: GlobalContextState;
 }
 
-export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence }: RightPanelProps) {
-  const [activeTab, setActiveTab] = useState<'layers' | 'simulation'>('layers');
+export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence, globalContext }: RightPanelProps) {
+  const [activeTab, setActiveTab] = useState<'layers' | 'simulation' | 'trend'>('layers');
   const [levers, setLevers] = useState<SimulationLever[]>([]);
-  const [narrative, setNarrative] = useState<string>('');
+  const [narrativeObj, setNarrativeObj] = useState<{ summary?: string, tactical_actions?: string[], strategic_shifts?: string[] } | null>(null);
   const [isTyping, setIsTyping] = useState<boolean>(false);
+  const [historyCache, setHistoryCache] = useState<Record<string, any[]>>({});
+
+  useEffect(() => {
+    fetch('/data/history.json')
+      .then(res => res.json())
+      .then(data => setHistoryCache(data))
+      .catch(err => console.error("Failed to load history.json", err));
+  }, []);
 
   const selectedNode = selectedNodeId ? nodes.find(n => n.id === selectedNodeId) : null;
 
@@ -83,8 +94,26 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
   // Run simulation reactively
   const simulationResult = useMemo(() => {
     if (!selectedNode || selectedNode.type !== 'workPackage' || levers.length === 0) return null;
-    return simulateWPRisk(selectedNode, levers, nodes, edges, dataQualityConfidence);
-  }, [selectedNode, levers, nodes, edges, dataQualityConfidence]);
+    return simulateWPRisk(selectedNode, levers, nodes, edges, dataQualityConfidence, globalContext);
+  }, [selectedNode, levers, nodes, edges, dataQualityConfidence, globalContext]);
+
+  const radarData = useMemo(() => {
+    if (!simulationResult?.state?.detected) return [];
+    const det = simulationResult.state.detected;
+    return [
+      { subject: 'Cost & Fin.', score: Math.round(det.costFinancial?.score || 0) },
+      { subject: 'Schedule', score: Math.round(det.schedule?.score || 0) },
+      { subject: 'Operational', score: Math.round(det.operational?.score || 0) },
+      { subject: 'Supplier', score: Math.round(det.supplier?.score || 0) },
+      { subject: 'Cashflow', score: Math.round(det.cashflow?.score || 0) },
+    ];
+  }, [simulationResult?.state?.detected]);
+
+  // Real Trend Data for selected node from Python backend
+  const trendData = useMemo(() => {
+    if (!selectedNode || !historyCache[selectedNode.id]) return [];
+    return historyCache[selectedNode.id];
+  }, [selectedNode, historyCache]);
 
   // Fetch narrative stream when simulation changes
   useEffect(() => {
@@ -104,25 +133,26 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
             nodeData: selectedNode.data,
             state: simulationResult.state,
             delta: simulationResult.delta,
+            globalContext: globalContext
           }),
           signal: abortController.signal
         });
 
-        if (!res.body) throw new Error('No body');
-
-        const reader = res.body.getReader();
-        const decoder = new TextDecoder();
+        const data = await res.json();
         
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          const chunk = decoder.decode(value, { stream: true });
-          setNarrative(prev => prev + chunk);
+        try {
+          // Gemini returns markdown block often, strip it
+          let cleanStr = data.narrative.replace(/```json/g, '').replace(/```/g, '').trim();
+          const parsed = JSON.parse(cleanStr);
+          setNarrativeObj(parsed);
+        } catch (e) {
+          // Fallback if parsing fails
+          setNarrativeObj({ summary: data.narrative });
         }
       } catch (err: any) {
         if (err.name !== 'AbortError') {
-          console.error("Failed to stream narrative", err);
-          setNarrative("Analysis could not be generated.");
+          console.error("Failed to get narrative", err);
+          setNarrativeObj({ summary: "Analysis could not be generated." });
         }
       } finally {
         setIsTyping(false);
@@ -194,6 +224,12 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
           <Activity size={14} /> Simulation
           {isSimulating && <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />}
         </button>
+        <button 
+          onClick={() => setActiveTab('trend')}
+          className={`flex items-center gap-2 border-b-2 px-4 py-2 text-sm font-medium transition-colors ${activeTab === 'trend' ? 'border-emerald-500 text-emerald-400' : 'border-transparent text-gray-500 hover:text-gray-300'}`}
+        >
+          <Activity size={14} /> Trend Analysis
+        </button>
       </div>
 
       {/* Scrollable Content */}
@@ -209,7 +245,7 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
             >
               {/* Strategist Agent Summary */}
               <div className="rounded-xl border border-white/5 bg-emerald-900/10 p-4">
-                <div className="flex items-center gap-2 mb-2">
+                <div className="flex items-center gap-2 mb-3">
                   <Bot size={14} className="text-emerald-400" />
                   <h3 className="text-xs font-semibold uppercase tracking-wider text-emerald-500/70">Strategist Agent</h3>
                   {isTyping && <span className="flex h-2 w-2 relative ml-1">
@@ -217,32 +253,54 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                   </span>}
                 </div>
-                <p className="text-sm leading-relaxed text-gray-300 min-h-[60px]">
-                  {narrative}
-                  {isTyping && <span className="animate-pulse">_</span>}
-                </p>
+                
+                <div className="text-sm leading-relaxed text-gray-300 min-h-[60px]">
+                  {isTyping ? (
+                    <span className="animate-pulse flex items-center gap-2"><Activity size={14} className="text-emerald-500" /> Synthesizing mitigation strategies...</span>
+                  ) : narrativeObj ? (
+                    <div className="space-y-4">
+                      {narrativeObj.summary && (
+                        <p className="text-sm text-emerald-100">{narrativeObj.summary}</p>
+                      )}
+                      
+                      {narrativeObj.tactical_actions && narrativeObj.tactical_actions.length > 0 && (
+                        <div>
+                          <h4 className="text-xs font-semibold text-emerald-400 mb-1 uppercase tracking-widest">Tactical (48h)</h4>
+                          <ul className="list-disc pl-4 space-y-1">
+                            {narrativeObj.tactical_actions.map((act, i) => <li key={i} className="text-xs text-gray-300">{act}</li>)}
+                          </ul>
+                        </div>
+                      )}
+
+                      {narrativeObj.strategic_shifts && narrativeObj.strategic_shifts.length > 0 && (
+                        <div>
+                          <h4 className="text-xs font-semibold text-blue-400 mb-1 uppercase tracking-widest">Strategic</h4>
+                          <ul className="list-disc pl-4 space-y-1">
+                            {narrativeObj.strategic_shifts.map((act, i) => <li key={i} className="text-xs text-gray-300">{act}</li>)}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                  ) : null}
+                </div>
               </div>
 
               {/* Layer 2: Detected Risk */}
               <div className="flex flex-col gap-3">
-                <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500 border-b border-white/10 pb-1">1. Detected Risk Signals</h3>
-                <div className="space-y-2">
-                  {Object.entries(state.detected).filter(([_, d]) => d.class !== 'Low' && d.class !== 'No Data').map(([dim, data]) => (
-                    <div key={dim} className="bg-white/5 rounded-lg p-2.5 text-xs">
-                      <div className="flex justify-between font-medium mb-1.5">
-                        <span className="text-gray-300 capitalize">{dim.replace(/([A-Z])/g, ' $1').trim()}</span>
-                        <span className={data.class === 'High' ? 'text-rose-400' : 'text-amber-400'}>Score: {Math.round(data.score)}</span>
-                      </div>
-                      <ul className="text-gray-400 space-y-1 list-disc list-inside">
-                        {data.drivers.filter(d => d && !d.includes('On track') && !d.includes('within tolerance') && !d.includes('manageable') && !d.toLowerCase().includes('low') && !d.toLowerCase().includes('no ')).map((d, i) => (
-                          <li key={i}>{d}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
-                  {Object.entries(state.detected).filter(([_, d]) => d.class !== 'Low' && d.class !== 'No Data').length === 0 && (
-                    <div className="text-xs text-gray-500 italic">No significant risks detected in baseline metrics.</div>
-                  )}
+                <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500 border-b border-white/10 pb-1">1. Detected Risk Profile</h3>
+                <div className="h-[200px] w-full bg-white/5 rounded-xl flex items-center justify-center p-2">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <RadarChart cx="50%" cy="50%" outerRadius="70%" data={radarData}>
+                      <PolarGrid stroke="#333" />
+                      <PolarAngleAxis dataKey="subject" tick={{ fill: '#9ca3af', fontSize: 10 }} />
+                      <PolarRadiusAxis angle={30} domain={[0, 100]} tick={{ fill: '#4b5563', fontSize: 10 }} />
+                      <Radar name="Risk Score" dataKey="score" stroke="#10b981" fill="#10b981" fillOpacity={0.3} />
+                      <RechartsTooltip 
+                        contentStyle={{ backgroundColor: '#111827', borderColor: '#374151', borderRadius: '8px', fontSize: '12px' }}
+                        itemStyle={{ color: '#10b981' }}
+                      />
+                    </RadarChart>
+                  </ResponsiveContainer>
                 </div>
               </div>
 
@@ -301,7 +359,12 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
 
               {/* Layer 8: Blast Radius */}
               <div className="flex flex-col gap-3">
-                <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500 border-b border-white/10 pb-1">5. Blast Radius</h3>
+                <div className="flex items-center gap-2 border-b border-white/10 pb-1">
+                  <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500">5. Blast Radius</h3>
+                  <div title="The cascading financial impact if this Work Package fails, traversing up to 3 levels downstream in the dependency graph." className="cursor-help text-gray-500 hover:text-gray-300">
+                    <Info size={12} />
+                  </div>
+                </div>
                 <div className="bg-black/30 border border-rose-500/10 rounded-lg p-3 text-sm">
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-gray-300">Impacted Entities</span>
@@ -360,6 +423,33 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
                 </div>
               )}
 
+            </motion.div>
+          )}
+
+          {activeTab === 'trend' && (
+            <motion.div
+              key="trend"
+              initial={{ opacity: 0, x: 10 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -10 }}
+              className="flex flex-col gap-6"
+            >
+              <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500 border-b border-white/10 pb-1">6-Month CRI Trend</h3>
+              <div className="h-[250px] w-full mt-4">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={trendData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" />
+                    <XAxis dataKey="month" stroke="#9ca3af" fontSize={10} tickLine={false} axisLine={false} />
+                    <YAxis stroke="#9ca3af" fontSize={10} domain={[0, 100]} tickLine={false} axisLine={false} />
+                    <RechartsTooltip 
+                      contentStyle={{ backgroundColor: '#111827', borderColor: '#374151', borderRadius: '8px', fontSize: '12px' }}
+                      itemStyle={{ color: '#10b981' }}
+                    />
+                    <Line type="monotone" dataKey="cri" stroke="#10b981" strokeWidth={3} dot={{ fill: '#10b981', strokeWidth: 2 }} />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+              <p className="text-xs text-gray-500 italic mt-2 text-center">Historical volatility and projected trajectory based on audit logs.</p>
             </motion.div>
           )}
         </AnimatePresence>

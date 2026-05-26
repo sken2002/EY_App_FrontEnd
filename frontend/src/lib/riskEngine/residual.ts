@@ -51,25 +51,17 @@ export function computeResidualRisk(
 
 export function computeCRI(
   residual: Record<DimensionKey, { score: number; class: RiskClass }>,
-  dataQualityConfidence: number
+  dataQualityConfidence: number,
+  globalContext: any
 ): { score: number; class: RiskClass } {
   
-  // Weights from EY Framework
-  const weights: Record<DimensionKey, number> = {
-    costFinancial: 0.25,
-    cashflow: 0.20,
-    schedule: 0.20,
-    operational: 0.10,
-    supplier: 0.20
-  };
-
+  // Calculate Perfect Average
   let cri = 0;
-  for (const [dim, weight] of Object.entries(weights)) {
-    cri += residual[dim as DimensionKey].score * weight;
+  const dimensions: DimensionKey[] = ['costFinancial', 'cashflow', 'schedule', 'operational', 'supplier'];
+  for (const dim of dimensions) {
+    cri += residual[dim].score;
   }
-
-  // Apply confidence modifier
-  cri = Math.round(cri * dataQualityConfidence);
+  cri = Math.round(cri / 5);
 
   let criClass: RiskClass = 'Low';
   if (cri >= 65) criClass = 'High';

@@ -1,190 +1,163 @@
 'use client';
 
+import { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { RiskIndex, DimensionRiskIndex, DimensionKey } from '@/lib/types';
-import { Clock, DollarSign, ShoppingCart, ChevronRight, AlertTriangle, Activity, Banknote, Shield } from 'lucide-react';
+import { SpiderNode, DimensionKey, RiskIndex } from '@/lib/types';
+import { Users, ArrowUpDown } from 'lucide-react';
 
 interface PortfolioViewProps {
+  nodes: SpiderNode[];
   riskIndex: RiskIndex;
   onPillarClick: (pillar: DimensionKey) => void;
-  nodeCount: number;
 }
 
-const DIM_CONFIG: Record<DimensionKey, { icon: any; gradient: string; glow: string; accent: string }> = {
-  costFinancial: {
-    icon: DollarSign,
-    gradient: 'from-amber-500/20 via-yellow-500/10 to-transparent',
-    glow: 'shadow-amber-500/20',
-    accent: 'text-amber-400',
-  },
-  cashflow: {
-    icon: Banknote,
-    gradient: 'from-cyan-500/20 via-teal-500/10 to-transparent',
-    glow: 'shadow-cyan-500/20',
-    accent: 'text-cyan-400',
-  },
-  schedule: {
-    icon: Clock,
-    gradient: 'from-red-500/20 via-orange-500/10 to-transparent',
-    glow: 'shadow-red-500/20',
-    accent: 'text-red-400',
-  },
-  operational: {
-    icon: Activity,
-    gradient: 'from-fuchsia-500/20 via-pink-500/10 to-transparent',
-    glow: 'shadow-fuchsia-500/20',
-    accent: 'text-fuchsia-400',
-  },
-  supplier: {
-    icon: ShoppingCart,
-    gradient: 'from-violet-500/20 via-purple-500/10 to-transparent',
-    glow: 'shadow-violet-500/20',
-    accent: 'text-violet-400',
-  },
+const DIM_KEYS: DimensionKey[] = ['costFinancial', 'cashflow', 'schedule', 'operational', 'supplier'];
+const DIM_LABELS: Record<DimensionKey, string> = {
+  costFinancial: 'Cost',
+  cashflow: 'Cashflow',
+  schedule: 'Schedule',
+  operational: 'Ops',
+  supplier: 'Supplier'
 };
 
-const DIM_KEYS: DimensionKey[] = ['costFinancial', 'cashflow', 'schedule', 'operational', 'supplier'];
+export function PortfolioView({ nodes, onPillarClick }: PortfolioViewProps) {
+  const [sortConfig, setSortConfig] = useState<{ key: string; direction: 'asc' | 'desc' }>({ key: 'cri', direction: 'desc' });
 
-export function PortfolioView({ riskIndex, onPillarClick, nodeCount }: PortfolioViewProps) {
-  const cri = riskIndex.compositeRiskIndex;
-  const dq = riskIndex.dataQuality;
-  const criColor = cri.severity === 'critical' ? 'text-red-400' : cri.severity === 'high' ? 'text-orange-400' : 'text-emerald-400';
-  const overallSeverity = cri.severity === 'critical' ? 'Critical' : cri.severity === 'high' ? 'Elevated' : 'Stable';
+  // Group by PM
+  const pmData = useMemo(() => {
+    const wps = nodes.filter(n => n.type === 'workPackage');
+    const grouped = wps.reduce((acc, wp) => {
+      const pm = wp.data.pm || 'Unassigned';
+      if (!acc[pm]) {
+        acc[pm] = {
+          name: pm,
+          wps: [],
+          criTotal: 0,
+          dims: { costFinancial: 0, cashflow: 0, schedule: 0, operational: 0, supplier: 0 }
+        };
+      }
+      acc[pm].wps.push(wp);
+      acc[pm].criTotal += (wp.data.riskScore || 0);
+      
+      DIM_KEYS.forEach(k => {
+        // We look at the dimension class to assign a rough numeric score for the heatmap, or just average the actual scores if available.
+        // For simplicity, we'll map High=3, Medium=2, Low=1
+        const cls = wp.data.dimensions?.[k]?.class || 'Low';
+        acc[pm].dims[k] += (cls === 'High' ? 3 : cls === 'Medium' ? 2 : 1);
+      });
+      
+      return acc;
+    }, {} as Record<string, any>);
+
+    return Object.values(grouped).map(g => {
+      const count = g.wps.length;
+      return {
+        name: g.name,
+        wpCount: count,
+        avgCri: Math.round(g.criTotal / count),
+        dims: {
+          costFinancial: g.dims.costFinancial / count,
+          cashflow: g.dims.cashflow / count,
+          schedule: g.dims.schedule / count,
+          operational: g.dims.operational / count,
+          supplier: g.dims.supplier / count,
+        }
+      };
+    });
+  }, [nodes]);
+
+  // Sort logic
+  const sortedData = useMemo(() => {
+    return [...pmData].sort((a, b) => {
+      let aVal = a.avgCri;
+      let bVal = b.avgCri;
+      if (sortConfig.key === 'name') {
+        aVal = a.name; bVal = b.name;
+      } else if (sortConfig.key === 'wps') {
+        aVal = a.wpCount; bVal = b.wpCount;
+      }
+
+      if (aVal < bVal) return sortConfig.direction === 'asc' ? -1 : 1;
+      if (aVal > bVal) return sortConfig.direction === 'asc' ? 1 : -1;
+      return 0;
+    });
+  }, [pmData, sortConfig]);
+
+  const requestSort = (key: string) => {
+    let direction: 'asc' | 'desc' = 'desc';
+    if (sortConfig.key === key && sortConfig.direction === 'desc') {
+      direction = 'asc';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const getHeatmapColor = (score: number) => {
+    if (score >= 2.5) return 'bg-rose-500/20 text-rose-400 border-rose-500/30';
+    if (score >= 1.8) return 'bg-amber-500/20 text-amber-400 border-amber-500/30';
+    return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
+  };
 
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.95 }}
-      transition={{ duration: 0.4, ease: 'easeOut' }}
-      className="flex h-full flex-col items-center justify-center px-8 overflow-y-auto"
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -10 }}
+      className="flex h-full flex-col p-8 overflow-y-auto w-full max-w-6xl mx-auto"
     >
-      {/* Portfolio Title + CRI */}
-      <motion.div 
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-        className="mb-8 text-center"
-      >
-        <p className="text-sm font-medium uppercase tracking-widest text-gray-500 mb-2">Composite Risk Index</p>
-        <h2 className="text-5xl font-bold tracking-tight">
-          <span className={criColor}>
-            {cri.weightedScore.toFixed(0)}
-          </span>
-          <span className="text-2xl text-gray-500 ml-2">/ 100</span>
-        </h2>
-        <p className="mt-2 text-sm text-gray-500">
-          {nodeCount} Work Packages across 6 risk dimensions · 
-          <span className="ml-1">
-            <Shield size={12} className="inline text-blue-400 mr-1" />
-            {(dq.confidenceModifier * 100).toFixed(0)}% data confidence
-          </span>
-        </p>
-      </motion.div>
-
-      {/* Dimension Cards — 2 rows */}
-      <div className="grid grid-cols-3 gap-4 max-w-5xl w-full mb-4">
-        {DIM_KEYS.slice(0, 3).map((key, idx) => (
-          <DimensionCard key={key} dimKey={key} data={riskIndex[key]} idx={idx} onPillarClick={onPillarClick} />
-        ))}
+      <div className="mb-6 flex justify-between items-end">
+        <div>
+          <h2 className="text-2xl font-bold tracking-tight text-white mb-2 flex items-center gap-2">
+            <Users size={20} className="text-emerald-400" />
+            Project Manager Scorecard
+          </h2>
+          <p className="text-sm text-gray-400">Rankings based on Composite Risk Index and Pillar severities.</p>
+        </div>
       </div>
-      <div className="grid grid-cols-2 gap-4 max-w-[680px] w-full">
-        {DIM_KEYS.slice(3).map((key, idx) => (
-          <DimensionCard key={key} dimKey={key} data={riskIndex[key]} idx={idx + 3} onPillarClick={onPillarClick} />
-        ))}
+
+      <div className="bg-[#111116] border border-white/10 rounded-xl overflow-hidden">
+        <table className="w-full text-left border-collapse">
+          <thead>
+            <tr className="bg-[#161620] border-b border-white/10">
+              <th className="p-4 text-xs font-semibold text-gray-400 uppercase tracking-wider cursor-pointer hover:text-white" onClick={() => requestSort('name')}>
+                <div className="flex items-center gap-1">Manager <ArrowUpDown size={12} /></div>
+              </th>
+              <th className="p-4 text-xs font-semibold text-gray-400 uppercase tracking-wider cursor-pointer hover:text-white" onClick={() => requestSort('wps')}>
+                <div className="flex items-center gap-1">WPs <ArrowUpDown size={12} /></div>
+              </th>
+              <th className="p-4 text-xs font-semibold text-emerald-400 uppercase tracking-wider cursor-pointer hover:text-emerald-300" onClick={() => requestSort('cri')}>
+                <div className="flex items-center gap-1">Avg CRI <ArrowUpDown size={12} /></div>
+              </th>
+              {DIM_KEYS.map(k => (
+                <th key={k} className="p-4 text-xs font-semibold text-gray-500 uppercase tracking-wider text-center cursor-pointer hover:text-gray-300" onClick={() => onPillarClick(k)}>
+                  {DIM_LABELS[k]}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {sortedData.map((pm, idx) => (
+              <tr key={pm.name} className="border-b border-white/5 hover:bg-white/5 transition-colors">
+                <td className="p-4 text-sm font-medium text-gray-200">{pm.name}</td>
+                <td className="p-4 text-sm text-gray-400 font-mono">{pm.wpCount}</td>
+                <td className="p-4">
+                  <div className={`inline-flex items-center justify-center px-2 py-1 rounded text-xs font-bold ${
+                    pm.avgCri > 65 ? 'bg-rose-500/20 text-rose-400' : pm.avgCri > 40 ? 'bg-amber-500/20 text-amber-400' : 'bg-emerald-500/20 text-emerald-400'
+                  }`}>
+                    {pm.avgCri}
+                  </div>
+                </td>
+                {DIM_KEYS.map(k => (
+                  <td key={k} className="p-4 text-center">
+                    <div className={`inline-flex h-6 w-12 items-center justify-center rounded border text-[10px] font-bold ${getHeatmapColor(pm.dims[k])}`}>
+                      {pm.dims[k].toFixed(1)}
+                    </div>
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </motion.div>
-  );
-}
-
-function DimensionCard({ dimKey, data, idx, onPillarClick }: { 
-  dimKey: DimensionKey; data: DimensionRiskIndex; idx: number; onPillarClick: (k: DimensionKey) => void 
-}) {
-  const config = DIM_CONFIG[dimKey];
-  const Icon = config.icon;
-  const isCritical = data.severity === 'critical';
-
-  return (
-    <motion.button
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.15 + idx * 0.08, duration: 0.5 }}
-      whileHover={{ y: -4, scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
-      onClick={() => onPillarClick(dimKey)}
-      className={`group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#111116] p-5 text-left shadow-2xl transition-all hover:border-white/20 ${config.glow}`}
-    >
-      {/* Background gradient */}
-      <div className={`absolute inset-0 bg-gradient-to-br ${config.gradient} opacity-0 transition-opacity group-hover:opacity-100`} />
-      
-      {isCritical && (
-        <div className="absolute -top-1 -right-1">
-          <span className="relative flex h-3.5 w-3.5">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-60"></span>
-            <span className="relative inline-flex h-3.5 w-3.5 rounded-full bg-red-500"></span>
-          </span>
-        </div>
-      )}
-
-      <div className="relative z-10">
-        <div className="flex items-center gap-3 mb-4">
-          <div className={`flex h-10 w-10 items-center justify-center rounded-xl bg-white/5 ${config.accent}`}>
-            <Icon size={20} />
-          </div>
-          <div>
-            <h3 className="text-sm font-semibold text-white">{data.label}</h3>
-            <p className="text-[10px] text-gray-500">{(data.weight * 100).toFixed(0)}% weight · {data.severity}</p>
-          </div>
-        </div>
-
-        <div className="mb-4">
-          <div className="flex items-end gap-2 mb-2">
-            <span className={`text-3xl font-bold tabular-nums ${config.accent}`}>
-              {data.score.toFixed(0)}
-            </span>
-            <span className="text-xs text-gray-500 mb-1">/ 100</span>
-          </div>
-          <div className="h-1.5 w-full rounded-full bg-white/5 overflow-hidden">
-            <motion.div 
-              initial={{ width: 0 }}
-              animate={{ width: `${data.score}%` }}
-              transition={{ delay: 0.3 + idx * 0.08, duration: 1, ease: 'easeOut' }}
-              className={`h-full rounded-full ${
-                isCritical ? 'bg-gradient-to-r from-red-600 to-red-400' : 
-                data.severity === 'high' ? 'bg-gradient-to-r from-orange-600 to-orange-400' :
-                'bg-gradient-to-r from-emerald-600 to-emerald-400'
-              }`}
-            />
-          </div>
-        </div>
-
-        <div className="flex items-center gap-2 mb-3">
-          {data.breakdown.high > 0 && (
-            <div className="flex items-center gap-1 rounded-full bg-red-500/10 px-2 py-0.5">
-              <AlertTriangle size={9} className="text-red-400" />
-              <span className="text-[10px] font-bold text-red-400">{data.breakdown.high}</span>
-              <span className="text-[9px] text-red-400/60">H</span>
-            </div>
-          )}
-          {data.breakdown.medium > 0 && (
-            <div className="flex items-center gap-1 rounded-full bg-orange-500/10 px-2 py-0.5">
-              <span className="text-[10px] font-bold text-orange-400">{data.breakdown.medium}</span>
-              <span className="text-[9px] text-orange-400/60">M</span>
-            </div>
-          )}
-          {data.breakdown.low > 0 && (
-            <div className="flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5">
-              <span className="text-[10px] font-bold text-emerald-400">{data.breakdown.low}</span>
-              <span className="text-[9px] text-emerald-400/60">L</span>
-            </div>
-          )}
-        </div>
-
-        <div className="flex items-center gap-2 text-xs text-gray-400 group-hover:text-white transition-colors">
-          <span>Drill into sources</span>
-          <ChevronRight size={14} className="transition-transform group-hover:translate-x-1" />
-        </div>
-      </div>
-    </motion.button>
   );
 }

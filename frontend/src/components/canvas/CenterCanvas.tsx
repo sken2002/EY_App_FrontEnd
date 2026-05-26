@@ -1,13 +1,14 @@
 'use client';
 
 import { useMemo } from 'react';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { SpiderNode, SpiderEdge as SpiderEdgeType, Scenario, RiskIndex, DimensionKey } from '@/lib/types';
 import { DrillState } from '@/app/page';
 import { PortfolioView } from './PortfolioView';
 import { PillarView } from './PillarView';
 import { EntityGraph } from './EntityGraph';
 import { Breadcrumbs } from './Breadcrumbs';
+import { MacroHeatmap } from './MacroHeatmap';
 
 interface CenterCanvasProps {
   nodes: SpiderNode[];
@@ -17,10 +18,11 @@ interface CenterCanvasProps {
   onDrillIntoPillar: (pillar: DimensionKey) => void;
   onDrillIntoEntity: (entityId: string) => void;
   onNavigateBack: () => void;
+  onDrillIntoPortfolio?: (workstream: string) => void;
 }
 export function CenterCanvas({ 
   nodes, edges, riskIndex, drill, 
-  onDrillIntoPillar, onDrillIntoEntity, onNavigateBack 
+  onDrillIntoPillar, onDrillIntoEntity, onNavigateBack, onDrillIntoPortfolio
 }: CenterCanvasProps) {
 
   // Filter WP nodes for the active dimension, sorted by severity
@@ -97,26 +99,45 @@ export function CenterCanvas({
   const activeDimLabel = drill.activePillar 
     ? riskIndex[drill.activePillar]?.label 
     : undefined;
-
   return (
     <div className="flex flex-1 flex-col bg-[#0a0a0f] relative overflow-hidden">
       {/* Breadcrumb Navigation */}
-      <Breadcrumbs 
-        drill={drill}
-        pillarLabel={activeDimLabel}
-        entityLabel={selectedEntityLabel || undefined}
-        onNavigateBack={onNavigateBack}
-      />
+      {drill.level !== 'macro' && (
+        <Breadcrumbs 
+          drill={drill}
+          pillarLabel={activeDimLabel}
+          entityLabel={selectedEntityLabel || undefined}
+          onNavigateBack={onNavigateBack}
+        />
+      )}
 
-      {/* Content Area */}
-      <div className="flex-1 relative overflow-hidden">
+      {/* Dynamic View Layer */}
+      <div className="flex-1 overflow-hidden relative">
         <AnimatePresence mode="wait">
+          
+          {drill.level === 'macro' && (
+            <motion.div
+              key="macro"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0"
+            >
+              <MacroHeatmap 
+                nodes={nodes} 
+                onSelectWorkstream={(ws) => {
+                  if (onDrillIntoPortfolio) onDrillIntoPortfolio(ws);
+                }} 
+              />
+            </motion.div>
+          )}
+
           {drill.level === 'portfolio' && (
             <PortfolioView 
               key="portfolio"
+              nodes={nodes}
               riskIndex={riskIndex} 
               onPillarClick={onDrillIntoPillar}
-              nodeCount={nodes.filter(n => n.type === 'workPackage').length}
             />
           )}
 

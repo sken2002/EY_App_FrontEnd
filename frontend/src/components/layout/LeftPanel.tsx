@@ -56,18 +56,43 @@ export function LeftPanel({ riskIndex, activePillar, onPillarClick }: LeftPanelP
         )}
       </div>
 
-      {/* 6-Dimension Risk Cards */}
-      <div className="flex flex-col gap-3 p-5">
-        <h3 className="text-sm font-semibold text-white">Risk Dimensions</h3>
-        {DIMENSION_KEYS.map(key => (
-          <div 
-            key={key} 
-            onClick={() => onPillarClick(key)}
-            className={`rounded-xl transition-all cursor-pointer ${activePillar === key ? 'ring-2 ring-emerald-500' : ''}`}
-          >
-            <RiskDimensionCard dimension={riskIndex[key]} />
-          </div>
-        ))}
+      {/* 6-Dimension Risk Cards (Removed due to redundancy with PortfolioView) */}
+      <div className="flex flex-col gap-4 p-5">
+        <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-400">Control Center</h3>
+        
+        {/* Watchlist Section */}
+        <div className="flex flex-col gap-2">
+          <div className="text-xs text-gray-500 mb-1">My Watchlist</div>
+          {['WP-014 (Civil)', 'WP-042 (IT Deploy)'].map((wp) => (
+            <div key={wp} className="flex items-center gap-2 p-2 rounded bg-white/5 border border-white/10 hover:bg-white/10 cursor-pointer transition-colors">
+              <Shield size={12} className="text-rose-400" />
+              <span className="text-xs text-gray-300">{wp}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* Filters Section */}
+        <div className="flex flex-col gap-2 mt-4">
+          <div className="text-xs text-gray-500 mb-1">Global Filters</div>
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" className="accent-emerald-500" />
+            <span className="text-xs text-gray-300">Show Critical Risks Only</span>
+          </label>
+          <label className="flex items-center gap-2 cursor-pointer mt-1">
+            <input type="checkbox" className="accent-emerald-500" />
+            <span className="text-xs text-gray-300">Show Financial &gt; £1M Exposure</span>
+          </label>
+        </div>
+
+        {/* Persona Toggle */}
+        <div className="flex flex-col gap-2 mt-4">
+          <div className="text-xs text-gray-500 mb-1">Active Persona</div>
+          <select className="bg-black/20 border border-white/10 text-xs text-gray-300 rounded p-1.5 focus:outline-none">
+            <option>Global Executive</option>
+            <option>Project Manager (IT)</option>
+            <option>Risk Auditor</option>
+          </select>
+        </div>
       </div>
     </aside>
   );

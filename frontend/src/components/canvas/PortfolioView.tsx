@@ -27,7 +27,7 @@ export function PortfolioView({ nodes, onPillarClick }: PortfolioViewProps) {
   const pmData = useMemo(() => {
     const wps = nodes.filter(n => n.type === 'workPackage');
     const grouped = wps.reduce((acc, wp) => {
-      const pm = wp.data.pm || 'Unassigned';
+      const pm = wp.data.owner || 'Unassigned';
       if (!acc[pm]) {
         acc[pm] = {
           name: pm,

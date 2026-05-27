@@ -123,7 +123,7 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
     
     const fetchNarrative = async () => {
       setIsTyping(true);
-      setNarrative('');
+      setNarrativeObj(null);
       
       try {
         const res = await fetch('/api/narrative', {

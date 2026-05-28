@@ -47,14 +47,7 @@ type NarrativeResponse = {
   blast_radius: string;
   residual_risk_view: string;
 
-  // Business-context interpretation. These may be inferred assumptions.
-  business_context_view: string;
-  inferred_strategic_objective: string;
-  benefit_preservation_view: string;
-  context_confidence: 'Low' | 'Medium' | 'High';
-
   tactical_actions: string[];
-  strategic_shifts: string[];
   assumptions_and_limits: string[];
 };
 
@@ -85,10 +78,6 @@ function buildFallbackNarrative(
   const impactedCount = state.blastRadius?.impactedNodeIds?.length ?? 0;
   const exposure = state.blastRadius?.totalExposure ?? 0;
 
-  const workstream = String(getNodeField(nodeData, 'group') ?? 'the relevant workstream');
-  const location = getNodeField(nodeData, 'location');
-  const contextConfidence: NarrativeResponse['context_confidence'] = 'Low';
-
   return {
     executive_summary: `${nodeData.label} shows ${materialRisks.length > 0 ? 'material risk pressure' : 'limited material risk pressure'} under the current deterministic simulation. ${criDelta !== 0 ? `The simulated CRI movement is ${criDelta > 0 ? '+' : ''}${Math.round(criDelta)}.` : 'No material CRI movement is currently detected.'}`,
     active_pathway: materialRisks.length > 0 ? materialRisks.map(r => r.split(':')[0]).join(' → ') : 'No active multi-step pathway detected',
@@ -97,15 +86,7 @@ function buildFallbackNarrative(
     blast_radius: `${impactedCount} connected entities are affected, with approximately £${exposure.toLocaleString()} financial exposure.`,
     residual_risk_view: activeMitigations.length > 0 ? `Active mitigations are applied: ${activeMitigations.join(', ')}.` : 'No active mitigation is currently applied, so residual risk remains close to baseline simulation output.',
 
-    business_context_view: `This work package appears connected to ${workstream}${location ? ` in ${location}` : ''}.`,
-    inferred_strategic_objective: 'Inferred objective: preserve delivery continuity and avoid wider programme disruption.',
-    benefit_preservation_view: activeMitigations.length > 0
-      ? 'Mitigation appears relevant if it preserves downstream delivery confidence and prevents local risk from becoming a broader programme issue.'
-      : 'Without active mitigation, the main benefit-preservation concern is whether local risk could create avoidable delay, cost pressure, or downstream disruption.',
-    context_confidence: contextConfidence,
-
     tactical_actions: materialRisks.length > 0 ? ['Validate the highest-risk driver with the workstream owner.', 'Prioritise intervention on the first downstream dependency in the blast radius.'] : ['Maintain monitoring and refresh metrics when new project data is available.'],
-    strategic_shifts: activeMitigations.length > 0 ? ['Compare mitigation effectiveness across alternative resource, supplier, schedule, or budget rebalancing options.'] : ['Consider adding mitigation levers for budget, supplier, schedule, or operational rebalancing.'],
     assumptions_and_limits: [
       'This narrative is based only on the deterministic payload supplied by the risk engine.',
       'Business context is inferred from synthetic data and should not be treated as confirmed project fact.',
@@ -234,12 +215,7 @@ Return ONLY valid JSON with this exact shape:
   "key_drivers": ["Driver 1", "Driver 2", "Driver 3"],
   "blast_radius": "Plain-English explanation of connected exposure using only supplied numbers.",
   "residual_risk_view": "How mitigations change or fail to change the remaining risk.",
-  "business_context_view": "Inferred or supplied business context and why this risk matters beyond the local WP.",
-  "inferred_strategic_objective": "A cautious inferred objective, or the supplied objective if available.",
-  "benefit_preservation_view": "Whether accepting cost/schedule trade-offs may be justified to preserve wider programme benefits.",
-  "context_confidence": "Low | Medium | High",
   "tactical_actions": ["Immediate action 1", "Immediate action 2"],
-  "strategic_shifts": ["Portfolio or operating model adjustment 1", "Longer-term adjustment 2"],
   "assumptions_and_limits": ["Limit 1", "Limit 2"]
 }`;
 

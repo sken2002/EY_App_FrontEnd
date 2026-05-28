@@ -325,27 +325,11 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
                         )}
                       </div>
 
-                      {narrativeObj.business_context_view && (
-                        <div className="text-xs text-blue-200 border-l-2 border-blue-500/50 pl-3 py-1">
-                          <span className="font-semibold text-blue-400 block mb-1">Business Context</span>
-                          {narrativeObj.business_context_view}
-                        </div>
-                      )}
-
                       {narrativeObj.tactical_actions && narrativeObj.tactical_actions.length > 0 && (
                         <div>
                           <h4 className="text-xs font-semibold text-emerald-400 mb-1 uppercase tracking-widest">Tactical (48h)</h4>
                           <ul className="list-disc pl-4 space-y-1">
                             {narrativeObj.tactical_actions.map((act: string, i: number) => <li key={i} className="text-xs text-gray-300">{act}</li>)}
-                          </ul>
-                        </div>
-                      )}
-
-                      {narrativeObj.strategic_shifts && narrativeObj.strategic_shifts.length > 0 && (
-                        <div>
-                          <h4 className="text-xs font-semibold text-amber-400 mb-1 uppercase tracking-widest">Strategic</h4>
-                          <ul className="list-disc pl-4 space-y-1">
-                            {narrativeObj.strategic_shifts.map((act: string, i: number) => <li key={i} className="text-xs text-gray-300">{act}</li>)}
                           </ul>
                         </div>
                       )}

@@ -358,8 +358,8 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
               {/* Layer 2: Detected Risk */}
               <div className="flex flex-col gap-3">
                 <div className="border-b border-white/10 pb-1">
-                  <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500">1. Base Risk (Pre-Contagion)</h3>
-                  <p className="text-[10px] text-gray-400 mt-1">The inherent risk score before considering network effects or mitigations.</p>
+                  <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500">1. Standalone Risk</h3>
+                  <p className="text-[10px] text-gray-400 mt-1">The inherent risk score before considering dependencies or mitigations.</p>
                 </div>
                 <div className="h-[200px] w-full bg-white/5 rounded-xl flex items-center justify-center p-2">
                   <ResponsiveContainer width="100%" height="100%">
@@ -380,18 +380,18 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
               {/* Layer 3: Propagation */}
               <div className="flex flex-col gap-3">
                 <div className="border-b border-white/10 pb-1">
-                  <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500">2. Network Contagion</h3>
-                  <p className="text-[10px] text-gray-400 mt-1">Risk inherited from failing dependencies in the graph.</p>
+                  <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500">2. Dependency Impact</h3>
+                  <p className="text-[10px] text-gray-400 mt-1">Risk inherited from failing dependencies in the project.</p>
                 </div>
                 <div className="space-y-2">
                   {Object.entries(state.propagated).filter(([_, pressure]) => pressure > 0).map(([dim, pressure]) => (
                     <div key={dim} className="flex items-start gap-2 text-xs text-gray-300 bg-rose-500/5 p-2 rounded border border-rose-500/10">
                       <GitBranch size={14} className="text-rose-500 mt-0.5 shrink-0" />
-                      <span>Due to failures in connected dependencies, the <span className="capitalize font-medium text-rose-400">{dim.replace(/([A-Z])/g, ' $1').trim()}</span> risk for this Work Package has inflated by <strong className="text-rose-400">+{Math.round(pressure)}</strong> points.</span>
+                      <span>Due to issues in connected dependencies, the <span className="capitalize font-medium text-rose-400">{dim.replace(/([A-Z])/g, ' $1').trim()}</span> risk for this Work Package has increased by <strong className="text-rose-400">+{Math.round(pressure)}</strong> points.</span>
                     </div>
                   ))}
                   {Object.entries(state.propagated).filter(([_, p]) => p > 0).length === 0 && (
-                    <div className="text-xs text-gray-500 italic">No downstream contagion detected. Dependencies are healthy.</div>
+                    <div className="text-xs text-gray-500 italic">No inherited risk detected. Dependencies are healthy.</div>
                   )}
                 </div>
               </div>
@@ -399,8 +399,8 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
               {/* Layer 4: Mitigations */}
               <div className="flex flex-col gap-3">
                 <div className="border-b border-white/10 pb-1">
-                  <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500">3. Active Defenses</h3>
-                  <p className="text-[10px] text-gray-400 mt-1">Interventions currently applied to suppress the risk.</p>
+                  <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500">3. Active Mitigations</h3>
+                  <p className="text-[10px] text-gray-400 mt-1">Actions currently applied to reduce the risk.</p>
                 </div>
                 <div className="space-y-2">
                   {state.mitigations.filter(m => m.active).map(m => (
@@ -408,12 +408,12 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
                       <Shield size={14} className="text-emerald-500 mt-0.5 shrink-0" />
                       <div>
                         <div className="font-medium text-emerald-400">{m.label}</div>
-                        <div className="text-gray-400 mt-0.5">Currently suppressing the <span className="capitalize">{m.dimension.replace(/([A-Z])/g, ' $1').trim()}</span> risk by {Math.round(m.reduction * 100)}%.</div>
+                        <div className="text-gray-400 mt-0.5">Currently reducing the <span className="capitalize">{m.dimension.replace(/([A-Z])/g, ' $1').trim()}</span> risk by {Math.round(m.reduction * 100)}%.</div>
                       </div>
                     </div>
                   ))}
                   {state.mitigations.filter(m => m.active).length === 0 && (
-                    <div className="text-xs text-gray-500 italic">No active defenses or mitigations detected.</div>
+                    <div className="text-xs text-gray-500 italic">No active mitigations applied.</div>
                   )}
                 </div>
               </div>
@@ -421,8 +421,8 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
               {/* Layer 5: Residual */}
               <div className="flex flex-col gap-3">
                 <div className="border-b border-white/10 pb-1">
-                  <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500">4. Final Risk Posture</h3>
-                  <p className="text-[10px] text-gray-400 mt-1">The actual risk level after accounting for contagion and active defenses.</p>
+                  <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500">4. Final Risk Score</h3>
+                  <p className="text-[10px] text-gray-400 mt-1">The actual risk level after accounting for dependency impacts and mitigations.</p>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
                   {Object.entries(state.residual).map(([dim, data]) => (
@@ -443,11 +443,11 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
               <div className="flex flex-col gap-3">
                 <div className="flex items-center gap-2 border-b border-white/10 pb-1">
                   <div>
-                    <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500">5. Blast Radius</h3>
+                    <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500">5. Downstream Impact</h3>
                   </div>
                 </div>
                 <div className="bg-black/30 border border-rose-500/10 rounded-lg p-3 text-sm">
-                  <p className="text-xs text-gray-300 mb-3">If this Work Package fails, the impact will cascade to <strong className="text-rose-400">{state.blastRadius.impactedNodeIds.length}</strong> downstream entities, endangering <strong className="text-rose-400">£{state.blastRadius.totalExposure.toLocaleString()}</strong> in project value.</p>
+                  <p className="text-xs text-gray-300 mb-3">If this Work Package fails, the impact will cascade to <strong className="text-rose-400">{state.blastRadius.impactedNodeIds.length}</strong> dependent tasks, putting <strong className="text-rose-400">£{state.blastRadius.totalExposure.toLocaleString()}</strong> of project value at risk.</p>
                 </div>
               </div>
 

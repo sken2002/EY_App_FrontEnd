@@ -6,17 +6,15 @@ import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Responsi
 import { SimulationLever, WPRiskState } from '@/lib/riskEngine/types';
 import { simulateWPRisk } from '@/lib/riskEngine/simulate';
 import { SimulationControls } from '../simulation/SimulationControls';
-import { GlobalContextState } from '@/app/page';
 
 interface RightPanelProps {
   selectedNodeId: string | null;
   nodes: SpiderNode[];
   edges: SpiderEdge[];
   dataQualityConfidence: number;
-  globalContext: GlobalContextState;
 }
 
-export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence, globalContext }: RightPanelProps) {
+export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence }: RightPanelProps) {
   const [activeTab, setActiveTab] = useState<'layers' | 'simulation' | 'trend'>('layers');
   const [levers, setLevers] = useState<SimulationLever[]>([]);
   const [narrativeObj, setNarrativeObj] = useState<any | null>(null);
@@ -94,8 +92,8 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
   // Run simulation reactively
   const simulationResult = useMemo(() => {
     if (!selectedNode || selectedNode.type !== 'workPackage' || levers.length === 0) return null;
-    return simulateWPRisk(selectedNode, levers, nodes, edges, dataQualityConfidence, globalContext);
-  }, [selectedNode, levers, nodes, edges, dataQualityConfidence, globalContext]);
+    return simulateWPRisk(selectedNode, levers, nodes, edges, dataQualityConfidence);
+  }, [selectedNode, levers, nodes, edges, dataQualityConfidence]);
 
   const radarData = useMemo(() => {
     if (!simulationResult?.state?.detected) return [];
@@ -130,10 +128,11 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            nodeData: selectedNode.data,
-            state: simulationResult.state,
-            delta: simulationResult.delta,
-            globalContext: globalContext
+            node: selectedNode,
+            simulationState: simulationResult.state,
+            simulationDelta: simulationResult.delta,
+            dataQualityConfidence,
+            blastRadius: simulationResult.state.blastRadius
           }),
           signal: abortController.signal
         });

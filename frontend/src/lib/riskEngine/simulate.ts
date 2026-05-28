@@ -43,8 +43,7 @@ export function simulateWPRisk(
   levers: SimulationLever[],
   allNodes: SpiderNode[],
   allEdges: SpiderEdge[],
-  dataQualityConfidence: number,
-  globalContext: any
+  dataQualityConfidence: number
 ): SimulationResult {
   
   // 1. Create a simulated copy of the node's metrics based on lever inputs
@@ -119,7 +118,7 @@ export function simulateWPRisk(
 
   // 5. LAYER 5: RESIDUAL & CRI
   const residual = computeResidualRisk(detected, propagated, mitigations);
-  const cri = computeCRI(residual, dataQualityConfidence, globalContext);
+  const cri = computeCRI(residual, dataQualityConfidence);
 
   // 6. LAYER 8: BLAST RADIUS
   const impactedNodeIds = computeBlastRadius(targetNode.id, allEdges);

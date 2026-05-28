@@ -51,8 +51,7 @@ export function computeResidualRisk(
 
 export function computeCRI(
   residual: Record<DimensionKey, { score: number; class: RiskClass }>,
-  dataQualityConfidence: number,
-  globalContext: any
+  dataQualityConfidence: number
 ): { score: number; class: RiskClass } {
   
   // Calculate Perfect Average

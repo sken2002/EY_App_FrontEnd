@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { generateText } from 'ai';
 import { google } from '@ai-sdk/google';
 import { WPRiskState } from '@/lib/riskEngine/types';
-import { SpiderNodeData } from '@/lib/types';
+import { SpiderNode, SpiderNodeData } from '@/lib/types';
 
 export const runtime = 'edge';
 
@@ -26,10 +26,11 @@ type GlobalContext = {
 };
 
 type NarrativeRequestBody = {
-  nodeData: SpiderNodeData;
-  state: WPRiskState;
-  delta?: { criDelta?: number };
-  globalContext?: GlobalContext;
+  node: SpiderNode;
+  simulationState: WPRiskState;
+  simulationDelta?: { criDelta?: number };
+  dataQualityConfidence: number;
+  blastRadius: any;
 };
 
 /**
@@ -57,12 +58,8 @@ type NarrativeResponse = {
   assumptions_and_limits: string[];
 };
 
-/**
- * Small helper to safely read optional node fields without making the API
- * depend too tightly on the exact SpiderNodeData interface.
- */
-function getNodeField(nodeData: SpiderNodeData, key: string): unknown {
-  return (nodeData as unknown as Record<string, unknown>)?.[key];
+function getNodeField(nodeData: any, key: string): unknown {
+  return nodeData?.[key];
 }
 
 /**
@@ -78,8 +75,7 @@ function getNodeField(nodeData: SpiderNodeData, key: string): unknown {
 function buildFallbackNarrative(
   nodeData: SpiderNodeData,
   state: WPRiskState,
-  criDelta: number,
-  globalContext?: GlobalContext
+  criDelta: number
 ): NarrativeResponse {
   const materialRisks = Object.entries(state.detected ?? {})
     .filter(([_, d]) => d.class === 'High' || d.class === 'Medium')
@@ -91,8 +87,7 @@ function buildFallbackNarrative(
 
   const workstream = String(getNodeField(nodeData, 'group') ?? 'the relevant workstream');
   const location = getNodeField(nodeData, 'location');
-  const contextConfidence: NarrativeResponse['context_confidence'] =
-    globalContext?.strategicObjective || globalContext?.expectedBenefit ? 'High' : 'Low';
+  const contextConfidence: NarrativeResponse['context_confidence'] = 'Low';
 
   return {
     executive_summary: `${nodeData.label} shows ${materialRisks.length > 0 ? 'material risk pressure' : 'limited material risk pressure'} under the current deterministic simulation. ${criDelta !== 0 ? `The simulated CRI movement is ${criDelta > 0 ? '+' : ''}${Math.round(criDelta)}.` : 'No material CRI movement is currently detected.'}`,
@@ -102,8 +97,8 @@ function buildFallbackNarrative(
     blast_radius: `${impactedCount} connected entities are affected, with approximately £${exposure.toLocaleString()} financial exposure.`,
     residual_risk_view: activeMitigations.length > 0 ? `Active mitigations are applied: ${activeMitigations.join(', ')}.` : 'No active mitigation is currently applied, so residual risk remains close to baseline simulation output.',
 
-    business_context_view: `Inferred from available synthetic data, this work package appears connected to ${workstream}${location ? ` in ${location}` : ''}. The business interpretation should be treated as directional because no explicit strategic objective was supplied.`,
-    inferred_strategic_objective: globalContext?.strategicObjective ?? 'Inferred objective: preserve delivery continuity and avoid wider programme disruption.',
+    business_context_view: `This work package appears connected to ${workstream}${location ? ` in ${location}` : ''}.`,
+    inferred_strategic_objective: 'Inferred objective: preserve delivery continuity and avoid wider programme disruption.',
     benefit_preservation_view: activeMitigations.length > 0
       ? 'Mitigation appears relevant if it preserves downstream delivery confidence and prevents local risk from becoming a broader programme issue.'
       : 'Without active mitigation, the main benefit-preservation concern is whether local risk could create avoidable delay, cost pressure, or downstream disruption.',
@@ -146,15 +141,14 @@ function safeJsonParse(text: string): NarrativeResponse | null {
 export async function POST(req: Request) {
   try {
     const body = (await req.json()) as NarrativeRequestBody;
-    const { nodeData, state, delta, globalContext } = body;
+    const { node, simulationState: state, simulationDelta: delta } = body;
+    const nodeData = node.data;
 
     if (!nodeData || !state) {
       return NextResponse.json({ error: 'Missing required deterministic state payload' }, { status: 400 });
     }
 
     const criDelta = delta?.criDelta ?? 0;
-    const archetype = globalContext?.archetype ?? 'Infrastructure';
-    const horizon = globalContext?.horizon ?? 'Short-term';
 
     const materialRisks = Object.entries(state.detected ?? {})
       .filter(([_, d]) => d.class === 'High' || d.class === 'Medium')
@@ -173,12 +167,7 @@ export async function POST(req: Request) {
       .map(m => m.label);
 
     const businessContextClues = {
-      supplied_business_context: {
-        strategic_objective: globalContext?.strategicObjective ?? null,
-        business_priority: globalContext?.businessPriority ?? null,
-        expected_benefit: globalContext?.expectedBenefit ?? null,
-        value_at_stake: globalContext?.valueAtStake ?? null
-      },
+      supplied_business_context: null,
       inference_clues: {
         work_package_name: nodeData.label,
         workstream: getNodeField(nodeData, 'group') ?? null,
@@ -186,8 +175,6 @@ export async function POST(req: Request) {
         priority: getNodeField(nodeData, 'priority') ?? null,
         planned_cost: getNodeField(nodeData, 'plannedCost') ?? getNodeField(nodeData, 'planned_cost') ?? null,
         completion: getNodeField(nodeData, 'completion') ?? getNodeField(nodeData, 'completionPct') ?? null,
-        project_archetype: archetype,
-        time_horizon: horizon,
         downstream_impacted_count: state.blastRadius?.impactedNodeIds?.length ?? 0,
         downstream_financial_exposure: state.blastRadius?.totalExposure ?? 0,
         active_risk_dimensions: materialRisks.map(r => r.dimension)
@@ -201,8 +188,6 @@ export async function POST(req: Request) {
         original_data: nodeData
       },
       context: {
-        project_archetype: archetype,
-        time_horizon: horizon,
         business_context_clues: businessContextClues
       },
       simulation: {
@@ -220,33 +205,26 @@ export async function POST(req: Request) {
 
     if (!process.env.GOOGLE_GENERATIVE_AI_API_KEY) {
       return NextResponse.json({
-        narrative: buildFallbackNarrative(nodeData, state, criDelta, globalContext),
+        narrative: buildFallbackNarrative(nodeData, state, criDelta),
         source: 'fallback'
       });
     }
 
-    const systemPrompt = `You are Project Spider's AI interpretation layer for an infrastructure risk dashboard.
+    const systemPrompt = `You are Project Spider's Strategist AI.
 
 Your role:
-- Explain deterministic risk-engine output in clear executive language.
-- Interpret scenario pathways, risk propagation, blast radius, residual risk, and mitigation options.
-- Produce governance-style commentary suitable for EY/client review.
-- Add business-context interpretation where useful, especially around strategic value, delivery priority, and benefit preservation.
+- Explain risk output in brutally direct, highly-specific executive language.
+- Provide actionable tactical steps.
+- ZERO generic buzzwords. ZERO management consulting fluff. 
 
-Strict rules:
-- Do NOT calculate or invent CRI, thresholds, exposures, impacted nodes, or risk classes.
-- Do NOT introduce specific factual project data that is not present in the deterministic payload.
-- Treat propagation as probabilistic confidence, not deterministic certainty.
-- Keep the distinction between baseline risk, propagation pressure, mitigation, and residual risk clear.
-- Use the supplied deterministic payload as the source of truth.
+Strict Rules for Tactical Actions:
+- You MUST name specific entities if provided in the payload (e.g. Work Package Name, downstream impacted counts).
+- You MUST explicitly reference the numerical data (e.g. "£1.2M exposure", "delay by 15 days").
+- Do NOT say "collaborate with stakeholders". Say "Resolve compliance block on upstream contract to relieve Cost risk."
+- Make the actions sound like precise engineering or operational directives.
 
-Business-context inference rules:
-- The dataset may be synthetic and may not contain explicit strategic objectives.
-- You MAY infer plausible qualitative business context from work package name, workstream, location, project archetype, time horizon, active risk pattern, and dependency exposure.
-- Clearly label inferred business context as inferred, assumed, or appears to indicate.
-- Use cautious language such as "likely", "may", "appears to", and "could support".
-- Do NOT invent specific client names, contract terms, regulation names, revenue numbers, benefit amounts, or deadlines unless supplied.
-- If context is weak, state that the interpretation is operationally grounded rather than strategically confirmed.
+Business-context rules:
+- We do not use top-down personas anymore. Rely ONLY on the exact financial and schedule metrics provided in the payload.
 
 Return ONLY valid JSON with this exact shape:
 {
@@ -285,7 +263,7 @@ ${JSON.stringify(deterministicPayload, null, 2)}`;
 
     if (!parsed) {
       return NextResponse.json({
-        narrative: buildFallbackNarrative(nodeData, state, criDelta, globalContext),
+        narrative: buildFallbackNarrative(nodeData, state, criDelta),
         source: 'fallback_after_invalid_ai_json',
         raw_model_output: result.text
       });

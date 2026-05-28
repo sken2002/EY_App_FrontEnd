@@ -10,13 +10,7 @@ import { DimensionKey } from '@/lib/types';
 
 export type DrillLevel = 'portfolio' | 'pillar' | 'entity' | 'macro';
 
-export type ProjectArchetype = 'Agile IT' | 'Heavy Infrastructure' | 'Standard Corporate';
-export type TimeHorizon = 'Short-term (3mo)' | 'Long-term (12mo+)';
 
-export interface GlobalContextState {
-  archetype: ProjectArchetype;
-  horizon: TimeHorizon;
-}
 
 export interface DrillState {
   level: DrillLevel;
@@ -28,11 +22,7 @@ export interface DrillState {
 export default function Home() {
   const { data, loading, error } = useSpiderState();
 
-  // Global Context State
-  const [globalContext, setGlobalContext] = useState<GlobalContextState>({
-    archetype: 'Standard Corporate',
-    horizon: 'Short-term (3mo)'
-  });
+
 
   // Top-level tabs for layout simplification
   const [activeTopTab, setActiveTopTab] = useState<'scorecard' | 'topology' | 'pipeline'>('scorecard');
@@ -90,11 +80,7 @@ export default function Home() {
 
   return (
     <main className="flex h-screen w-screen flex-col overflow-hidden bg-[#0a0a0f] text-white">
-      <Header 
-        meta={data.meta}
-        globalContext={globalContext}
-        setGlobalContext={setGlobalContext}
-      />
+      <Header meta={data.meta} />
 
       {/* Top Level Tab Navigation */}
       <div className="flex border-b border-white/10 bg-[#0f0f15] px-4">
@@ -162,7 +148,6 @@ export default function Home() {
                 nodes={data.nodes}
                 edges={data.edges}
                 dataQualityConfidence={data.riskIndex.dataQuality.confidenceModifier}
-                globalContext={globalContext}
               />
             )}
           </>

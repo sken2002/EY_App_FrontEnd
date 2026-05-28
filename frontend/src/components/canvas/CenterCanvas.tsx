@@ -138,6 +138,7 @@ export function CenterCanvas({
               nodes={nodes}
               riskIndex={riskIndex} 
               onPillarClick={onDrillIntoPillar}
+              onEntityClick={onDrillIntoEntity}
             />
           )}
 

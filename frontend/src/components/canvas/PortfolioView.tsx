@@ -1,14 +1,15 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import React, { useMemo, useState, Fragment } from 'react';
 import { motion } from 'framer-motion';
 import { SpiderNode, DimensionKey, RiskIndex } from '@/lib/types';
-import { Users, ArrowUpDown } from 'lucide-react';
+import { Users, ArrowUpDown, ChevronDown, ChevronRight, Search } from 'lucide-react';
 
 interface PortfolioViewProps {
   nodes: SpiderNode[];
   riskIndex: RiskIndex;
   onPillarClick: (pillar: DimensionKey) => void;
+  onEntityClick: (entityId: string) => void;
 }
 
 const DIM_KEYS: DimensionKey[] = ['costFinancial', 'cashflow', 'schedule', 'operational', 'supplier'];
@@ -20,8 +21,9 @@ const DIM_LABELS: Record<DimensionKey, string> = {
   supplier: 'Supplier'
 };
 
-export function PortfolioView({ nodes, onPillarClick }: PortfolioViewProps) {
+export function PortfolioView({ nodes, onPillarClick, onEntityClick }: PortfolioViewProps) {
   const [sortConfig, setSortConfig] = useState<{ key: string; direction: 'asc' | 'desc' }>({ key: 'cri', direction: 'desc' });
+  const [expandedPm, setExpandedPm] = useState<string | null>(null);
 
   // Group by PM
   const pmData = useMemo(() => {
@@ -54,6 +56,7 @@ export function PortfolioView({ nodes, onPillarClick }: PortfolioViewProps) {
       return {
         name: g.name,
         wpCount: count,
+        wps: g.wps,
         avgCri: Math.round(g.criTotal / count),
         dims: {
           costFinancial: g.dims.costFinancial / count,
@@ -136,24 +139,67 @@ export function PortfolioView({ nodes, onPillarClick }: PortfolioViewProps) {
           </thead>
           <tbody>
             {sortedData.map((pm, idx) => (
-              <tr key={pm.name} className="border-b border-white/5 hover:bg-white/5 transition-colors">
-                <td className="p-4 text-sm font-medium text-gray-200">{pm.name}</td>
-                <td className="p-4 text-sm text-gray-400 font-mono">{pm.wpCount}</td>
-                <td className="p-4">
-                  <div className={`inline-flex items-center justify-center px-2 py-1 rounded text-xs font-bold ${
-                    pm.avgCri > 65 ? 'bg-rose-500/20 text-rose-400' : pm.avgCri > 40 ? 'bg-amber-500/20 text-amber-400' : 'bg-emerald-500/20 text-emerald-400'
-                  }`}>
-                    {pm.avgCri}
-                  </div>
-                </td>
-                {DIM_KEYS.map(k => (
-                  <td key={k} className="p-4 text-center">
-                    <div className={`inline-flex h-6 w-12 items-center justify-center rounded border text-[10px] font-bold ${getHeatmapColor(pm.dims[k])}`}>
-                      {pm.dims[k].toFixed(1)}
+              <Fragment key={pm.name}>
+                <tr 
+                  className="border-b border-white/5 hover:bg-white/5 transition-colors cursor-pointer"
+                  onClick={() => setExpandedPm(expandedPm === pm.name ? null : pm.name)}
+                >
+                  <td className="p-4 text-sm font-medium text-gray-200 flex items-center gap-2">
+                    {expandedPm === pm.name ? <ChevronDown size={14} className="text-gray-500"/> : <ChevronRight size={14} className="text-gray-500"/>}
+                    {pm.name}
+                  </td>
+                  <td className="p-4 text-sm text-gray-400 font-mono">{pm.wpCount}</td>
+                  <td className="p-4">
+                    <div className={`inline-flex items-center justify-center px-2 py-1 rounded text-xs font-bold ${
+                      pm.avgCri > 65 ? 'bg-rose-500/20 text-rose-400' : pm.avgCri > 40 ? 'bg-amber-500/20 text-amber-400' : 'bg-emerald-500/20 text-emerald-400'
+                    }`}>
+                      {pm.avgCri}
                     </div>
                   </td>
-                ))}
-              </tr>
+                  {DIM_KEYS.map(k => (
+                    <td key={k} className="p-4 text-center">
+                      <div className={`inline-flex h-6 w-12 items-center justify-center rounded border text-[10px] font-bold ${getHeatmapColor(pm.dims[k])}`}>
+                        {pm.dims[k].toFixed(1)}
+                      </div>
+                    </td>
+                  ))}
+                </tr>
+                
+                {/* Expanded Row showing Work Packages */}
+                {expandedPm === pm.name && (
+                  <tr className="bg-black/40 border-b border-white/10">
+                    <td colSpan={3 + DIM_KEYS.length} className="p-4">
+                      <div className="pl-6 py-2">
+                        <h4 className="text-xs font-semibold text-emerald-400 mb-3 uppercase tracking-wider">Managed Work Packages</h4>
+                        <div className="grid grid-cols-1 gap-2">
+                          {pm.wps.map((wp: any) => (
+                            <div key={wp.id} className="flex items-center justify-between bg-[#1a1a24] p-3 rounded border border-white/5 hover:border-white/20 transition-colors">
+                              <div className="flex flex-col">
+                                <span className="text-sm text-white font-medium">{wp.data.label}</span>
+                                <span className="text-xs text-gray-400">{wp.data.subtitle}</span>
+                              </div>
+                              <div className="flex items-center gap-4">
+                                <div className={`px-2 py-1 rounded text-xs font-bold ${
+                                  (wp.data.riskScore || 0) > 65 ? 'bg-rose-500/20 text-rose-400' : (wp.data.riskScore || 0) > 40 ? 'bg-amber-500/20 text-amber-400' : 'bg-emerald-500/20 text-emerald-400'
+                                }`}>
+                                  CRI: {wp.data.riskScore || 'N/A'}
+                                </div>
+                                <button 
+                                  onClick={(e) => { e.stopPropagation(); onEntityClick(wp.id); }}
+                                  className="flex items-center gap-1 px-3 py-1.5 bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 rounded text-xs font-semibold transition-colors"
+                                >
+                                  <Search size={12} />
+                                  Analyze in Graph
+                                </button>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                )}
+              </Fragment>
             ))}
           </tbody>
         </table>

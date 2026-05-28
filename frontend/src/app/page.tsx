@@ -50,6 +50,7 @@ export default function Home() {
 
   const drillIntoEntity = useCallback((entityId: string) => {
     setDrill(prev => ({ ...prev, level: 'entity', activeEntityId: entityId }));
+    setActiveTopTab('topology');
   }, []);
 
   const navigateBack = useCallback(() => {

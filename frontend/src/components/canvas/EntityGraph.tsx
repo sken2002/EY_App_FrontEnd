@@ -2,8 +2,9 @@
 
 import { useMemo, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { ReactFlow, Background, Controls, MiniMap, NodeTypes } from '@xyflow/react';
+import { ReactFlow, Background, Controls, MiniMap, NodeTypes, Panel } from '@xyflow/react';
 import { SpiderNode, Scenario } from '@/lib/types';
+import { Info } from 'lucide-react';
 import { WorkPackageNode } from './WorkPackageNode';
 import { ContractNode } from './ContractNode';
 import { MilestoneNode } from './MilestoneNode';
@@ -50,6 +51,20 @@ export function EntityGraph({ nodes, edges, centerId }: EntityGraphProps) {
           maxZoom={2}
           proOptions={{ hideAttribution: true }}
         >
+          <Panel position="top-left" className="bg-[#1a1a24]/90 backdrop-blur border border-emerald-500/30 p-4 rounded-xl shadow-lg max-w-sm m-4">
+            <div className="flex items-start gap-3">
+              <div className="p-2 bg-emerald-500/20 rounded-lg text-emerald-400">
+                <Info size={20} />
+              </div>
+              <div>
+                <h3 className="text-white font-semibold text-sm mb-1">Topology & Dependency Map</h3>
+                <p className="text-gray-400 text-xs leading-relaxed">
+                  You are viewing the calculated blast radius for <strong>{centerNode?.data.label || 'this Work Package'}</strong>. 
+                  The AI Risk Engine has mapped all immediate downstream dependencies (Contracts & Milestones) that will be affected if this entity fails.
+                </p>
+              </div>
+            </div>
+          </Panel>
           <Background color="#ffffff" gap={20} size={1} style={{ opacity: 0.03 }} />
           <Controls className="bg-black/50 border border-white/10 fill-white" />
           <MiniMap

@@ -22,6 +22,7 @@ export interface DrillState {
   level: DrillLevel;
   activePillar: DimensionKey | null;
   activeEntityId: string | null;
+  selectedSubNodeId?: string | null;
 }
 
 export default function Home() {
@@ -41,6 +42,7 @@ export default function Home() {
     level: 'portfolio', // Default to PM Scorecard view
     activePillar: null,
     activeEntityId: null,
+    selectedSubNodeId: null,
   });
 
   // Navigation handlers
@@ -49,8 +51,12 @@ export default function Home() {
   }, []);
 
   const drillIntoEntity = useCallback((entityId: string) => {
-    setDrill(prev => ({ ...prev, level: 'entity', activeEntityId: entityId }));
+    setDrill(prev => ({ ...prev, level: 'entity', activeEntityId: entityId, selectedSubNodeId: null }));
     setActiveTopTab('topology');
+  }, []);
+
+  const selectSubNode = useCallback((nodeId: string | null) => {
+    setDrill(prev => ({ ...prev, selectedSubNodeId: nodeId }));
   }, []);
 
   const navigateBack = useCallback(() => {
@@ -138,20 +144,21 @@ export default function Home() {
 
             {/* Center Panel: Progressive Drill-Down Canvas (Flex) */}
             <CenterCanvas 
+              drill={drill} 
               nodes={data.nodes} 
-              edges={data.edges}
+              edges={data.edges} 
               riskIndex={data.riskIndex}
-              drill={drill}
+              onDrillIntoPortfolio={() => setDrill({ level: 'portfolio', activePillar: null, activeEntityId: null })}
               onDrillIntoPillar={drillIntoPillar}
               onDrillIntoEntity={drillIntoEntity}
               onNavigateBack={navigateBack}
-              onDrillIntoPortfolio={() => setDrill({ level: 'portfolio', activePillar: null, activeEntityId: null })}
+              onNodeClick={selectSubNode}
             />
 
             {/* Right Panel: Risk Engine Simulation (380px) - Only show in Topology */}
             {activeTopTab === 'topology' && (
               <RightPanel 
-                selectedNodeId={drill.activeEntityId}
+                selectedNodeId={drill.selectedSubNodeId || drill.activeEntityId}
                 nodes={data.nodes}
                 edges={data.edges}
                 dataQualityConfidence={data.riskIndex.dataQuality.confidenceModifier}

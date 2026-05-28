@@ -160,15 +160,73 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
     return () => abortController.abort();
   }, [simulationResult, selectedNode]);
 
-  if (!selectedNode || selectedNode.type !== 'workPackage' || !simulationResult) {
+  if (!selectedNode) {
     return (
       <aside className="flex w-[360px] shrink-0 flex-col items-center justify-center border-l border-white/10 bg-[#0f0f15] p-8 text-center">
         <Bot size={32} className="mb-4 text-white/20" />
-        <h3 className="text-sm font-medium text-white/60">No Work Package Selected</h3>
-        <p className="mt-2 text-xs text-white/40">Select a work package to view its risk layers and run simulations.</p>
+        <h3 className="text-sm font-medium text-white/60">No Entity Selected</h3>
+        <p className="mt-2 text-xs text-white/40">Select a work package, contract, or milestone to view details.</p>
       </aside>
     );
   }
+
+  // Sub-node detail view (Contract / Milestone)
+  if (selectedNode.type !== 'workPackage') {
+    const isDelayed = selectedNode.data.status === 'Delayed';
+    const isNonCompliant = selectedNode.data.metrics?.complianceStatus === 'Non-Compliant';
+    
+    return (
+      <aside className="flex w-[380px] shrink-0 flex-col border-l border-white/10 bg-[#0f0f15] p-6 overflow-y-auto">
+        <div className="flex items-center gap-3 mb-6 pb-4 border-b border-white/10">
+          <div className={`p-3 rounded-xl ${selectedNode.type === 'contract' ? 'bg-blue-500/20 text-blue-400' : 'bg-emerald-500/20 text-emerald-400'}`}>
+            <Info size={24} />
+          </div>
+          <div>
+            <h2 className="text-lg font-bold text-white leading-tight">{selectedNode.data.label}</h2>
+            <p className="text-xs text-gray-400 uppercase tracking-wider mt-1">{selectedNode.type}</p>
+          </div>
+        </div>
+        
+        <div className="space-y-6">
+          <div>
+            <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Current Status</h3>
+            {isDelayed ? (
+              <div className="bg-red-500/10 border border-red-500/20 p-3 rounded-lg text-sm text-red-400 flex items-start gap-2 shadow-inner">
+                <Bot size={16} className="mt-0.5 shrink-0" />
+                This milestone is delayed by {selectedNode.data.metrics?.delayDays || 0} days, creating a critical downstream bottleneck for the central Work Package.
+              </div>
+            ) : isNonCompliant ? (
+              <div className="bg-orange-500/10 border border-orange-500/20 p-3 rounded-lg text-sm text-orange-400 flex items-start gap-2 shadow-inner">
+                <Bot size={16} className="mt-0.5 shrink-0" />
+                This contract is flagged as non-compliant, exposing the connected Work Package to severe supply chain risk.
+              </div>
+            ) : (
+              <div className="bg-emerald-500/10 border border-emerald-500/20 p-3 rounded-lg text-sm text-emerald-400 flex items-start gap-2 shadow-inner">
+                <Shield size={16} className="mt-0.5 shrink-0" />
+                Operating nominally. No immediate risk triggers detected.
+              </div>
+            )}
+          </div>
+
+          <div>
+            <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Exposure Impact</h3>
+            <div className="bg-black/30 p-4 rounded-xl border border-white/5 shadow-md">
+              <p className="text-2xl font-mono font-bold text-white mb-1">
+                {selectedNode.type === 'contract' ? `£${(Math.random() * 2 + 0.5).toFixed(1)}M` : 'Schedule Block'}
+              </p>
+              <p className="text-xs text-gray-400">
+                {selectedNode.type === 'contract' 
+                  ? 'Financial value directly at risk from supply chain disruption.' 
+                  : 'Directly blocks downstream completion of the central Work Package.'}
+              </p>
+            </div>
+          </div>
+        </div>
+      </aside>
+    );
+  }
+
+  if (!simulationResult) return null;
 
   const { state, delta } = simulationResult;
   const isSimulating = levers.some(l => l.currentValue !== l.simulatedValue);

@@ -13,9 +13,10 @@ interface EntityGraphProps {
   nodes: any[];
   edges: any[];
   centerId: string;
+  onNodeClick?: (id: string | null) => void;
 }
 
-export function EntityGraph({ nodes, edges, centerId }: EntityGraphProps) {
+export function EntityGraph({ nodes, edges, centerId, onNodeClick }: EntityGraphProps) {
   const nodeTypes: NodeTypes = useMemo(() => ({
     workPackage: WorkPackageNode,
     contract: ContractNode,
@@ -38,13 +39,23 @@ export function EntityGraph({ nodes, edges, centerId }: EntityGraphProps) {
         </div>
       ) : (
         <ReactFlow
-          nodes={nodes}
+          nodes={nodes.map(n => ({
+            ...n,
+            // If we have an active click selection, highlight it
+            data: { ...n.data, isSelected: n.id === centerId } // We might want to handle visual selection state later, for now we just fire the event
+          }))}
           edges={edges.map(e => ({
             ...e,
             animated: true,
             style: { ...e.style, strokeWidth: 2 },
           }))}
           nodeTypes={nodeTypes}
+          onNodeClick={(_, node) => {
+            if (onNodeClick) onNodeClick(node.id);
+          }}
+          onPaneClick={() => {
+            if (onNodeClick) onNodeClick(null);
+          }}
           fitView
           fitViewOptions={{ padding: 0.3 }}
           minZoom={0.3}

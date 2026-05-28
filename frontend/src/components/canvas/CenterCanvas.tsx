@@ -19,10 +19,11 @@ interface CenterCanvasProps {
   onDrillIntoEntity: (entityId: string) => void;
   onNavigateBack: () => void;
   onDrillIntoPortfolio?: (workstream: string) => void;
+  onNodeClick?: (id: string | null) => void;
 }
 export function CenterCanvas({ 
   nodes, edges, riskIndex, drill, 
-  onDrillIntoPillar, onDrillIntoEntity, onNavigateBack, onDrillIntoPortfolio
+  onDrillIntoPillar, onDrillIntoEntity, onNavigateBack, onDrillIntoPortfolio, onNodeClick
 }: CenterCanvasProps) {
 
   // Filter WP nodes for the active dimension, sorted by severity
@@ -66,7 +67,24 @@ export function CenterCanvas({
       if (connectedNodeIds.has(e.target)) connectedNodeIds.add(e.source);
     });
 
-    const allEdges = [...connectedEdges, ...secondDegreeEdges];
+    const allEdges = [...connectedEdges, ...secondDegreeEdges].map(e => {
+      const sourceNode = nodes.find(n => n.id === e.source);
+      const targetNode = nodes.find(n => n.id === e.target);
+      
+      let label = 'impacts';
+      if (sourceNode?.type === 'contract' && targetNode?.type === 'workPackage') label = 'supplies →';
+      if (sourceNode?.type === 'milestone' && targetNode?.type === 'workPackage') label = 'blocks →';
+      if (sourceNode?.type === 'workPackage' && targetNode?.type === 'milestone') label = 'depends on →';
+      if (sourceNode?.type === 'workPackage' && targetNode?.type === 'contract') label = 'funds →';
+      
+      return {
+        ...e,
+        label,
+        labelStyle: { fill: '#a7f3d0', fontWeight: 600, fontSize: 10, fontFamily: 'monospace' },
+        labelBgStyle: { fill: '#050505', stroke: '#10b981', fillOpacity: 0.9, strokeWidth: 1, rx: 4, ry: 4 },
+        labelBgPadding: [4, 4],
+      };
+    });
     const graphNodes = nodes
       .filter(n => connectedNodeIds.has(n.id))
       .map((n, idx) => {
@@ -158,6 +176,7 @@ export function CenterCanvas({
               nodes={entityGraph.nodes}
               edges={entityGraph.edges}
               centerId={drill.activeEntityId}
+              onNodeClick={onNodeClick}
             />
           )}
         </AnimatePresence>

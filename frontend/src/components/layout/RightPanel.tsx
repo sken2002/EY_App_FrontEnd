@@ -19,7 +19,7 @@ interface RightPanelProps {
 export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence, globalContext }: RightPanelProps) {
   const [activeTab, setActiveTab] = useState<'layers' | 'simulation' | 'trend'>('layers');
   const [levers, setLevers] = useState<SimulationLever[]>([]);
-  const [narrativeObj, setNarrativeObj] = useState<{ summary?: string, tactical_actions?: string[], strategic_shifts?: string[] } | null>(null);
+  const [narrativeObj, setNarrativeObj] = useState<any | null>(null);
   const [isTyping, setIsTyping] = useState<boolean>(false);
   const [historyCache, setHistoryCache] = useState<Record<string, any[]>>({});
 
@@ -140,14 +140,10 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
 
         const data = await res.json();
         
-        try {
-          // Gemini returns markdown block often, strip it
-          let cleanStr = data.narrative.replace(/```json/g, '').replace(/```/g, '').trim();
-          const parsed = JSON.parse(cleanStr);
-          setNarrativeObj(parsed);
-        } catch (e) {
-          // Fallback if parsing fails
-          setNarrativeObj({ summary: data.narrative });
+        if (data.narrative && typeof data.narrative === 'object') {
+          setNarrativeObj(data.narrative);
+        } else {
+          setNarrativeObj({ executive_summary: "Failed to parse analysis from server." });
         }
       } catch (err: any) {
         if (err.name !== 'AbortError') {
@@ -259,24 +255,40 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
                     <span className="animate-pulse flex items-center gap-2"><Activity size={14} className="text-emerald-500" /> Synthesizing mitigation strategies...</span>
                   ) : narrativeObj ? (
                     <div className="space-y-4">
-                      {narrativeObj.summary && (
-                        <p className="text-sm text-emerald-100">{narrativeObj.summary}</p>
+                      {narrativeObj.executive_summary && (
+                        <p className="text-sm text-emerald-100">{narrativeObj.executive_summary}</p>
                       )}
                       
+                      <div className="bg-black/20 p-3 rounded border border-white/5 space-y-2">
+                        {narrativeObj.active_pathway && (
+                          <div className="text-xs"><span className="text-gray-500">Pathway:</span> <span className="text-gray-300">{narrativeObj.active_pathway}</span></div>
+                        )}
+                        {narrativeObj.blast_radius && (
+                          <div className="text-xs"><span className="text-gray-500">Blast Radius:</span> <span className="text-gray-300">{narrativeObj.blast_radius}</span></div>
+                        )}
+                      </div>
+
+                      {narrativeObj.business_context_view && (
+                        <div className="text-xs text-blue-200 border-l-2 border-blue-500/50 pl-3 py-1">
+                          <span className="font-semibold text-blue-400 block mb-1">Business Context</span>
+                          {narrativeObj.business_context_view}
+                        </div>
+                      )}
+
                       {narrativeObj.tactical_actions && narrativeObj.tactical_actions.length > 0 && (
                         <div>
                           <h4 className="text-xs font-semibold text-emerald-400 mb-1 uppercase tracking-widest">Tactical (48h)</h4>
                           <ul className="list-disc pl-4 space-y-1">
-                            {narrativeObj.tactical_actions.map((act, i) => <li key={i} className="text-xs text-gray-300">{act}</li>)}
+                            {narrativeObj.tactical_actions.map((act: string, i: number) => <li key={i} className="text-xs text-gray-300">{act}</li>)}
                           </ul>
                         </div>
                       )}
 
                       {narrativeObj.strategic_shifts && narrativeObj.strategic_shifts.length > 0 && (
                         <div>
-                          <h4 className="text-xs font-semibold text-blue-400 mb-1 uppercase tracking-widest">Strategic</h4>
+                          <h4 className="text-xs font-semibold text-amber-400 mb-1 uppercase tracking-widest">Strategic</h4>
                           <ul className="list-disc pl-4 space-y-1">
-                            {narrativeObj.strategic_shifts.map((act, i) => <li key={i} className="text-xs text-gray-300">{act}</li>)}
+                            {narrativeObj.strategic_shifts.map((act: string, i: number) => <li key={i} className="text-xs text-gray-300">{act}</li>)}
                           </ul>
                         </div>
                       )}

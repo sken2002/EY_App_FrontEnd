@@ -7,7 +7,7 @@ export function HelperDrawer() {
 
   return (
     <>
-      <button 
+      <button
         onClick={() => setIsOpen(true)}
         className="flex items-center gap-1.5 text-xs text-gray-400 hover:text-white bg-white/5 hover:bg-white/10 px-3 py-1.5 rounded transition-colors"
       >
@@ -18,14 +18,14 @@ export function HelperDrawer() {
       <AnimatePresence>
         {isOpen && (
           <>
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsOpen(false)}
               className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
             />
-            <motion.div 
+            <motion.div
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
@@ -43,18 +43,44 @@ export function HelperDrawer() {
               </div>
 
               <div className="flex-1 overflow-y-auto p-6 space-y-8">
-                
+
                 {/* Composite Risk Index */}
                 <div className="space-y-2">
                   <h3 className="text-sm font-semibold text-emerald-400 flex items-center gap-2">
                     <Activity size={14} />
                     Composite Risk Index (CRI)
                   </h3>
+                  {/* CHANGED (Avery #15): replaced "strict, perfect mathematical average" wording with Avery's preferred phrasing
+                      that emphasises transparency, aggregation, equal weighting for explainability and auditability. */}
                   <p className="text-sm text-gray-300 leading-relaxed">
-                    The CRI is a strict, perfect mathematical average of the 5 core pillars: Cost, Schedule, Operational, Supplier, and Cashflow. It provides a transparent, unweighted view of total risk exposure on a 0-100 scale.
+                    The CRI provides a transparent aggregation of the five core risk pillars: Cost, Schedule, Operational, Supplier, and Cashflow. Currently each pillar contributes equally for explainability and auditability.
                   </p>
                   <div className="bg-black/30 border border-white/5 p-3 rounded font-mono text-xs text-gray-400 mt-2">
                     CRI = (Cost + Schedule + Ops + Supplier + Cash) / 5
+                  </div>
+
+                  {/* CHANGED (Avery #14): added H/M/L threshold bands so the score-to-class mapping is explicit and auditable.
+                      Thresholds mirror the colour bands used in the PortfolioView heatmap (rose/amber/emerald). */}
+                  <div className="mt-3 space-y-1.5">
+                    <p className="text-[11px] uppercase tracking-wider text-gray-500 mb-1.5">Risk class thresholds</p>
+                    <div className="flex items-center justify-between text-xs bg-rose-500/10 border border-rose-500/20 px-3 py-1.5 rounded">
+                      <span className="flex items-center gap-2 text-rose-400 font-medium">
+                        <span className="h-1.5 w-1.5 rounded-full bg-rose-400" /> High
+                      </span>
+                      <span className="text-gray-400 tabular-nums">CRI ≥ 65</span>
+                    </div>
+                    <div className="flex items-center justify-between text-xs bg-amber-500/10 border border-amber-500/20 px-3 py-1.5 rounded">
+                      <span className="flex items-center gap-2 text-amber-400 font-medium">
+                        <span className="h-1.5 w-1.5 rounded-full bg-amber-400" /> Medium
+                      </span>
+                      <span className="text-gray-400 tabular-nums">40 ≤ CRI &lt; 65</span>
+                    </div>
+                    <div className="flex items-center justify-between text-xs bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded">
+                      <span className="flex items-center gap-2 text-emerald-400 font-medium">
+                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" /> Low
+                      </span>
+                      <span className="text-gray-400 tabular-nums">CRI &lt; 40</span>
+                    </div>
                   </div>
                 </div>
 
@@ -65,7 +91,7 @@ export function HelperDrawer() {
                     Financial Blast Radius
                   </h3>
                   <p className="text-sm text-gray-300 leading-relaxed">
-                    If a Work Package fails or is delayed, the system calculates its "Blast Radius" by tracing its dependencies up to 3 levels deep in the project graph. 
+                    If a Work Package fails or is delayed, the system calculates its "Blast Radius" by tracing its dependencies up to 3 levels deep in the project graph.
                     The total Financial Exposure represents the combined planned budget of all downstream tasks that will be blocked by this failure.
                   </p>
                 </div>
@@ -73,14 +99,14 @@ export function HelperDrawer() {
                 {/* EVM Metrics */}
                 <div className="space-y-4">
                   <h3 className="text-sm font-semibold text-blue-400 border-b border-white/10 pb-2">Earned Value Metrics</h3>
-                  
+
                   <div>
                     <h4 className="text-sm text-gray-200 font-medium">Cost Performance Index (CPI)</h4>
                     <p className="text-xs text-gray-400 mt-1">
                       Ratio of earned value to actual cost. A CPI below 1.0 means the project is burning budget faster than it generates value.
                     </p>
                   </div>
-                  
+
                   <div>
                     <h4 className="text-sm text-gray-200 font-medium">Schedule Performance Index (SPI)</h4>
                     <p className="text-xs text-gray-400 mt-1">

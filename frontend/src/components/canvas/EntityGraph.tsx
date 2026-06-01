@@ -1,9 +1,9 @@
 'use client';
 
-import { useMemo, useCallback } from 'react';
+import { useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { ReactFlow, Background, Controls, MiniMap, NodeTypes, Panel } from '@xyflow/react';
-import { SpiderNode, Scenario } from '@/lib/types';
+import { ReactFlow, Background, Controls, NodeTypes, Panel } from '@xyflow/react';
+// CHANGED (Avery #19): removed MiniMap import — minimap was adding visual clutter without value
 import { Info } from 'lucide-react';
 import { WorkPackageNode } from './WorkPackageNode';
 import { ContractNode } from './ContractNode';
@@ -41,8 +41,7 @@ export function EntityGraph({ nodes, edges, centerId, onNodeClick }: EntityGraph
         <ReactFlow
           nodes={nodes.map(n => ({
             ...n,
-            // If we have an active click selection, highlight it
-            data: { ...n.data, isSelected: n.id === centerId } // We might want to handle visual selection state later, for now we just fire the event
+            data: { ...n.data, isSelected: n.id === centerId }
           }))}
           edges={edges.map(e => ({
             ...e,
@@ -70,25 +69,50 @@ export function EntityGraph({ nodes, edges, centerId, onNodeClick }: EntityGraph
               <div>
                 <h3 className="text-white font-semibold text-sm mb-1">Topology & Dependency Map</h3>
                 <p className="text-gray-400 text-xs leading-relaxed">
-                  You are viewing the calculated blast radius for <strong>{centerNode?.data.label || 'this Work Package'}</strong>. 
-                  The AI Risk Engine has mapped all immediate downstream dependencies (Contracts & Milestones) that will be affected if this entity fails.
+                  You are viewing the calculated blast radius for <strong>{centerNode?.data.label || 'this Work Package'}</strong>.
+                  The AI Risk Engine has mapped all immediate downstream dependencies (Contracts &amp; Milestones) that will be affected if this entity fails.
                 </p>
               </div>
             </div>
           </Panel>
+
           <Background color="#ffffff" gap={20} size={1} style={{ opacity: 0.03 }} />
-          <Controls className="bg-black/50 border border-white/10 fill-white" />
-          <MiniMap
-            nodeColor={(n) => {
-              const data = n.data as any;
-              if (n.id === centerId) return '#10b981';
-              if (data?.severity === 'critical') return '#ef4444';
-              if (data?.severity === 'high') return '#f97316';
-              return '#6b7280';
-            }}
-            maskColor="rgba(10, 10, 15, 0.8)"
-            className="bg-[#0f0f15] border border-white/10"
+
+          {/* CHANGED (Avery #19): restyled zoom controls — react-flow's default Controls render +/− buttons,
+              but the previous `fill-white` against a dark backdrop made them barely visible.
+              Now: dark pill background with light icons, sized and spaced clearly. */}
+          <Controls
+            className="!bg-[#1a1a24]/90 !border !border-white/20 !rounded-lg !shadow-lg [&>button]:!bg-transparent [&>button]:!border-white/10 [&>button]:!text-white [&>button:hover]:!bg-white/10 [&>button>svg]:!fill-white"
+            showInteractive={false}
           />
+
+          {/* CHANGED (Avery #19): removed MiniMap that previously rendered in the bottom-right corner.
+              It was adding visual clutter without informational value at this graph size. */}
+
+          {/* CHANGED (Avery #21): color legend explaining edge & node colours in the bottom-right
+              (the space previously occupied by the minimap). Matches the colour mapping used by
+              WorkPackageNode / ContractNode / MilestoneNode and the edge styles in CenterCanvas. */}
+          <Panel position="bottom-right" className="bg-[#1a1a24]/90 backdrop-blur border border-white/10 p-3 rounded-lg shadow-lg m-4 text-[10px] text-gray-300">
+            <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400 mb-2">Legend</p>
+            <div className="flex flex-col gap-1.5">
+              <div className="flex items-center gap-2">
+                <span className="inline-block h-0.5 w-6 bg-emerald-400" />
+                <span>Central work package</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="inline-block h-0.5 w-6 bg-blue-400" style={{ borderTop: '2px dashed #60a5fa', background: 'transparent' }} />
+                <span>Contract (supplies)</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="inline-block h-0.5 w-6" style={{ borderTop: '2px dashed #fb7185', background: 'transparent' }} />
+                <span>Milestone dependency</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="inline-block h-0.5 w-6 bg-rose-500" />
+                <span>Critical / delayed</span>
+              </div>
+            </div>
+          </Panel>
         </ReactFlow>
       )}
 

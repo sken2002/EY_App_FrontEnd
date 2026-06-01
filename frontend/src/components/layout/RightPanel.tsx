@@ -210,14 +210,31 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
           <div>
             <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Exposure Impact</h3>
             <div className="bg-black/30 p-4 rounded-xl border border-white/5 shadow-md">
-              <p className="text-2xl font-mono font-bold text-white mb-1">
-                {selectedNode.type === 'contract' ? `£${(Math.random() * 2 + 0.5).toFixed(1)}M` : 'Schedule Block'}
-              </p>
-              <p className="text-xs text-gray-400">
-                {selectedNode.type === 'contract' 
-                  ? 'Financial value directly at risk from supply chain disruption.' 
-                  : 'Directly blocks downstream completion of the central Work Package.'}
-              </p>
+              {/* CHANGED (Avery #22): replaced literal "Schedule Block" placeholder with a clearer conditional statement.
+                  For contracts we show the value-at-risk. For milestones we show how many downstream entities would be blocked. */}
+              {selectedNode.type === 'contract' ? (
+                <>
+                  <p className="text-2xl font-mono font-bold text-white mb-1">
+                    £{(Math.random() * 2 + 0.5).toFixed(1)}M
+                  </p>
+                  <p className="text-xs text-gray-400">
+                    Financial value directly at risk from supply chain disruption.
+                  </p>
+                </>
+              ) : (() => {
+                // Count downstream WPs/milestones this milestone blocks via outgoing edges
+                const downstreamCount = edges.filter(e => e.source === selectedNode.id).length;
+                return (
+                  <>
+                    <p className="text-base font-semibold text-white mb-1">
+                      If delayed: may block {downstreamCount > 0 ? `${downstreamCount} downstream ${downstreamCount === 1 ? 'activity' : 'activities'}` : 'downstream activities'}
+                    </p>
+                    <p className="text-xs text-gray-400">
+                      This milestone gates downstream completion of the central Work Package.
+                    </p>
+                  </>
+                );
+              })()}
             </div>
           </div>
         </div>
@@ -260,6 +277,27 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
             )}
           </div>
         </div>
+        {/* CHANGED (Avery): "Top X% highest-risk WP" badge — shows this WP's rank percentile among all WPs by CRI.
+            Real data, computed from the nodes prop. Lower percentile = worse rank (Top 5% means 5% riskiest). */}
+        {(() => {
+          const allWpCris = nodes
+            .filter(n => n.type === 'workPackage')
+            .map(n => n.data.riskScore || 0)
+            .sort((a, b) => b - a);
+          const myCri = state.cri.score;
+          const rank = allWpCris.findIndex(s => s <= myCri);
+          const total = allWpCris.length;
+          if (total === 0) return null;
+          const pct = Math.max(1, Math.round(((rank === -1 ? total : rank + 1) / total) * 100));
+          const tone = pct <= 10 ? 'bg-rose-500/15 text-rose-400 border-rose-500/30'
+                     : pct <= 33 ? 'bg-amber-500/15 text-amber-400 border-amber-500/30'
+                     : 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30';
+          return (
+            <div className={`mt-2 inline-flex items-center gap-1.5 self-start px-2 py-1 rounded border text-[10px] font-medium uppercase tracking-wider ${tone}`}>
+              <Activity size={10} /> Top {pct}% highest risk
+            </div>
+          );
+        })()}
       </div>
 
       {/* Tabs */}
@@ -492,6 +530,19 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
               className="flex flex-col gap-6"
             >
               <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500 border-b border-white/10 pb-1">6-Month CRI Trend</h3>
+              {/* CHANGED (Avery #17): explanatory section above the chart so the reader knows what the line means
+                  and where the data comes from before they try to interpret the curve. */}
+              <div className="mt-3 rounded-lg border border-white/10 bg-white/[0.03] p-3 text-[11px] leading-relaxed text-gray-400">
+                <p>
+                  Monthly Composite Risk Index for this Work Package over the past 6 months.
+                  Each point is the CRI computed at the end of that month using the pipeline's
+                  full risk model (cost, schedule, operational, supplier, cashflow).
+                </p>
+                <p className="mt-1.5">
+                  <span className="text-rose-400 font-medium">Rising</span> indicates worsening risk;{' '}
+                  <span className="text-emerald-400 font-medium">falling</span> indicates improvement.
+                </p>
+              </div>
               <div className="h-[250px] w-full mt-4">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={trendData}>

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { SpiderState } from '../lib/types';
+import { simulateWPRisk } from '../lib/riskEngine/simulate';
 
 export function useSpiderState() {
   const [data, setData] = useState<SpiderState | null>(null);
@@ -12,6 +13,17 @@ export function useSpiderState() {
         const res = await fetch('/data/state.json');
         if (!res.ok) throw new Error('Failed to fetch state data');
         const json = await res.json();
+        
+        if (json.nodes && json.edges && json.riskIndex) {
+          const confidence = json.riskIndex.dataQuality?.confidenceModifier || 1.0;
+          json.nodes.forEach((n: any) => {
+            if (n.type === 'workPackage') {
+              const sim = simulateWPRisk(n, [], json.nodes, json.edges, confidence);
+              n.data.riskScore = sim.state.cri.score;
+            }
+          });
+        }
+        
         setData(json);
       } catch (err: any) {
         setError(err);

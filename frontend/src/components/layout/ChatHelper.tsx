@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { useChat } from '@ai-sdk/react';
+// Removed broken useChat import
 import { Bot, X, MessageSquare, Send } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -31,18 +31,67 @@ export default function ChatHelper({ selectedNodeId, selectedNodeData, riskState
     }
   };
 
-  const { messages, append, isLoading } = useChat({
-    api: '/api/chat',
-    body: contextBody,
-  } as any) as any;
-
+  const [messages, setMessages] = useState<any[]>([]);
   const [inputValue, setInputValue] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!inputValue.trim() || isLoading) return;
-    append({ role: 'user', content: inputValue });
+
+    const userMessage = { role: 'user', content: inputValue, id: Date.now().toString() };
+    setMessages(prev => [...prev, userMessage]);
     setInputValue("");
+    setIsLoading(true);
+
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: [...messages, userMessage], context: contextBody.context })
+      });
+
+      if (!response.ok) {
+        const errData = await response.json();
+        throw new Error(errData.error || 'Failed to fetch response');
+      }
+
+      setMessages(prev => [...prev, { role: 'assistant', content: '', id: (Date.now() + 1).toString() }]);
+
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
+      let done = false;
+
+      while (reader && !done) {
+        const { value, done: doneReading } = await reader.read();
+        done = doneReading;
+        if (value) {
+          const chunk = decoder.decode(value, { stream: true });
+          
+          // Next.js AI SDK streams text in the format `0:"text"` or just plain text depending on version
+          // If it's plain text, we just append it. If it has the `0:` prefix, we parse it.
+          const cleanChunk = chunk.split('\n').map(line => {
+            if (line.startsWith('0:')) {
+              try { return JSON.parse(line.substring(2)); } catch { return ''; }
+            }
+            if (line.trim().startsWith('"') && line.trim().endsWith('"')) {
+              try { return JSON.parse(line.trim()); } catch { return line; }
+            }
+            return line; // Fallback to raw text
+          }).join('');
+
+          setMessages(prev => {
+            const last = prev[prev.length - 1];
+            return [...prev.slice(0, -1), { ...last, content: last.content + cleanChunk }];
+          });
+        }
+      }
+    } catch (err: any) {
+      console.error(err);
+      setMessages(prev => [...prev, { role: 'assistant', content: `Error: ${err.message}`, id: Date.now().toString() }]);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // Auto-scroll to bottom

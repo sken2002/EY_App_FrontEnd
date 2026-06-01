@@ -552,20 +552,21 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
 
               <div className="mt-4 pt-4 border-t border-white/10">
                 <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-4">Historical Volatility</h3>
-                <div className="h-[140px] w-full">
+                <div className="h-[200px] w-full mt-4">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={trendData}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" />
                       <XAxis dataKey="month" stroke="#9ca3af" fontSize={10} tickLine={false} axisLine={false} />
-                      <YAxis stroke="#9ca3af" fontSize={10} domain={[0, 100]} tickLine={false} axisLine={false} hide />
+                      <YAxis stroke="#9ca3af" fontSize={10} domain={[0, 100]} tickLine={false} axisLine={false} />
                       <RechartsTooltip 
                         contentStyle={{ backgroundColor: '#111827', borderColor: '#374151', borderRadius: '8px', fontSize: '12px' }}
                         itemStyle={{ color: '#10b981' }}
                       />
-                      <Line type="monotone" dataKey="cri" stroke="#10b981" strokeWidth={2} dot={false} />
+                      <Line type="monotone" dataKey="cri" stroke="#10b981" strokeWidth={3} dot={{ fill: '#10b981', strokeWidth: 2 }} />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
+                <p className="text-xs text-gray-500 italic mt-2 text-center">Historical volatility and projected trajectory based on audit logs.</p>
               </div>
             </motion.div>
           )}

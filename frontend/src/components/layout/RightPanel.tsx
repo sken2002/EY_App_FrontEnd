@@ -294,7 +294,7 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
       {/* Scrollable Content */}
       <div className="flex-1 overflow-y-auto p-5">
         <AnimatePresence mode="wait">
-          {activeTab === 'layers' ? (
+          {activeTab === 'layers' && (
             <motion.div
               key="layers"
               initial={{ opacity: 0, x: -10 }}
@@ -426,7 +426,9 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
               </div>
 
             </motion.div>
-          ) : (
+          )}
+          
+          {activeTab === 'simulation' && (
             <motion.div
               key="simulation"
               initial={{ opacity: 0, x: 10 }}

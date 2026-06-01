@@ -31,6 +31,11 @@ type NarrativeRequestBody = {
   simulationDelta?: { criDelta?: number };
   dataQualityConfidence: number;
   blastRadius: any;
+  contextEnv?: {
+    upstreamDependencies: string[];
+    downstreamDependencies: string[];
+    impactedDependencies: string[];
+  };
 };
 
 /**
@@ -177,7 +182,12 @@ export async function POST(req: Request) {
         original_data: nodeData
       },
       context: {
-        business_context_clues: businessContextClues
+        business_context_clues: businessContextClues,
+        network_topology: {
+          upstream_dependencies: body.contextEnv?.upstreamDependencies ?? [],
+          downstream_dependencies: body.contextEnv?.downstreamDependencies ?? [],
+          blast_radius_impacted_entities: body.contextEnv?.impactedDependencies ?? []
+        }
       },
       simulation: {
         cri_delta: Math.round(criDelta),
@@ -208,7 +218,8 @@ Your role:
 
 Strict Rules for Tactical Actions:
 - Never provide generic advice. 
-- You MUST name specific entities (e.g., specific work packages, metric names) from the payload.
+- You MUST name specific entities from the payload. Look at "network_topology" to identify EXACT upstream dependencies blocking this node, or EXACT downstream dependencies at risk in the blast radius.
+- If upstream dependencies exist, suggest actions to clear blockers on them. If downstream dependencies exist, suggest actions to shield them.
 - You MUST explicitly reference numerical data (e.g. "Inject £50K capital to offset CPI of 0.76", "Resolve 14 days delay on milestone").
 - Make actions sound like precise engineering or operational directives tied exactly to the failing drivers in the payload.
 

@@ -128,6 +128,13 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
       const t2 = setTimeout(() => setAgentState('strategist'), 3000);
       
       try {
+        // Gather rich context names instead of just IDs
+        const upstreamEdges = edges.filter(e => e.target === selectedNode.id);
+        const downstreamEdges = edges.filter(e => e.source === selectedNode.id);
+        const upstreamNames = upstreamEdges.map(e => nodes.find(n => n.id === e.source)?.data.label).filter(Boolean);
+        const downstreamNames = downstreamEdges.map(e => nodes.find(n => n.id === e.target)?.data.label).filter(Boolean);
+        const impactedNames = simulationResult.state.blastRadius?.impactedNodeIds?.map(id => nodes.find(n => n.id === id)?.data.label).filter(Boolean) || [];
+
         const res = await fetch('/api/narrative', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -136,7 +143,12 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
             simulationState: simulationResult.state,
             simulationDelta: simulationResult.delta,
             dataQualityConfidence,
-            blastRadius: simulationResult.state.blastRadius
+            blastRadius: simulationResult.state.blastRadius,
+            contextEnv: {
+              upstreamDependencies: upstreamNames,
+              downstreamDependencies: downstreamNames,
+              impactedDependencies: impactedNames
+            }
           }),
           signal: abortController.signal
         });

@@ -87,10 +87,10 @@ export function LeftPanel({ riskIndex, activePillar, onPillarClick }: LeftPanelP
         {/* Persona Toggle */}
         <div className="flex flex-col gap-2 mt-4">
           <div className="text-xs text-gray-500 mb-1">Active Persona</div>
-          <select className="bg-black/20 border border-white/10 text-xs text-gray-300 rounded p-1.5 focus:outline-none">
-            <option>Global Executive</option>
-            <option>Project Manager (IT)</option>
-            <option>Risk Auditor</option>
+          <select className="bg-[#0f0f15] border border-white/10 text-xs text-gray-300 rounded p-1.5 focus:outline-none">
+            <option className="bg-[#0f0f15] text-white">Global Executive</option>
+            <option className="bg-[#0f0f15] text-white">Project Manager (IT)</option>
+            <option className="bg-[#0f0f15] text-white">Risk Auditor</option>
           </select>
         </div>
       </div>

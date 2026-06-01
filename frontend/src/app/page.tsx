@@ -5,6 +5,7 @@ import { LeftPanel } from '@/components/layout/LeftPanel';
 import { CenterCanvas } from '@/components/canvas/CenterCanvas';
 import { RightPanel } from '@/components/layout/RightPanel';
 import { Header } from '@/components/layout/Header';
+import ChatHelper from '@/components/layout/ChatHelper';
 import { useState, useCallback } from 'react';
 import { DimensionKey } from '@/lib/types';
 
@@ -153,6 +154,15 @@ export default function Home() {
           </>
         )}
       </div>
+
+      {/* Global AI Chat Helper */}
+      {!loading && !error && data && (
+        <ChatHelper 
+          selectedNodeId={drill.selectedSubNodeId || drill.activeEntityId}
+          selectedNodeData={data.nodes.find(n => n.id === (drill.selectedSubNodeId || drill.activeEntityId))?.data || null}
+          riskState={data.riskIndex}
+        />
+      )}
     </main>
   );
 }

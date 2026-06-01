@@ -16,7 +16,7 @@ export default function ChatHelper({ selectedNodeId, selectedNodeData, riskState
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Package the current context to send with the chat
-  const contextBody = {
+  const contextBody = React.useMemo(() => ({
     context: {
       selectedNodeId,
       nodeData: selectedNodeData,
@@ -29,10 +29,10 @@ export default function ChatHelper({ selectedNodeId, selectedNodeData, riskState
         }))
       } : null
     }
-  };
+  }), [selectedNodeId, selectedNodeData, riskState]);
 
   // @ts-expect-error - bypassing strict type inference for useChat
-  const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat({
+  const { messages = [], input, handleInputChange, handleSubmit, isLoading } = useChat({
     api: '/api/chat',
     body: contextBody
   } as any);

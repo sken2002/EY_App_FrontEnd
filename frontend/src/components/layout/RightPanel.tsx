@@ -521,9 +521,14 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
                     </h4>
                     <div className="space-y-2">
                       {Object.entries(selectedNode.data.trends).filter(([_, t]) => t === 'declining').map(([key]) => (
-                        <div key={key} className="bg-rose-500/10 border border-rose-500/20 p-2.5 rounded flex items-center justify-between">
+                        <div key={key} className="group relative bg-rose-500/10 border border-rose-500/20 p-2.5 rounded flex items-center justify-between cursor-help">
                           <span className="text-xs text-rose-200 capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
                           <span className="text-[10px] text-rose-400 font-medium tracking-wide">DETERIORATING</span>
+                          
+                          {/* Tooltip */}
+                          <div className="absolute bottom-full right-0 mb-2 hidden w-56 p-2 bg-gray-900 border border-white/20 text-[10px] text-gray-300 rounded-lg shadow-2xl group-hover:block z-50 pointer-events-none">
+                            <span className="text-white font-medium">Deterministic Rule:</span> The 6-month historical data for {key.replace(/([A-Z])/g, ' $1').trim().toLowerCase()} shows a sustained downward trajectory, signaling an accelerating risk to the CRI.
+                          </div>
                         </div>
                       ))}
                       {Object.entries(selectedNode.data.trends).filter(([_, t]) => t === 'declining').length === 0 && (
@@ -538,9 +543,14 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
                     </h4>
                     <div className="space-y-2">
                       {Object.entries(selectedNode.data.trends).filter(([_, t]) => t === 'improving' || t === 'stable').map(([key, t]) => (
-                        <div key={key} className="bg-emerald-500/10 border border-emerald-500/20 p-2.5 rounded flex items-center justify-between">
+                        <div key={key} className="group relative bg-emerald-500/10 border border-emerald-500/20 p-2.5 rounded flex items-center justify-between cursor-help">
                           <span className="text-xs text-emerald-200 capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
                           <span className="text-[10px] text-emerald-400 font-medium uppercase tracking-wide">{t as string}</span>
+
+                          {/* Tooltip */}
+                          <div className="absolute bottom-full right-0 mb-2 hidden w-56 p-2 bg-gray-900 border border-white/20 text-[10px] text-gray-300 rounded-lg shadow-2xl group-hover:block z-50 pointer-events-none">
+                            <span className="text-white font-medium">Deterministic Rule:</span> The 6-month historical data for {key.replace(/([A-Z])/g, ' $1').trim().toLowerCase()} {t === 'improving' ? 'shows a positive upward recovery, actively reducing' : 'remains within acceptable bounds, exerting neutral pressure on'} the overall CRI.
+                          </div>
                         </div>
                       ))}
                     </div>

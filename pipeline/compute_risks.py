@@ -555,18 +555,15 @@ def compute_all_risks(data):
         wp_master[[f'{dim_key}_score', f'{dim_key}_class', f'{dim_key}_driver']] = wp_master.apply(
             lambda r: compute_dim(r), axis=1)
 
-    # ── CRI per WP with Data Quality Penalty ──
-    dq_confidence = dq_modifier['confidence']
-    dq_penalty = (1.0 - dq_confidence) * 20  # Add up to 20 points of risk for poor data
-
+    # ── Perfect Average CRI per WP ──
     def compute_cri(row):
         cri_raw = 0
         for dim_key in DIMENSION_DEFS.keys():
             score = row.get(f'{dim_key}_score', 20)
             cri_raw += score
         
-        cri_final = round((cri_raw / 5) + dq_penalty, 1)
-        return min(cri_final, 100.0)
+        cri_final = round(cri_raw / 5, 1)
+        return cri_final
 
     wp_master['cri_score'] = wp_master.apply(compute_cri, axis=1)
 

@@ -411,17 +411,54 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
                   <p className="text-[10px] text-gray-400 mt-1">The actual risk level after accounting for dependency impacts and mitigations.</p>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
-                  {Object.entries(state.residual).map(([dim, data]) => (
-                    <div key={dim} className="flex flex-col bg-black/20 p-2 rounded border border-white/5 text-xs">
-                      <span className="text-gray-500 capitalize mb-1 truncate">{dim.replace(/([A-Z])/g, ' $1').trim()}</span>
+                  {Object.entries(state.residual).map(([dim, data]) => {
+                    // Get the exact rules and the drivers that fired
+                    const detectionData = state.detected[dim as keyof typeof state.detected];
+                    const drivers = detectionData?.drivers?.filter(d => !d.includes('On track') && !d.includes('No delays') && !d.includes('performing well') && !d.includes('On Track')) || [];
+                    
+                    const getThresholdTooltip = (dimension: string) => {
+                      switch(dimension) {
+                        case 'schedule': return 'High Risk: Delay > 45 days OR Slippage > 15%. Medium Risk: Minor delays > 0.';
+                        case 'costFinancial': return 'High Risk: CPI < 0.9 & SPI < 0.9 OR Budget Variance > 10%.';
+                        case 'operational': return 'High Risk: Backlog > 90% OR Emergencies >= 2.';
+                        case 'cashflow': return 'High Risk: Cashflow Deviation > 15% OR Payment Rejections > 20%.';
+                        case 'supplier': return 'High Risk: Single Supplier OR Spend Share > 70% OR NCR > 75%.';
+                        default: return 'Standard thresholds applied.';
+                      }
+                    };
+
+                    return (
+                    <div key={dim} className="group relative flex flex-col bg-black/20 p-2 rounded border border-white/5 text-xs cursor-help hover:bg-white/5 transition-colors">
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-gray-500 capitalize truncate flex items-center gap-1">
+                          {dim.replace(/([A-Z])/g, ' $1').trim()}
+                          <Info size={10} className="text-emerald-500/50" />
+                        </span>
+                      </div>
                       <div className="flex items-baseline justify-between">
                         <span className={`font-semibold ${data.class === 'High' ? 'text-rose-500' : data.class === 'Medium' ? 'text-amber-500' : 'text-emerald-500'}`}>
                           {Math.round(data.score)}
                         </span>
                         <span className="text-gray-600 text-[10px] uppercase">{data.class}</span>
                       </div>
+                      
+                      {/* Tooltip */}
+                      <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden w-48 p-3 bg-gray-900 border border-emerald-500/30 text-[10px] text-gray-300 rounded-lg shadow-2xl group-hover:block z-50 pointer-events-none">
+                        <div className="mb-2">
+                          <span className="text-emerald-400 font-semibold uppercase tracking-wider text-[9px] block mb-0.5">Threshold Rule:</span>
+                          {getThresholdTooltip(dim)}
+                        </div>
+                        {drivers.length > 0 && (
+                          <div className="pt-2 border-t border-white/10">
+                            <span className="text-rose-400 font-semibold uppercase tracking-wider text-[9px] block mb-0.5">Detected Drivers:</span>
+                            <ul className="list-disc pl-3 text-gray-400 space-y-0.5">
+                              {drivers.map((d, i) => <li key={i}>{d}</li>)}
+                            </ul>
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  ))}
+                  )})}
                 </div>
               </div>
 

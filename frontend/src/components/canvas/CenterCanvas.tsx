@@ -97,26 +97,69 @@ export function CenterCanvas({
         labelBgPadding: [4, 4],
       };
     });
-    const graphNodes = nodes
-      .filter(n => connectedNodeIds.has(n.id))
-      .map((n, idx) => {
-        const isCenter = n.id === targetId;
-        const angle = (idx / connectedNodeIds.size) * 2 * Math.PI;
-        const radius = isCenter ? 0 : 280;
-        return {
-          ...n,
-          position: {
-            x: 500 + Math.cos(angle) * radius,
-            y: 350 + Math.sin(angle) * radius,
-          },
-          data: {
-            ...n.data,
-            isSelected: isCenter,
-            isInBlast: false, // Computed locally during sim now
-            isTrigger: isCenter,
-          }
-        };
-      });
+    // Categorize nodes for Left-to-Right layout
+    const upstreamIds = new Set<string>();
+    const downstreamIds = new Set<string>();
+    
+    allEdges.forEach(e => {
+      if (e.target === targetId) upstreamIds.add(e.source);
+      if (e.source === targetId) downstreamIds.add(e.target);
+    });
+
+    const activeNodes = nodes.filter(n => connectedNodeIds.has(n.id));
+    
+    let upCount = 0;
+    let downCount = 0;
+    let otherCount = 0;
+    
+    activeNodes.forEach(n => {
+      if (n.id !== targetId) {
+        if (upstreamIds.has(n.id)) upCount++;
+        else if (downstreamIds.has(n.id)) downCount++;
+        else otherCount++;
+      }
+    });
+
+    const upStartY = 350 - (Math.max(0, upCount - 1) * 150) / 2;
+    const downStartY = 350 - (Math.max(0, downCount - 1) * 150) / 2;
+    const otherStartY = 100 - (Math.max(0, otherCount - 1) * 150) / 2;
+
+    let currUp = 0;
+    let currDown = 0;
+    let currOther = 0;
+
+    const graphNodes = activeNodes.map(n => {
+      const isCenter = n.id === targetId;
+      let x = 500;
+      let y = 350;
+
+      if (!isCenter) {
+        if (upstreamIds.has(n.id)) {
+          x = 100;
+          y = upStartY + (currUp * 150);
+          currUp++;
+        } else if (downstreamIds.has(n.id)) {
+          x = 900;
+          y = downStartY + (currDown * 150);
+          currDown++;
+        } else {
+          x = 500;
+          y = otherStartY + (currOther * 150);
+          currOther++;
+        }
+      }
+
+      return {
+        ...n,
+        position: { x, y },
+        data: {
+          ...n.data,
+          isSelected: isCenter,
+          isInBlast: false,
+          isTrigger: isCenter,
+        }
+      };
+    });
 
     return { nodes: graphNodes, edges: allEdges };
   }, [drill.activeEntityId, nodes, edges]);

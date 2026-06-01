@@ -20,25 +20,11 @@ export function computeResidualRisk(
   const dimensions: DimensionKey[] = ['costFinancial', 'cashflow', 'schedule', 'operational', 'supplier'];
 
   for (const dim of dimensions) {
-    // 1. Base score + Propagation pressure
+    // 1. Base score + Propagation pressure (Propagation is now probabilistically mitigated)
     let rawScore = detected[dim].score + (propagated[dim] || 0);
-    rawScore = Math.min(rawScore, 100); // Cap at 100
+    let finalScore = Math.min(Math.round(rawScore), 100); // Cap at 100
     
-    // 2. Find active mitigations for this dimension
-    const activeMitigations = mitigations.filter(m => m.active && m.dimension === dim);
-    
-    // 3. Apply reduction (additive percentages for simplicity)
-    let totalReduction = 0;
-    for (const m of activeMitigations) {
-      totalReduction += m.reduction;
-    }
-    totalReduction = Math.min(totalReduction, 0.8); // Cap reduction at 80%
-    
-    // 4. Calculate residual score
-    let finalScore = rawScore * (1 - totalReduction);
-    finalScore = Math.round(Math.max(finalScore, 0)); // Floor at 0
-    
-    // 5. Reclassify based on final score
+    // 2. Reclassify based on final score
     let finalClass: RiskClass = 'Low';
     if (finalScore >= 70) finalClass = 'High';
     else if (finalScore >= 40) finalClass = 'Medium';

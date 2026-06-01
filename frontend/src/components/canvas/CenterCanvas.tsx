@@ -15,6 +15,7 @@ interface CenterCanvasProps {
   edges: SpiderEdgeType[];
   riskIndex: RiskIndex;
   drill: DrillState;
+  globalFilters?: { criticalOnly: boolean; highExposure: boolean; persona: string };
   onDrillIntoPillar: (pillar: DimensionKey) => void;
   onDrillIntoEntity: (entityId: string) => void;
   onNavigateBack: () => void;
@@ -22,9 +23,20 @@ interface CenterCanvasProps {
   onNodeClick?: (id: string | null) => void;
 }
 export function CenterCanvas({ 
-  nodes, edges, riskIndex, drill, 
+  nodes, edges, riskIndex, drill, globalFilters,
   onDrillIntoPillar, onDrillIntoEntity, onNavigateBack, onDrillIntoPortfolio, onNodeClick
 }: CenterCanvasProps) {
+
+  const filteredNodes = useMemo(() => {
+    let result = [...nodes];
+    if (globalFilters?.criticalOnly) {
+      result = result.filter(n => n.type === 'workPackage' ? (n.data.riskScore || 0) >= 65 : true);
+    }
+    if (globalFilters?.highExposure) {
+      result = result.filter(n => n.type === 'workPackage' ? (n.data.metrics?.plannedCost || 0) > 1000000 : true);
+    }
+    return result;
+  }, [nodes, globalFilters]);
 
   // Filter WP nodes for the active dimension, sorted by severity
   const pillarWPs = useMemo(() => {
@@ -130,54 +142,51 @@ export function CenterCanvas({
       )}
 
       {/* Dynamic View Layer */}
-      <div className="flex-1 overflow-hidden relative">
+      <div className="flex-1 overflow-hidden p-6 relative">
         <AnimatePresence mode="wait">
           
-          {drill.level === 'macro' && (
-            <motion.div
-              key="macro"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="absolute inset-0"
-            >
-              <MacroHeatmap 
-                nodes={nodes} 
-                onSelectWorkstream={(ws) => {
-                  if (onDrillIntoPortfolio) onDrillIntoPortfolio(ws);
-                }} 
+          {drill.level === 'portfolio' && (
+            <motion.div key="portfolio" {...anim} className="absolute inset-0">
+              <PortfolioView 
+                nodes={filteredNodes}
+                riskIndex={riskIndex} 
+                onPillarClick={onDrillIntoPillar}
+                onEntityClick={onDrillIntoEntity}
               />
             </motion.div>
           )}
 
-          {drill.level === 'portfolio' && (
-            <PortfolioView 
-              key="portfolio"
-              nodes={nodes}
-              riskIndex={riskIndex} 
-              onPillarClick={onDrillIntoPillar}
-              onEntityClick={onDrillIntoEntity}
-            />
+          {drill.level === 'macro' && (
+            <motion.div key="macro" {...anim} className="absolute inset-0">
+              <MacroHeatmap 
+                nodes={filteredNodes} 
+                onSelectWorkstream={(ws) => {
+                  if (onDrillIntoPortfolio) onDrillIntoPortfolio(ws);
+                }}
+              />
+            </motion.div>
           )}
 
           {drill.level === 'pillar' && drill.activePillar && (
-            <PillarView
-              key={`pillar-${drill.activePillar}`}
-              pillarKey={drill.activePillar}
-              pillar={riskIndex[drill.activePillar]}
-              workPackages={pillarWPs}
-              onEntityClick={onDrillIntoEntity}
-            />
+            <motion.div key="pillar" {...anim} className="absolute inset-0">
+              <PillarView
+                pillarKey={drill.activePillar}
+                pillar={riskIndex[drill.activePillar]}
+                workPackages={pillarWPs} // Note: pillarWPs uses drill.activePillar, maybe we should filter it?
+                onEntityClick={onDrillIntoEntity}
+              />
+            </motion.div>
           )}
 
           {drill.level === 'entity' && drill.activeEntityId && (
-            <EntityGraph
-              key={`entity-${drill.activeEntityId}`}
-              nodes={entityGraph.nodes}
-              edges={entityGraph.edges}
-              centerId={drill.activeEntityId}
-              onNodeClick={onNodeClick}
-            />
+            <motion.div key="entity" {...anim} className="absolute inset-0">
+              <EntityGraph
+                nodes={nodes} // Unfiltered for D3 edges
+                edges={edges}
+                centerId={drill.activeEntityId}
+                onNodeClick={onNodeClick}
+              />
+            </motion.div>
           )}
         </AnimatePresence>
       </div>

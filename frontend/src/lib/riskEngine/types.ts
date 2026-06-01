@@ -18,7 +18,8 @@ export interface PropagationRule {
   id: string;
   sourceSignal: string;          // e.g., 'supplier.complianceIssue'
   targetDimension: DimensionKey; // e.g., 'schedule'
-  pressureChange: number;        // Magnitude of score increase (0.0 to 1.0 multiplier usually, or raw score points)
+  baseProbability: number;       // Probability of propagation (0.0 - 1.0)
+  basePressure: number;          // Magnitude of score increase if propagation triggers
   description: string;           // Human-readable explanation
   condition: (node: SpiderNode) => boolean; // Evaluates if the source node emits this signal
 }

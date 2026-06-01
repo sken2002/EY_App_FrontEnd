@@ -85,6 +85,9 @@ export function PortfolioView({ nodes, onPillarClick, onEntityClick }: Portfolio
         aVal = a.name; bVal = b.name;
       } else if (sortConfig.key === 'wps') {
         aVal = a.wpCount; bVal = b.wpCount;
+      } else if (DIM_KEYS.includes(sortConfig.key as DimensionKey)) {
+        aVal = a.dims[sortConfig.key as DimensionKey];
+        bVal = b.dims[sortConfig.key as DimensionKey];
       }
 
       if (aVal < bVal) return sortConfig.direction === 'asc' ? -1 : 1;
@@ -138,8 +141,8 @@ export function PortfolioView({ nodes, onPillarClick, onEntityClick }: Portfolio
                 <div className="flex items-center gap-1">Avg CRI <ArrowUpDown size={12} /></div>
               </th>
               {DIM_KEYS.map(k => (
-                <th key={k} className="p-4 text-xs font-semibold text-gray-500 uppercase tracking-wider text-center cursor-pointer hover:text-gray-300" onClick={() => onPillarClick(k)} title={DIM_DESCRIPTIONS[k]}>
-                  {DIM_LABELS[k]}
+                <th key={k} className="p-4 text-xs font-semibold text-gray-500 uppercase tracking-wider text-center cursor-pointer hover:text-gray-300" onClick={() => requestSort(k)} title={DIM_DESCRIPTIONS[k]}>
+                  <div className="flex items-center justify-center gap-1">{DIM_LABELS[k]} <ArrowUpDown size={12} /></div>
                 </th>
               ))}
             </tr>

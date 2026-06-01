@@ -6,11 +6,13 @@ interface LeftPanelProps {
   riskIndex: RiskIndex;
   activePillar: DimensionKey | null;
   onPillarClick: (pillar: DimensionKey) => void;
+  globalFilters?: { criticalOnly: boolean; highExposure: boolean; persona: string };
+  setGlobalFilters?: React.Dispatch<React.SetStateAction<{ criticalOnly: boolean; highExposure: boolean; persona: string }>>;
 }
 
 const DIMENSION_KEYS: DimensionKey[] = ['costFinancial', 'cashflow', 'schedule', 'operational', 'supplier'];
 
-export function LeftPanel({ riskIndex, activePillar, onPillarClick }: LeftPanelProps) {
+export function LeftPanel({ riskIndex, activePillar, onPillarClick, globalFilters, setGlobalFilters }: LeftPanelProps) {
   const cri = riskIndex.compositeRiskIndex;
   const dq = riskIndex.dataQuality;
   
@@ -75,11 +77,21 @@ export function LeftPanel({ riskIndex, activePillar, onPillarClick }: LeftPanelP
         <div className="flex flex-col gap-2 mt-4">
           <div className="text-xs text-gray-500 mb-1">Global Filters</div>
           <label className="flex items-center gap-2 cursor-pointer">
-            <input type="checkbox" className="accent-emerald-500" />
+            <input 
+              type="checkbox" 
+              className="accent-emerald-500" 
+              checked={globalFilters?.criticalOnly || false}
+              onChange={(e) => setGlobalFilters && setGlobalFilters(prev => ({ ...prev, criticalOnly: e.target.checked }))}
+            />
             <span className="text-xs text-gray-300">Show Critical Risks Only</span>
           </label>
           <label className="flex items-center gap-2 cursor-pointer mt-1">
-            <input type="checkbox" className="accent-emerald-500" />
+            <input 
+              type="checkbox" 
+              className="accent-emerald-500" 
+              checked={globalFilters?.highExposure || false}
+              onChange={(e) => setGlobalFilters && setGlobalFilters(prev => ({ ...prev, highExposure: e.target.checked }))}
+            />
             <span className="text-xs text-gray-300">Show Financial &gt; £1M Exposure</span>
           </label>
         </div>
@@ -87,7 +99,11 @@ export function LeftPanel({ riskIndex, activePillar, onPillarClick }: LeftPanelP
         {/* Persona Toggle */}
         <div className="flex flex-col gap-2 mt-4">
           <div className="text-xs text-gray-500 mb-1">Active Persona</div>
-          <select className="bg-[#0f0f15] border border-white/10 text-xs text-gray-300 rounded p-1.5 focus:outline-none">
+          <select 
+            className="bg-[#0f0f15] border border-white/10 text-xs text-gray-300 rounded p-1.5 focus:outline-none"
+            value={globalFilters?.persona || 'Global Executive'}
+            onChange={(e) => setGlobalFilters && setGlobalFilters(prev => ({ ...prev, persona: e.target.value }))}
+          >
             <option className="bg-[#0f0f15] text-white">Global Executive</option>
             <option className="bg-[#0f0f15] text-white">Project Manager (IT)</option>
             <option className="bg-[#0f0f15] text-white">Risk Auditor</option>

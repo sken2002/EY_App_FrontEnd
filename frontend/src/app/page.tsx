@@ -6,7 +6,7 @@ import { CenterCanvas } from '@/components/canvas/CenterCanvas';
 import { RightPanel } from '@/components/layout/RightPanel';
 import { Header } from '@/components/layout/Header';
 import ChatHelper from '@/components/layout/ChatHelper';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { DimensionKey } from '@/lib/types';
 
 export type DrillLevel = 'portfolio' | 'pillar' | 'entity' | 'macro';
@@ -22,8 +22,24 @@ export interface DrillState {
 
 export default function Home() {
   const { data, loading, error } = useSpiderState();
+  const [globalFilters, setGlobalFilters] = useState({
+    criticalOnly: false,
+    highExposure: false,
+    persona: 'Global Executive'
+  });
 
-
+  // Filter nodes based on global filters
+  const filteredNodes = useMemo(() => {
+    if (!data?.nodes) return [];
+    let nodes = [...data.nodes];
+    if (globalFilters.criticalOnly) {
+      nodes = nodes.filter(n => n.type === 'workPackage' ? (n.data.riskScore || 0) >= 65 : true);
+    }
+    if (globalFilters.highExposure) {
+      nodes = nodes.filter(n => n.type === 'workPackage' ? (n.data.metrics?.plannedCost || 0) > 1000000 : true);
+    }
+    return nodes;
+  }, [data?.nodes, globalFilters]);
 
   // Top-level tabs for layout simplification
   const [activeTopTab, setActiveTopTab] = useState<'scorecard' | 'topology' | 'pipeline'>('scorecard');
@@ -127,14 +143,17 @@ export default function Home() {
               riskIndex={data.riskIndex} 
               activePillar={drill.activePillar}
               onPillarClick={drillIntoPillar}
+              globalFilters={globalFilters}
+              setGlobalFilters={setGlobalFilters}
             />
 
             {/* Center Panel: Progressive Drill-Down Canvas (Flex) */}
             <CenterCanvas 
               drill={drill} 
-              nodes={data.nodes} 
+              nodes={filteredNodes} 
               edges={data.edges} 
               riskIndex={data.riskIndex}
+              globalFilters={globalFilters}
               onDrillIntoPortfolio={() => setDrill({ level: 'portfolio', activePillar: null, activeEntityId: null })}
               onDrillIntoPillar={drillIntoPillar}
               onDrillIntoEntity={drillIntoEntity}
@@ -146,7 +165,7 @@ export default function Home() {
             {activeTopTab === 'topology' && (
               <RightPanel 
                 selectedNodeId={drill.selectedSubNodeId || drill.activeEntityId}
-                nodes={data.nodes}
+                nodes={filteredNodes}
                 edges={data.edges}
                 dataQualityConfidence={data.riskIndex.dataQuality.confidenceModifier}
               />

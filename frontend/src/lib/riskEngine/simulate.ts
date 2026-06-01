@@ -95,7 +95,12 @@ export function simulateWPRisk(
     supplier: { score: supplierDim.score, class: supplierDim.class, drivers: [concRisk.driver, perfRisk.driver] }
   };
 
-  // 3. LAYER 3: PROPAGATION (Walk graph for extra pressure)
+  // 3. LAYER 3: MITIGATION
+  // Mitigations now reduce the PROBABILITY of propagation, so they must be detected first
+  const simulatedNode = { ...targetNode, data: { ...targetNode.data, metrics: simulatedMetrics } };
+  const mitigations = detectMitigations(simulatedNode);
+
+  // 4. LAYER 4: PROPAGATION (Walk graph for extra pressure using probabilistic rolls)
   // Create a mock lookup for the propagation engine using the newly detected scores
   const scoreLookup: Record<string, Record<DimensionKey, number>> = {};
   for (const n of allNodes) {
@@ -109,12 +114,7 @@ export function simulateWPRisk(
     };
   }
   
-  const propagated = propagateRisk(targetNode.id, allNodes, allEdges, scoreLookup);
-
-  // 4. LAYER 4: MITIGATION
-  // Create a temporary simulated node to pass into mitigations
-  const simulatedNode = { ...targetNode, data: { ...targetNode.data, metrics: simulatedMetrics } };
-  const mitigations = detectMitigations(simulatedNode);
+  const propagated = propagateRisk(targetNode.id, allNodes, allEdges, scoreLookup, mitigations);
 
   // 5. LAYER 5: RESIDUAL & CRI
   const residual = computeResidualRisk(detected, propagated, mitigations);

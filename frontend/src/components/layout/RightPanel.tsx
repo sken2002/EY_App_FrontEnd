@@ -457,29 +457,37 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
               </div>
 
               {isSimulating && (
-                <div className="mt-4 bg-amber-900/10 border border-amber-500/20 p-4 rounded-xl space-y-4">
+                <div className="mt-4 bg-[#14141a] border border-amber-500/20 p-4 rounded-xl space-y-4 shadow-lg">
                   <div>
-                    <h4 className="text-xs font-medium text-amber-400 mb-2 flex items-center gap-2">
-                      <Activity size={14} /> Topline Simulation Impact
-                    </h4>
-                    <p className="text-xs text-gray-300">
-                      Composite Risk Index shifted by <strong className={delta.criDelta < 0 ? 'text-emerald-400' : 'text-rose-400'}>{delta.criDelta > 0 ? '+' : ''}{Math.round(delta.criDelta)}</strong> points.
-                    </p>
+                    <h4 className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-2">Simulation Impact</h4>
+                    <div className="flex items-end gap-2">
+                      <span className={`text-2xl font-bold ${delta.criDelta < 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                        {delta.criDelta > 0 ? '+' : ''}{Math.round(delta.criDelta)}
+                      </span>
+                      <span className="text-xs text-gray-500 mb-1">CRI points</span>
+                    </div>
                   </div>
 
-                  <div className="border-t border-amber-500/20 pt-4">
-                    <h4 className="text-xs font-medium text-emerald-400 mb-2 flex items-center gap-2">
-                      <Shield size={14} /> Hyper-Specific Contextual Mitigations
-                    </h4>
+                  <div className="border-t border-white/10 pt-4">
+                    <h4 className="text-[11px] font-semibold text-emerald-500 uppercase tracking-wider mb-3">Engineered Mitigations</h4>
                     <div className="space-y-2">
                       {state.mitigations.filter(m => m.active).map(m => (
-                        <div key={m.id} className="text-[11px] text-gray-300 bg-black/40 p-3 rounded border border-emerald-500/20 leading-relaxed shadow-inner">
-                          Because you dynamically adjusted levers to trigger <strong className="text-emerald-400">{m.label}</strong>, the mathematical engine intercepted the propagation pathway. This action effectively dampens the incoming <span className="capitalize font-semibold text-white">{m.dimension.replace(/([A-Z])/g, ' $1').trim()}</span> risk cascade by <strong className="text-emerald-400">{Math.round(m.reduction * 100)}%</strong>, shielding this node from critical failure and recalculating the residual score downwards.
+                        <div key={m.id} className="bg-emerald-500/10 border border-emerald-500/20 p-3 rounded-lg flex items-start gap-3">
+                          <div className="bg-emerald-500/20 p-1.5 rounded text-emerald-400 mt-0.5">
+                            <Shield size={12} />
+                          </div>
+                          <div>
+                            <div className="text-xs font-semibold text-emerald-400">{m.label}</div>
+                            <div className="text-[11px] text-emerald-100/70 mt-1 leading-snug">
+                              Intercepted <span className="text-white font-medium capitalize">{m.dimension.replace(/([A-Z])/g, ' $1').trim()}</span> propagation. Downstream risk exposure reduced by <strong className="text-emerald-400">{Math.round(m.reduction * 100)}%</strong>.
+                            </div>
+                          </div>
                         </div>
                       ))}
                       {state.mitigations.filter(m => m.active).length === 0 && (
-                        <div className="text-xs text-amber-500/80 italic bg-amber-500/5 p-3 rounded border border-amber-500/10">
-                          Toggle levers above (e.g., increase CPI for capital injection, decrease delay days for fast-tracking) to see the engine intercept risks and mathematically apply mitigations.
+                        <div className="text-[11px] text-gray-500 italic flex items-center gap-2">
+                          <Activity size={12} className="text-amber-500/50" />
+                          Adjust levers to model mitigation strategies.
                         </div>
                       )}
                     </div>
@@ -498,22 +506,65 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
               exit={{ opacity: 0, x: -10 }}
               className="flex flex-col gap-6"
             >
-              <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500 border-b border-white/10 pb-1">6-Month CRI Trend</h3>
-              <div className="h-[250px] w-full mt-4">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={trendData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" />
-                    <XAxis dataKey="month" stroke="#9ca3af" fontSize={10} tickLine={false} axisLine={false} />
-                    <YAxis stroke="#9ca3af" fontSize={10} domain={[0, 100]} tickLine={false} axisLine={false} />
-                    <RechartsTooltip 
-                      contentStyle={{ backgroundColor: '#111827', borderColor: '#374151', borderRadius: '8px', fontSize: '12px' }}
-                      itemStyle={{ color: '#10b981' }}
-                    />
-                    <Line type="monotone" dataKey="cri" stroke="#10b981" strokeWidth={3} dot={{ fill: '#10b981', strokeWidth: 2 }} />
-                  </LineChart>
-                </ResponsiveContainer>
+              <div className="border-b border-white/10 pb-2">
+                <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500">Risk Velocity & Trajectory</h3>
+                <p className="text-[10px] text-gray-400 mt-1">Leading indicators predicting the next 30-day CRI movement.</p>
               </div>
-              <p className="text-xs text-gray-500 italic mt-2 text-center">Historical volatility and projected trajectory based on audit logs.</p>
+
+              {selectedNode.data.trends ? (
+                <div className="space-y-4">
+                  <div>
+                    <h4 className="text-[10px] font-semibold text-rose-400 uppercase tracking-wider mb-2 flex items-center gap-1">
+                      <Activity size={12} /> Accelerating Risk Drivers
+                    </h4>
+                    <div className="space-y-2">
+                      {Object.entries(selectedNode.data.trends).filter(([_, t]) => t === 'declining').map(([key]) => (
+                        <div key={key} className="bg-rose-500/10 border border-rose-500/20 p-2.5 rounded flex items-center justify-between">
+                          <span className="text-xs text-rose-200 capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
+                          <span className="text-[10px] text-rose-400 font-medium tracking-wide">DETERIORATING</span>
+                        </div>
+                      ))}
+                      {Object.entries(selectedNode.data.trends).filter(([_, t]) => t === 'declining').length === 0 && (
+                        <div className="text-xs text-gray-500 italic px-2">No accelerating drivers detected.</div>
+                      )}
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <h4 className="text-[10px] font-semibold text-emerald-400 uppercase tracking-wider mb-2 flex items-center gap-1">
+                      <Shield size={12} /> Stabilizing Drivers
+                    </h4>
+                    <div className="space-y-2">
+                      {Object.entries(selectedNode.data.trends).filter(([_, t]) => t === 'improving' || t === 'stable').map(([key, t]) => (
+                        <div key={key} className="bg-emerald-500/10 border border-emerald-500/20 p-2.5 rounded flex items-center justify-between">
+                          <span className="text-xs text-emerald-200 capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
+                          <span className="text-[10px] text-emerald-400 font-medium uppercase tracking-wide">{t as string}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="text-xs text-gray-500 italic p-4 bg-white/5 rounded">Not enough historical data to compute risk velocity.</div>
+              )}
+
+              <div className="mt-4 pt-4 border-t border-white/10">
+                <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-4">Historical Volatility</h3>
+                <div className="h-[140px] w-full">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={trendData}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" />
+                      <XAxis dataKey="month" stroke="#9ca3af" fontSize={10} tickLine={false} axisLine={false} />
+                      <YAxis stroke="#9ca3af" fontSize={10} domain={[0, 100]} tickLine={false} axisLine={false} hide />
+                      <RechartsTooltip 
+                        contentStyle={{ backgroundColor: '#111827', borderColor: '#374151', borderRadius: '8px', fontSize: '12px' }}
+                        itemStyle={{ color: '#10b981' }}
+                      />
+                      <Line type="monotone" dataKey="cri" stroke="#10b981" strokeWidth={2} dot={false} />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>

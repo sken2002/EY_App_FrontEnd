@@ -127,10 +127,10 @@ export function PortfolioView({ nodes, onPillarClick, onEntityClick }: Portfolio
         </div>
       </div>
 
-      <div className="bg-[#111116] border border-white/10 rounded-xl overflow-hidden">
+      <div className="bg-[#111116] border border-white/10 rounded-xl flex-1 overflow-y-auto min-h-0 relative">
         <table className="w-full text-left border-collapse">
-          <thead>
-            <tr className="bg-[#161620] border-b border-white/10">
+          <thead className="sticky top-0 z-10">
+            <tr className="bg-[#161620] border-b border-white/10 shadow-sm">
               <th className="p-4 text-xs font-semibold text-gray-400 uppercase tracking-wider cursor-pointer hover:text-white" onClick={() => requestSort('name')}>
                 <div className="flex items-center gap-1">Manager <ArrowUpDown size={12} /></div>
               </th>

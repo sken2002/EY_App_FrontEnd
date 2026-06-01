@@ -362,7 +362,7 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
                     <RadarChart cx="50%" cy="50%" outerRadius="70%" data={radarData}>
                       <PolarGrid stroke="#333" />
                       <PolarAngleAxis dataKey="subject" tick={{ fill: '#9ca3af', fontSize: 10 }} />
-                      <PolarRadiusAxis angle={30} domain={[0, 100]} tick={{ fill: '#4b5563', fontSize: 10 }} />
+                      <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} axisLine={false} />
                       <Radar name="Risk Score" dataKey="score" stroke="#10b981" fill="#10b981" fillOpacity={0.3} />
                       <RechartsTooltip 
                         contentStyle={{ backgroundColor: '#111827', borderColor: '#374151', borderRadius: '8px', fontSize: '12px' }}
@@ -392,32 +392,10 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
                 </div>
               </div>
 
-              {/* Layer 4: Mitigations */}
-              <div className="flex flex-col gap-3">
-                <div className="border-b border-white/10 pb-1">
-                  <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500">3. Active Mitigations</h3>
-                  <p className="text-[10px] text-gray-400 mt-1">Actions currently applied to reduce the risk.</p>
-                </div>
-                <div className="space-y-2">
-                  {state.mitigations.filter(m => m.active).map(m => (
-                    <div key={m.id} className="flex items-start gap-2 text-xs text-gray-300 bg-emerald-500/5 p-2 rounded-lg border border-emerald-500/10">
-                      <Shield size={14} className="text-emerald-500 mt-0.5 shrink-0" />
-                      <div>
-                        <div className="font-medium text-emerald-400">{m.label}</div>
-                        <div className="text-gray-400 mt-0.5">Currently reducing the <span className="capitalize">{m.dimension.replace(/([A-Z])/g, ' $1').trim()}</span> risk by {Math.round(m.reduction * 100)}%.</div>
-                      </div>
-                    </div>
-                  ))}
-                  {state.mitigations.filter(m => m.active).length === 0 && (
-                    <div className="text-xs text-gray-500 italic">No active mitigations applied.</div>
-                  )}
-                </div>
-              </div>
-
               {/* Layer 5: Residual */}
               <div className="flex flex-col gap-3">
                 <div className="border-b border-white/10 pb-1">
-                  <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500">4. Final Risk Score</h3>
+                  <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500">3. Final Risk Score</h3>
                   <p className="text-[10px] text-gray-400 mt-1">The actual risk level after accounting for dependency impacts and mitigations.</p>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
@@ -439,7 +417,7 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
               <div className="flex flex-col gap-3">
                 <div className="flex items-center gap-2 border-b border-white/10 pb-1">
                   <div>
-                    <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500">5. Downstream Impact</h3>
+                    <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500">4. Downstream Impact</h3>
                   </div>
                 </div>
                 <div className="bg-black/30 border border-rose-500/10 rounded-lg p-3 text-sm">
@@ -479,17 +457,33 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
               </div>
 
               {isSimulating && (
-                <div className="mt-4 bg-amber-900/10 border border-amber-500/20 p-4 rounded-xl">
-                  <h4 className="text-xs font-medium text-amber-400 mb-2 flex items-center gap-2">
-                    <Activity size={14} /> Simulation Impacts
-                  </h4>
-                  <ul className="text-xs text-gray-300 space-y-2 list-disc list-inside">
-                    {delta.criDelta !== 0 && (
-                      <li>Composite Risk Index changed by <strong className={delta.criDelta < 0 ? 'text-emerald-400' : 'text-rose-400'}>{delta.criDelta > 0 ? '+' : ''}{Math.round(delta.criDelta)}</strong> points.</li>
-                    )}
-                    {/* Could add more delta explanations here based on before/after states */}
-                    <li>Graph propagation and mitigations have been recomputed.</li>
-                  </ul>
+                <div className="mt-4 bg-amber-900/10 border border-amber-500/20 p-4 rounded-xl space-y-4">
+                  <div>
+                    <h4 className="text-xs font-medium text-amber-400 mb-2 flex items-center gap-2">
+                      <Activity size={14} /> Topline Simulation Impact
+                    </h4>
+                    <p className="text-xs text-gray-300">
+                      Composite Risk Index shifted by <strong className={delta.criDelta < 0 ? 'text-emerald-400' : 'text-rose-400'}>{delta.criDelta > 0 ? '+' : ''}{Math.round(delta.criDelta)}</strong> points.
+                    </p>
+                  </div>
+
+                  <div className="border-t border-amber-500/20 pt-4">
+                    <h4 className="text-xs font-medium text-emerald-400 mb-2 flex items-center gap-2">
+                      <Shield size={14} /> Hyper-Specific Contextual Mitigations
+                    </h4>
+                    <div className="space-y-2">
+                      {state.mitigations.filter(m => m.active).map(m => (
+                        <div key={m.id} className="text-[11px] text-gray-300 bg-black/40 p-3 rounded border border-emerald-500/20 leading-relaxed shadow-inner">
+                          Because you dynamically adjusted levers to trigger <strong className="text-emerald-400">{m.label}</strong>, the mathematical engine intercepted the propagation pathway. This action effectively dampens the incoming <span className="capitalize font-semibold text-white">{m.dimension.replace(/([A-Z])/g, ' $1').trim()}</span> risk cascade by <strong className="text-emerald-400">{Math.round(m.reduction * 100)}%</strong>, shielding this node from critical failure and recalculating the residual score downwards.
+                        </div>
+                      ))}
+                      {state.mitigations.filter(m => m.active).length === 0 && (
+                        <div className="text-xs text-amber-500/80 italic bg-amber-500/5 p-3 rounded border border-amber-500/10">
+                          Toggle levers above (e.g., increase CPI for capital injection, decrease delay days for fast-tracking) to see the engine intercept risks and mathematically apply mitigations.
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 </div>
               )}
 

@@ -129,6 +129,14 @@ export function CenterCanvas({
   const activeDimLabel = drill.activePillar 
     ? riskIndex[drill.activePillar]?.label 
     : undefined;
+
+  const anim = {
+    initial: { opacity: 0, scale: 0.98 },
+    animate: { opacity: 1, scale: 1 },
+    exit: { opacity: 0, scale: 0.98 },
+    transition: { duration: 0.3 }
+  };
+
   return (
     <div className="flex flex-1 flex-col bg-[#0a0a0f] relative overflow-hidden">
       {/* Breadcrumb Navigation */}

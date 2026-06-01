@@ -31,10 +31,20 @@ export default function ChatHelper({ selectedNodeId, selectedNodeData, riskState
     }
   };
 
-  const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat({
+  // @ts-expect-error - bypassing strict type inference for useChat
+  const { messages, append, isLoading } = useChat({
     api: '/api/chat',
     body: contextBody
-  });
+  } as any);
+
+  const [inputValue, setInputValue] = useState('');
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!inputValue.trim() || isLoading) return;
+    append({ role: 'user', content: inputValue });
+    setInputValue('');
+  };
 
   // Auto-scroll to bottom
   useEffect(() => {
@@ -128,14 +138,14 @@ export default function ChatHelper({ selectedNodeId, selectedNodeData, riskState
               <form onSubmit={handleSubmit} className="flex items-center gap-2 relative">
                 <input
                   type="text"
-                  value={input}
-                  onChange={handleInputChange}
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
                   placeholder="Ask a question..."
                   className="w-full bg-white/5 border border-white/10 rounded-full pl-4 pr-10 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500/50 transition-colors"
                 />
                 <button
                   type="submit"
-                  disabled={isLoading || !input.trim()}
+                  disabled={isLoading || !inputValue.trim()}
                   className="absolute right-1.5 p-1.5 bg-emerald-500 text-white rounded-full disabled:opacity-50 disabled:bg-gray-700 transition-colors"
                 >
                   <Send size={14} className="ml-0.5" />

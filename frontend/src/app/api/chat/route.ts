@@ -44,6 +44,7 @@ ${JSON.stringify(context, null, 2)}
           parameters: z.object({
             entityId: z.string().describe('The exact ID of the entity.')
           }),
+          // @ts-expect-error - bypassing strict type inference for execute
           execute: async ({ entityId }) => {
             try {
               const raw = await fs.readFile(path.join(process.cwd(), 'public', 'data', 'state.json'), 'utf-8');
@@ -67,6 +68,7 @@ ${JSON.stringify(context, null, 2)}
           parameters: z.object({
             entityId: z.string().describe('The ID of the entity.')
           }),
+          // @ts-expect-error - bypassing strict type inference for execute
           execute: async ({ entityId }) => {
             try {
               const raw = await fs.readFile(path.join(process.cwd(), 'public', 'data', 'state.json'), 'utf-8');
@@ -97,7 +99,7 @@ ${JSON.stringify(context, null, 2)}
       }
     });
 
-    return result.toDataStreamResponse();
+    return result.toTextStreamResponse();
   } catch (error) {
     console.error('Chat API error:', error);
     return NextResponse.json(

@@ -68,17 +68,8 @@ export default function ChatHelper({ selectedNodeId, selectedNodeData, riskState
         if (value) {
           const chunk = decoder.decode(value, { stream: true });
           
-          // Next.js AI SDK streams text in the format `0:"text"` or just plain text depending on version
-          // If it's plain text, we just append it. If it has the `0:` prefix, we parse it.
-          const cleanChunk = chunk.split('\n').map(line => {
-            if (line.startsWith('0:')) {
-              try { return JSON.parse(line.substring(2)); } catch { return ''; }
-            }
-            if (line.trim().startsWith('"') && line.trim().endsWith('"')) {
-              try { return JSON.parse(line.trim()); } catch { return line; }
-            }
-            return line; // Fallback to raw text
-          }).join('');
+          // For toTextStreamResponse(), chunks are pure string text. No JSON parsing needed.
+          const cleanChunk = chunk;
 
           setMessages(prev => {
             const last = prev[prev.length - 1];

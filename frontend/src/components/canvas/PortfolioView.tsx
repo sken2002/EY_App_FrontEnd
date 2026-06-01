@@ -42,10 +42,9 @@ export function PortfolioView({ nodes, onPillarClick, onEntityClick }: Portfolio
       acc[pm].criTotal += (wp.data.riskScore || 0);
       
       DIM_KEYS.forEach(k => {
-        // We look at the dimension class to assign a rough numeric score for the heatmap, or just average the actual scores if available.
-        // For simplicity, we'll map High=3, Medium=2, Low=1
-        const cls = wp.data.dimensions?.[k]?.class || 'Low';
-        acc[pm].dims[k] += (cls === 'High' ? 3 : cls === 'Medium' ? 2 : 1);
+        // Use the actual 0-100 dimension score instead of a 1-3 mapping
+        const score = wp.data.dimensions?.[k]?.score || 20;
+        acc[pm].dims[k] += score;
       });
       
       return acc;
@@ -95,8 +94,8 @@ export function PortfolioView({ nodes, onPillarClick, onEntityClick }: Portfolio
   };
 
   const getHeatmapColor = (score: number) => {
-    if (score >= 2.5) return 'bg-rose-500/20 text-rose-400 border-rose-500/30';
-    if (score >= 1.8) return 'bg-amber-500/20 text-amber-400 border-amber-500/30';
+    if (score >= 65) return 'bg-rose-500/20 text-rose-400 border-rose-500/30';
+    if (score >= 40) return 'bg-amber-500/20 text-amber-400 border-amber-500/30';
     return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
   };
 
@@ -159,7 +158,7 @@ export function PortfolioView({ nodes, onPillarClick, onEntityClick }: Portfolio
                   {DIM_KEYS.map(k => (
                     <td key={k} className="p-4 text-center">
                       <div className={`inline-flex h-6 w-12 items-center justify-center rounded border text-[10px] font-bold ${getHeatmapColor(pm.dims[k])}`}>
-                        {pm.dims[k].toFixed(1)}
+                        {pm.dims[k].toFixed(0)}
                       </div>
                     </td>
                   ))}

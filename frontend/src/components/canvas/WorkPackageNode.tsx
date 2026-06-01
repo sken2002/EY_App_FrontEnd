@@ -1,22 +1,39 @@
 import { Handle, Position } from '@xyflow/react';
-import { SpiderNodeData } from '@/lib/types';
+import { SpiderNodeData, DimensionKey } from '@/lib/types';
 import { Briefcase, AlertCircle } from 'lucide-react';
+
+// CHANGED (Avery #9): friendly short labels for the "top drivers" line.
+// Mirrors the labels used by the existing mini-badge row below so the two stay consistent.
+const DIM_LABELS: Record<DimensionKey, string> = {
+  costFinancial: 'Cost',
+  cashflow: 'Cashflow',
+  schedule: 'Schedule',
+  operational: 'Ops',
+  supplier: 'Supplier',
+};
 
 export function WorkPackageNode({ data }: { data: SpiderNodeData & { isSelected?: boolean, isInBlast?: boolean, isTrigger?: boolean } }) {
   const isCritical = data.severity === 'critical';
   const criScore = data.riskScore || 0;
-  
+
+  // CHANGED (Avery #9): compute the top 2 risk drivers for this WP by real dimension score (0-100).
+  // Surfaces *why* this WP is risky at a glance, instead of leaving the viewer to scan five colored pills.
+  const topDrivers = (['costFinancial', 'cashflow', 'schedule', 'operational', 'supplier'] as DimensionKey[])
+    .map(k => ({ key: k, score: data.dimensions?.[k]?.score ?? 0 }))
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 2);
+
   return (
     <div className={`relative w-[320px] rounded-xl border bg-black/80 p-5 shadow-2xl backdrop-blur-md transition-all
       ${data.isSelected ? 'ring-2 ring-emerald-500 scale-[1.02] shadow-emerald-500/20' : ''}
-      ${data.isTrigger ? 'border-red-500 shadow-red-500/20' : 
+      ${data.isTrigger ? 'border-red-500 shadow-red-500/20' :
         isCritical ? 'border-orange-500/50' : 'border-emerald-500/30'}`}>
-      
+
       {/* Node styling effects */}
       {data.isTrigger && (
         <div className="absolute -inset-1 -z-10 animate-pulse rounded-xl bg-red-500/20 blur-md" />
       )}
-      
+
       {data.isSelected && (
         <div className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap bg-emerald-500 text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-lg border border-emerald-400 uppercase tracking-widest">
           Central Work Package
@@ -60,8 +77,21 @@ export function WorkPackageNode({ data }: { data: SpiderNodeData & { isSelected?
         </div>
       </div>
 
+      {/* CHANGED (Avery #9): explicit "Top drivers" line so the card tells you which 2 pillars
+          actually drive this WP's CRI, not just that 5 pillars exist. Real scores from dimensions[k].score. */}
+      <div className="mt-3 flex items-center gap-1.5 text-[9px]">
+        <span className="text-gray-500 uppercase tracking-wider font-semibold">Top drivers:</span>
+        {topDrivers.map((d, i) => (
+          <span key={d.key} className="inline-flex items-center gap-1">
+            <span className="text-amber-400 font-medium">{DIM_LABELS[d.key]}</span>
+            <span className="text-gray-500 tabular-nums">({Math.round(d.score)})</span>
+            {i === 0 && topDrivers.length > 1 && <span className="text-gray-600 ml-0.5">·</span>}
+          </span>
+        ))}
+      </div>
+
       {/* Mini Dimension Badges */}
-      <div className="mt-3 flex gap-1">
+      <div className="mt-2 flex gap-1">
         {(['costFinancial', 'cashflow', 'schedule', 'operational', 'supplier'] as const).map(dk => {
           const dim = data.dimensions?.[dk];
           const isHigh = dim?.class === 'High';

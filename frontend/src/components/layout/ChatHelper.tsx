@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-// Removed broken useChat import
-import { Bot, X, MessageSquare, Send } from 'lucide-react';
+import { useChat } from '@ai-sdk/react';
+import { Bot, X, MessageSquare, Send, Activity, Wrench } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 type ChatHelperProps = {
@@ -31,59 +31,10 @@ export default function ChatHelper({ selectedNodeId, selectedNodeData, riskState
     }
   };
 
-  const [messages, setMessages] = useState<any[]>([]);
-  const [inputValue, setInputValue] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleFormSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!inputValue.trim() || isLoading) return;
-
-    const userMessage = { role: 'user', content: inputValue, id: Date.now().toString() };
-    setMessages(prev => [...prev, userMessage]);
-    setInputValue("");
-    setIsLoading(true);
-
-    try {
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: [...messages, userMessage], context: contextBody.context })
-      });
-
-      if (!response.ok) {
-        const errData = await response.json();
-        throw new Error(errData.error || 'Failed to fetch response');
-      }
-
-      setMessages(prev => [...prev, { role: 'assistant', content: '', id: (Date.now() + 1).toString() }]);
-
-      const reader = response.body?.getReader();
-      const decoder = new TextDecoder();
-      let done = false;
-
-      while (reader && !done) {
-        const { value, done: doneReading } = await reader.read();
-        done = doneReading;
-        if (value) {
-          const chunk = decoder.decode(value, { stream: true });
-          
-          // For toTextStreamResponse(), chunks are pure string text. No JSON parsing needed.
-          const cleanChunk = chunk;
-
-          setMessages(prev => {
-            const last = prev[prev.length - 1];
-            return [...prev.slice(0, -1), { ...last, content: last.content + cleanChunk }];
-          });
-        }
-      }
-    } catch (err: any) {
-      console.error(err);
-      setMessages(prev => [...prev, { role: 'assistant', content: `Error: ${err.message}`, id: Date.now().toString() }]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat({
+    api: '/api/chat',
+    body: contextBody
+  });
 
   // Auto-scroll to bottom
   useEffect(() => {
@@ -131,22 +82,33 @@ export default function ChatHelper({ selectedNodeId, selectedNodeData, riskState
                 </div>
               )}
               {messages.map((m: any) => (
-                <div key={m.id} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                  <div 
-                    className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm ${
-                      m.role === 'user' 
-                        ? 'bg-emerald-600 text-white rounded-br-none' 
-                        : 'bg-white/10 text-gray-200 rounded-bl-none border border-white/5'
-                    }`}
-                  >
-                    {/* Render basic markdown/newlines roughly */}
-                    {String(m.content).split('\n').map((line: string, i: number) => (
-                      <React.Fragment key={i}>
-                        {line}
-                        {i !== m.content.split('\n').length - 1 && <br />}
-                      </React.Fragment>
-                    ))}
-                  </div>
+                <div key={m.id} className={`flex flex-col gap-1 ${m.role === 'user' ? 'items-end' : 'items-start'}`}>
+                  {m.content && (
+                    <div 
+                      className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm ${
+                        m.role === 'user' 
+                          ? 'bg-emerald-600 text-white rounded-br-none' 
+                          : 'bg-white/10 text-gray-200 rounded-bl-none border border-white/5'
+                      }`}
+                    >
+                      {String(m.content).split('\n').map((line: string, i: number) => (
+                        <React.Fragment key={i}>
+                          {line}
+                          {i !== m.content.split('\n').length - 1 && <br />}
+                        </React.Fragment>
+                      ))}
+                    </div>
+                  )}
+                  {m.toolInvocations?.map((toolInvocation: any) => (
+                    <div key={toolInvocation.toolCallId} className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs px-3 py-2 rounded flex items-center gap-2">
+                      <Wrench size={12} />
+                      {toolInvocation.state === 'result' ? (
+                        <span>Executed: {toolInvocation.toolName}</span>
+                      ) : (
+                        <span className="animate-pulse">Calling: {toolInvocation.toolName}...</span>
+                      )}
+                    </div>
+                  ))}
                 </div>
               ))}
               {isLoading && (
@@ -163,17 +125,17 @@ export default function ChatHelper({ selectedNodeId, selectedNodeData, riskState
 
             {/* Input Area */}
             <div className="border-t border-white/10 bg-black/40 p-3">
-              <form onSubmit={handleFormSubmit} className="flex items-center gap-2 relative">
+              <form onSubmit={handleSubmit} className="flex items-center gap-2 relative">
                 <input
                   type="text"
-                  value={inputValue}
-                  onChange={(e) => setInputValue(e.target.value)}
+                  value={input}
+                  onChange={handleInputChange}
                   placeholder="Ask a question..."
                   className="w-full bg-white/5 border border-white/10 rounded-full pl-4 pr-10 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500/50 transition-colors"
                 />
                 <button
                   type="submit"
-                  disabled={isLoading || !inputValue.trim()}
+                  disabled={isLoading || !input.trim()}
                   className="absolute right-1.5 p-1.5 bg-emerald-500 text-white rounded-full disabled:opacity-50 disabled:bg-gray-700 transition-colors"
                 >
                   <Send size={14} className="ml-0.5" />

@@ -219,19 +219,42 @@ Return ONLY valid JSON with this exact shape:
   "assumptions_and_limits": ["Limit 1", "Limit 2"]
 }`;
 
-    const userPrompt = `Analyze this deterministic Project Spider payload.
+    const financialPrompt = `You are Project Spider's Financial Agent.
+Analyze ONLY the cost and cashflow aspects of this payload.
+Identify budget variances, CPI deviations, cashflow exposure, and financial blast radius.
+Payload: ${JSON.stringify(deterministicPayload.simulation.material_risks.filter(r => r.dimension === 'costFinancial' || r.dimension === 'cashflow'))}
+Exposure: £${deterministicPayload.simulation.blast_radius.total_financial_exposure.toLocaleString()}`;
 
-Important:
-- Explain and contextualize only; do not recalculate.
-- Use business-context inference only as labelled assumptions.
-- Make the output feel like a business-aware infrastructure risk interpretation, not a generic risk summary.
+    const operationalPrompt = `You are Project Spider's Operational Agent.
+Analyze ONLY the schedule, operational, and supplier aspects of this payload.
+Identify delays, backlog bottlenecks, and supplier compliance issues.
+Payload: ${JSON.stringify(deterministicPayload.simulation.material_risks.filter(r => r.dimension === 'schedule' || r.dimension === 'operational' || r.dimension === 'supplier'))}
+Impacted Nodes: ${deterministicPayload.simulation.blast_radius.impacted_node_count}`;
 
-${JSON.stringify(deterministicPayload, null, 2)}`;
+    // Run domain experts in parallel
+    const [financialResult, operationalResult] = await Promise.all([
+      generateText({ model: google('gemini-1.5-flash'), system: "Act as an expert financial risk auditor.", prompt: financialPrompt, temperature: 0.2 }),
+      generateText({ model: google('gemini-1.5-flash'), system: "Act as an expert operational and schedule auditor.", prompt: operationalPrompt, temperature: 0.2 })
+    ]);
+
+    const strategistUserPrompt = `Synthesize the findings from the Financial and Operational Agents into the final executive JSON response.
+
+=== FINANCIAL AGENT ANALYSIS ===
+${financialResult.text}
+
+=== OPERATIONAL AGENT ANALYSIS ===
+${operationalResult.text}
+
+=== CONTEXT ===
+Work Package: ${nodeData.label}
+CRI Delta: ${criDelta > 0 ? '+' : ''}${Math.round(criDelta)}
+Mitigations: ${activeMitigations.join(', ') || 'None'}
+`;
 
     const result = await generateText({
       model: google('gemini-1.5-flash'),
       system: systemPrompt,
-      prompt: userPrompt,
+      prompt: strategistUserPrompt,
       temperature: 0.25
     });
 

@@ -18,7 +18,7 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
   const [activeTab, setActiveTab] = useState<'layers' | 'simulation' | 'trend'>('layers');
   const [levers, setLevers] = useState<SimulationLever[]>([]);
   const [narrativeObj, setNarrativeObj] = useState<any | null>(null);
-  const [isTyping, setIsTyping] = useState<boolean>(false);
+  const [agentState, setAgentState] = useState<'idle' | 'financial' | 'operational' | 'strategist' | 'done'>('idle');
   const [historyCache, setHistoryCache] = useState<Record<string, any[]>>({});
 
   useEffect(() => {
@@ -120,8 +120,12 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
     const abortController = new AbortController();
     
     const fetchNarrative = async () => {
-      setIsTyping(true);
+      setAgentState('financial');
       setNarrativeObj(null);
+      
+      // Simulate agent handoffs while backend processes
+      const t1 = setTimeout(() => setAgentState('operational'), 1500);
+      const t2 = setTimeout(() => setAgentState('strategist'), 3000);
       
       try {
         const res = await fetch('/api/narrative', {
@@ -147,10 +151,12 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
       } catch (err: any) {
         if (err.name !== 'AbortError') {
           console.error("Failed to get narrative", err);
-          setNarrativeObj({ summary: "Analysis could not be generated." });
+          setNarrativeObj({ executive_summary: "Analysis could not be generated." });
         }
       } finally {
-        setIsTyping(false);
+        clearTimeout(t1);
+        clearTimeout(t2);
+        setAgentState('done');
       }
     };
 
@@ -300,17 +306,24 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
               <div className="rounded-xl border border-white/5 bg-emerald-900/10 p-4">
                 <div className="flex items-center gap-2 mb-3">
                   <Bot size={14} className="text-emerald-400" />
-                  <h3 className="text-xs font-semibold uppercase tracking-wider text-emerald-500/70">Strategist Agent</h3>
-                  {isTyping && <span className="flex h-2 w-2 relative ml-1">
+                  <h3 className="text-xs font-semibold uppercase tracking-wider text-emerald-500/70">Multi-Agent Synthesis</h3>
+                  {agentState !== 'idle' && agentState !== 'done' && <span className="flex h-2 w-2 relative ml-1">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                   </span>}
                 </div>
                 
                 <div className="text-sm leading-relaxed text-gray-300 min-h-[60px]">
-                  {isTyping ? (
-                    <span className="animate-pulse flex items-center gap-2"><Activity size={14} className="text-emerald-500" /> Synthesizing mitigation strategies...</span>
-                  ) : narrativeObj ? (
+                  {agentState === 'financial' && (
+                    <span className="animate-pulse flex items-center gap-2 text-emerald-500/80"><Activity size={14} /> Financial Agent analyzing cost exposure...</span>
+                  )}
+                  {agentState === 'operational' && (
+                    <span className="animate-pulse flex items-center gap-2 text-amber-500/80"><Activity size={14} /> Operational Agent auditing supplier delays...</span>
+                  )}
+                  {agentState === 'strategist' && (
+                    <span className="animate-pulse flex items-center gap-2 text-blue-500/80"><Activity size={14} /> Chief Strategist resolving cross-risk correlation...</span>
+                  )}
+                  {agentState === 'done' && narrativeObj ? (
                     <div className="space-y-4">
                       {narrativeObj.executive_summary && (
                         <p className="text-sm text-emerald-100">{narrativeObj.executive_summary}</p>

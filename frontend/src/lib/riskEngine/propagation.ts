@@ -60,17 +60,20 @@ export function propagateRisk(
     supplier: 0
   };
 
-  // Find edges where this WP is the target
-  const incomingEdges = edges.filter(e => e.target === targetWpId);
-  if (incomingEdges.length === 0) return propagatedPressure;
+  // Find edges where this WP is connected
+  const connectedEdges = edges.filter(e => e.target === targetWpId || e.source === targetWpId);
+  if (connectedEdges.length === 0) return propagatedPressure;
 
-  for (const edge of incomingEdges) {
-    const sourceNode = nodes.find(n => n.id === edge.source);
-    if (!sourceNode) continue;
+  for (const edge of connectedEdges) {
+    const isIncoming = edge.target === targetWpId;
+    const connectedNodeId = isIncoming ? edge.source : edge.target;
+    
+    const connectedNode = nodes.find(n => n.id === connectedNodeId);
+    if (!connectedNode) continue;
 
-    // Apply rules based on source node's state
+    // Apply rules based on connected node's state
     for (const rule of PROPAGATION_RULES) {
-      if (rule.condition(sourceNode)) {
+      if (rule.condition(connectedNode)) {
         propagatedPressure[rule.targetDimension] += rule.pressureChange;
       }
     }

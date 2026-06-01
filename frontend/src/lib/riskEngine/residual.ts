@@ -60,7 +60,10 @@ export function computeCRI(
   for (const dim of dimensions) {
     cri += residual[dim].score;
   }
-  cri = Math.round(cri / 5);
+  
+  const dqPenalty = (1.0 - dataQualityConfidence) * 20;
+  cri = Math.round((cri / 5) + dqPenalty);
+  cri = Math.min(cri, 100);
 
   let criClass: RiskClass = 'Low';
   if (cri >= 65) criClass = 'High';

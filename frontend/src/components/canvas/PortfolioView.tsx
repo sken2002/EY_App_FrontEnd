@@ -21,6 +21,14 @@ const DIM_LABELS: Record<DimensionKey, string> = {
   supplier: 'Supplier'
 };
 
+const DIM_DESCRIPTIONS: Record<DimensionKey, string> = {
+  costFinancial: '0-100 Risk Score. Driven by CPI, Budget Variance, and Cost Performance.',
+  cashflow: '0-100 Risk Score. Driven by burn rates and payment rejections.',
+  schedule: '0-100 Risk Score. Driven by milestone delays and completion slippage.',
+  operational: '0-100 Risk Score. Driven by service order backlogs and emergency incidents.',
+  supplier: '0-100 Risk Score. Driven by vendor concentration and past performance.'
+};
+
 export function PortfolioView({ nodes, onPillarClick, onEntityClick }: PortfolioViewProps) {
   const [sortConfig, setSortConfig] = useState<{ key: string; direction: 'asc' | 'desc' }>({ key: 'cri', direction: 'desc' });
   const [expandedPm, setExpandedPm] = useState<string | null>(null);
@@ -126,11 +134,11 @@ export function PortfolioView({ nodes, onPillarClick, onEntityClick }: Portfolio
               <th className="p-4 text-xs font-semibold text-gray-400 uppercase tracking-wider cursor-pointer hover:text-white" onClick={() => requestSort('wps')}>
                 <div className="flex items-center gap-1">WPs <ArrowUpDown size={12} /></div>
               </th>
-              <th className="p-4 text-xs font-semibold text-emerald-400 uppercase tracking-wider cursor-pointer hover:text-emerald-300" onClick={() => requestSort('cri')}>
+              <th className="p-4 text-xs font-semibold text-emerald-400 uppercase tracking-wider cursor-pointer hover:text-emerald-300" onClick={() => requestSort('cri')} title="Composite Risk Index: A strict 0-100 mathematical average of the 5 risk pillars.">
                 <div className="flex items-center gap-1">Avg CRI <ArrowUpDown size={12} /></div>
               </th>
               {DIM_KEYS.map(k => (
-                <th key={k} className="p-4 text-xs font-semibold text-gray-500 uppercase tracking-wider text-center cursor-pointer hover:text-gray-300" onClick={() => onPillarClick(k)}>
+                <th key={k} className="p-4 text-xs font-semibold text-gray-500 uppercase tracking-wider text-center cursor-pointer hover:text-gray-300" onClick={() => onPillarClick(k)} title={DIM_DESCRIPTIONS[k]}>
                   {DIM_LABELS[k]}
                 </th>
               ))}

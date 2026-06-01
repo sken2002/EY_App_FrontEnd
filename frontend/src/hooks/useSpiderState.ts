@@ -20,6 +20,14 @@ export function useSpiderState() {
             if (n.type === 'workPackage') {
               const sim = simulateWPRisk(n, [], json.nodes, json.edges, confidence);
               n.data.riskScore = sim.state.cri.score;
+              
+              const dims = ['costFinancial', 'cashflow', 'schedule', 'operational', 'supplier'];
+              dims.forEach(dim => {
+                if (n.data.dimensions?.[dim] && sim.state.residual?.[dim as keyof typeof sim.state.residual]) {
+                  n.data.dimensions[dim].score = sim.state.residual[dim as keyof typeof sim.state.residual].score;
+                  n.data.dimensions[dim].class = sim.state.residual[dim as keyof typeof sim.state.residual].class;
+                }
+              });
             }
           });
         }

@@ -4,7 +4,7 @@ import { google } from '@ai-sdk/google';
 import { WPRiskState } from '@/lib/riskEngine/types';
 import { SpiderNode, SpiderNodeData } from '@/lib/types';
 
-export const runtime = 'edge';
+export const runtime = 'nodejs';
 
 /**
  * Global context can be supplied by the frontend when available.
@@ -120,10 +120,18 @@ function safeJsonParse(text: string): NarrativeResponse | null {
 }
 
 export async function POST(req: Request) {
+  let fallbackNodeData: any = null;
+  let fallbackState: any = null;
+  let fallbackCriDelta: number = 0;
+
   try {
     const body = (await req.json()) as NarrativeRequestBody;
     const { node, simulationState: state, simulationDelta: delta } = body;
     const nodeData = node.data;
+
+    fallbackNodeData = nodeData;
+    fallbackState = state;
+    fallbackCriDelta = delta?.criDelta ?? 0;
 
     if (!nodeData || !state) {
       return NextResponse.json({ error: 'Missing required deterministic state payload' }, { status: 400 });
@@ -249,6 +257,8 @@ ${operationalResult.text}
 Work Package: ${nodeData.label}
 CRI Delta: ${criDelta > 0 ? '+' : ''}${Math.round(criDelta)}
 Mitigations: ${activeMitigations.join(', ') || 'None'}
+
+CRITICAL INSTRUCTION: You MUST return ONLY a single, valid JSON object exactly matching the required structure. Do NOT wrap the JSON in markdown blocks (e.g., \`\`\`json). Do NOT include any conversational text before or after the JSON.
 `;
 
     const result = await generateText({
@@ -271,6 +281,14 @@ Mitigations: ${activeMitigations.join(', ') || 'None'}
     return NextResponse.json({ narrative: parsed, source: 'gemini' });
   } catch (error) {
     console.error('Narrative API Error:', error);
+    // Graceful degradation: If LLM fails (timeout, rate limit, etc), return the deterministic fallback
+    if (fallbackNodeData && fallbackState) {
+      return NextResponse.json({
+        narrative: buildFallbackNarrative(fallbackNodeData, fallbackState, fallbackCriDelta),
+        source: 'fallback_after_api_error',
+        raw_model_output: String(error)
+      });
+    }
     return NextResponse.json({ error: 'Failed to generate narrative' }, { status: 500 });
   }
 }

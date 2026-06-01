@@ -189,8 +189,8 @@ export function CenterCanvas({
           {drill.level === 'entity' && drill.activeEntityId && (
             <motion.div key="entity" {...anim} className="absolute inset-0">
               <EntityGraph
-                nodes={nodes} // Unfiltered for D3 edges
-                edges={edges}
+                nodes={entityGraph.nodes} // Filtered for neighborhood
+                edges={entityGraph.edges}
                 centerId={drill.activeEntityId}
                 onNodeClick={onNodeClick}
               />

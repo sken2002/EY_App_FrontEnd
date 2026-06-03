@@ -2,7 +2,7 @@
 
 import { useMemo, useCallback, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ReactFlow, Background, Controls, MiniMap, NodeTypes, Panel, useNodesState, useEdgesState, Node, Edge } from '@xyflow/react';
+import { ReactFlow, Background, Controls, NodeTypes, Panel, useNodesState, useEdgesState, Node, Edge } from '@xyflow/react';
 import { SpiderNode, Scenario } from '@/lib/types';
 import { Info } from 'lucide-react';
 import { WorkPackageNode } from './WorkPackageNode';
@@ -113,17 +113,6 @@ export function EntityGraph({ nodes: initialNodes, edges: initialEdges, centerId
 
           <Background color="#ffffff" gap={20} size={1} style={{ opacity: 0.03 }} />
           <Controls className="bg-black/50 border border-white/10 fill-white" />
-          <MiniMap
-            nodeColor={(n) => {
-              const data = n.data as any;
-              if (n.id === centerId) return '#10b981';
-              if (data?.severity === 'critical') return '#ef4444';
-              if (data?.severity === 'high') return '#f97316';
-              return '#6b7280';
-            }}
-            maskColor="rgba(10, 10, 15, 0.8)"
-            className="bg-[#0f0f15] border border-white/10"
-          />
         </ReactFlow>
       )}
 

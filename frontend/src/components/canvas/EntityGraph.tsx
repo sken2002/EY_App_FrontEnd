@@ -1,8 +1,8 @@
 'use client';
 
-import { useMemo, useCallback } from 'react';
+import { useMemo, useCallback, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ReactFlow, Background, Controls, MiniMap, NodeTypes, Panel } from '@xyflow/react';
+import { ReactFlow, Background, Controls, MiniMap, NodeTypes, Panel, useNodesState, useEdgesState, Node, Edge } from '@xyflow/react';
 import { SpiderNode, Scenario } from '@/lib/types';
 import { Info } from 'lucide-react';
 import { WorkPackageNode } from './WorkPackageNode';
@@ -16,14 +16,29 @@ interface EntityGraphProps {
   onNodeClick?: (id: string | null) => void;
 }
 
-export function EntityGraph({ nodes, edges, centerId, onNodeClick }: EntityGraphProps) {
+export function EntityGraph({ nodes: initialNodes, edges: initialEdges, centerId, onNodeClick }: EntityGraphProps) {
   const nodeTypes: NodeTypes = useMemo(() => ({
     workPackage: WorkPackageNode,
     contract: ContractNode,
     milestone: MilestoneNode,
   }), []);
 
-  const centerNode = nodes.find(n => n.id === centerId);
+  const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
+
+  useEffect(() => {
+    setNodes(initialNodes.map(n => ({
+      ...n,
+      data: { ...n.data, isSelected: n.id === centerId }
+    })));
+    setEdges(initialEdges.map(e => ({
+      ...e,
+      animated: true,
+      style: { ...e.style, strokeWidth: 2 },
+    })));
+  }, [initialNodes, initialEdges, centerId, setNodes, setEdges]);
+
+  const centerNode = initialNodes.find(n => n.id === centerId);
 
   return (
     <motion.div
@@ -39,16 +54,10 @@ export function EntityGraph({ nodes, edges, centerId, onNodeClick }: EntityGraph
         </div>
       ) : (
         <ReactFlow
-          nodes={nodes.map(n => ({
-            ...n,
-            // If we have an active click selection, highlight it
-            data: { ...n.data, isSelected: n.id === centerId } // We might want to handle visual selection state later, for now we just fire the event
-          }))}
-          edges={edges.map(e => ({
-            ...e,
-            animated: true,
-            style: { ...e.style, strokeWidth: 2 },
-          }))}
+          nodes={nodes}
+          edges={edges}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
           nodeTypes={nodeTypes}
           onNodeClick={(_, node) => {
             if (onNodeClick) onNodeClick(node.id);
@@ -76,6 +85,32 @@ export function EntityGraph({ nodes, edges, centerId, onNodeClick }: EntityGraph
               </div>
             </div>
           </Panel>
+          
+          <Panel position="bottom-right" className="bg-[#1a1a24]/90 backdrop-blur border border-emerald-500/30 p-4 rounded-xl shadow-lg m-4 min-w-[200px]">
+            <h4 className="text-white font-semibold text-xs mb-3 uppercase tracking-wider text-center">Visual Legend</h4>
+            
+            <div className="space-y-4">
+              <div>
+                <h5 className="text-gray-400 text-[10px] uppercase tracking-widest mb-2 border-b border-white/10 pb-1">Risk Severity</h5>
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.6)]"></div><span className="text-xs text-gray-300">Critical / High</span></div>
+                  <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.6)]"></div><span className="text-xs text-gray-300">Medium</span></div>
+                  <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]"></div><span className="text-xs text-gray-300">Low / Track</span></div>
+                  <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-gray-500"></div><span className="text-xs text-gray-300">No Data</span></div>
+                </div>
+              </div>
+
+              <div>
+                <h5 className="text-gray-400 text-[10px] uppercase tracking-widest mb-2 border-b border-white/10 pb-1">Entity Types</h5>
+                <div className="flex flex-col gap-2">
+                  <div className="flex items-center gap-2"><div className="w-4 h-4 rounded-sm border border-emerald-500/50 bg-[#1f2937]"></div><span className="text-xs text-gray-300">Work Package</span></div>
+                  <div className="flex items-center gap-2"><div className="w-3 h-3 rotate-45 border border-emerald-500/50 bg-[#1f2937] ml-0.5 mr-0.5"></div><span className="text-xs text-gray-300">Milestone</span></div>
+                  <div className="flex items-center gap-2"><div className="w-4 h-4 rounded-full border border-emerald-500/50 bg-[#1f2937]"></div><span className="text-xs text-gray-300">Contract</span></div>
+                </div>
+              </div>
+            </div>
+          </Panel>
+
           <Background color="#ffffff" gap={20} size={1} style={{ opacity: 0.03 }} />
           <Controls className="bg-black/50 border border-white/10 fill-white" />
           <MiniMap

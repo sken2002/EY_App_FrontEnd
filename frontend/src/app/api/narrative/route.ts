@@ -106,20 +106,26 @@ function buildFallbackNarrative(
  */
 function safeJsonParse(text: string): NarrativeResponse | null {
   try {
-    const cleaned = text
-      .replace(/^```json\s*/i, '')
-      .replace(/^```\s*/i, '')
-      .replace(/```$/i, '')
-      .trim();
-
+    // Highly robust JSON extraction: find the first { and last }
+    const firstBrace = text.indexOf('{');
+    const lastBrace = text.lastIndexOf('}');
+    
+    if (firstBrace === -1 || lastBrace === -1) {
+      console.error('No JSON braces found in Gemini output:', text);
+      return null;
+    }
+    
+    const cleaned = text.substring(firstBrace, lastBrace + 1);
     const parsed = JSON.parse(cleaned) as NarrativeResponse;
 
     if (!parsed.executive_summary || !parsed.active_pathway || !parsed.key_drivers) {
+      console.error('JSON parsed successfully but missing required fields:', parsed);
       return null;
     }
 
     return parsed;
-  } catch {
+  } catch (err) {
+    console.error('Failed to parse Gemini JSON output:', err, 'Raw text:', text);
     return null;
   }
 }

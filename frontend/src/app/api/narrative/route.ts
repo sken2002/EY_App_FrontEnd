@@ -73,7 +73,8 @@ function getNodeField(nodeData: any, key: string): unknown {
 function buildFallbackNarrative(
   nodeData: SpiderNodeData,
   state: WPRiskState,
-  criDelta: number
+  criDelta: number,
+  failureReason?: string
 ): NarrativeResponse {
   const materialRisks = Object.entries(state.detected ?? {})
     .filter(([_, d]) => d.class === 'High' || d.class === 'Medium')
@@ -84,7 +85,7 @@ function buildFallbackNarrative(
   const exposure = state.blastRadius?.totalExposure ?? 0;
 
   return {
-    executive_summary: `${nodeData.label} shows ${materialRisks.length > 0 ? 'material risk pressure' : 'limited material risk pressure'} under the current deterministic simulation. ${criDelta !== 0 ? `The simulated CRI movement is ${criDelta > 0 ? '+' : ''}${Math.round(criDelta)}.` : 'No material CRI movement is currently detected.'}`,
+    executive_summary: `${failureReason ? `[SYSTEM: ${failureReason}] ` : ''}${nodeData.label} shows ${materialRisks.length > 0 ? 'material risk pressure' : 'limited material risk pressure'} under the current deterministic simulation. ${criDelta !== 0 ? `The simulated CRI movement is ${criDelta > 0 ? '+' : ''}${Math.round(criDelta)}.` : 'No material CRI movement is currently detected.'}`,
     active_pathway: materialRisks.length > 0 ? materialRisks.map(r => r.split(':')[0]).join(' → ') : 'No active multi-step pathway detected',
     propagation_confidence: impactedCount >= 3 || materialRisks.some(r => r.includes('High')) ? 'High' : materialRisks.length > 0 ? 'Medium' : 'Low',
     key_drivers: materialRisks.length > 0 ? materialRisks : ['No significant medium/high deterministic triggers detected'],
@@ -210,7 +211,7 @@ export async function POST(req: Request) {
 
     if (!process.env.GOOGLE_GENERATIVE_AI_API_KEY) {
       return NextResponse.json({
-        narrative: buildFallbackNarrative(nodeData, state, criDelta),
+        narrative: buildFallbackNarrative(nodeData, state, criDelta, "MISSING_API_KEY_ENV_VAR"),
         source: 'fallback'
       });
     }
@@ -292,7 +293,7 @@ CRITICAL INSTRUCTION: You MUST return ONLY a single, valid JSON object exactly m
 
     if (!parsed) {
       return NextResponse.json({
-        narrative: buildFallbackNarrative(nodeData, state, criDelta),
+        narrative: buildFallbackNarrative(nodeData, state, criDelta, "AI_JSON_PARSE_FAILED"),
         source: 'fallback_after_invalid_ai_json',
         raw_model_output: result.text
       });
@@ -304,7 +305,7 @@ CRITICAL INSTRUCTION: You MUST return ONLY a single, valid JSON object exactly m
     // Graceful degradation: If LLM fails (timeout, rate limit, etc), return the deterministic fallback
     if (fallbackNodeData && fallbackState) {
       return NextResponse.json({
-        narrative: buildFallbackNarrative(fallbackNodeData, fallbackState, fallbackCriDelta),
+        narrative: buildFallbackNarrative(fallbackNodeData, fallbackState, fallbackCriDelta, `GEMINI_API_ERROR_THROWN`),
         source: 'fallback_after_api_error',
         raw_model_output: String(error)
       });

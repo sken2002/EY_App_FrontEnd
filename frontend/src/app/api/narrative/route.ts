@@ -305,7 +305,7 @@ CRITICAL INSTRUCTION: You MUST return ONLY a single, valid JSON object exactly m
     // Graceful degradation: If LLM fails (timeout, rate limit, etc), return the deterministic fallback
     if (fallbackNodeData && fallbackState) {
       return NextResponse.json({
-        narrative: buildFallbackNarrative(fallbackNodeData, fallbackState, fallbackCriDelta, `GEMINI_API_ERROR_THROWN`),
+        narrative: buildFallbackNarrative(fallbackNodeData, fallbackState, fallbackCriDelta, `API_ERROR: ${String(error).substring(0, 100)}`),
         source: 'fallback_after_api_error',
         raw_model_output: String(error)
       });

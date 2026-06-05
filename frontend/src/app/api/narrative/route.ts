@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
-import { generateText } from 'ai';
-import { google } from '@ai-sdk/google';
+import { GoogleGenAI } from '@google/genai';
 import { WPRiskState } from '@/lib/riskEngine/types';
 import { SpiderNode, SpiderNodeData } from '@/lib/types';
 
@@ -257,20 +256,23 @@ Mitigations: ${activeMitigations.join(', ') || 'None'}
 
 CRITICAL INSTRUCTION: You MUST return ONLY a single, valid JSON object exactly matching the required structure. Do NOT wrap the JSON in markdown blocks. Do NOT include any conversational text.`;
 
-    const result = await generateText({
-      model: google('gemini-1.5-pro'),
-      system: systemPrompt,
-      prompt: strategistUserPrompt,
-      temperature: 0.25
+    const ai = new GoogleGenAI({ apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY });
+    const result = await ai.models.generateContent({
+      model: 'gemini-2.5-flash',
+      contents: strategistUserPrompt,
+      config: {
+        systemInstruction: systemPrompt,
+        temperature: 0.25
+      }
     });
 
-    const parsed = safeJsonParse(result.text);
+    const parsed = safeJsonParse(result.text || '');
 
     if (!parsed) {
       return NextResponse.json({
         narrative: buildFallbackNarrative(nodeData, state, criDelta, "AI_JSON_PARSE_FAILED"),
         source: 'fallback_after_invalid_ai_json',
-        raw_model_output: result.text
+        raw_model_output: result.text || ''
       });
     }
 

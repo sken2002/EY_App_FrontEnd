@@ -258,7 +258,7 @@ Mitigations: ${activeMitigations.join(', ') || 'None'}
 CRITICAL INSTRUCTION: You MUST return ONLY a single, valid JSON object exactly matching the required structure. Do NOT wrap the JSON in markdown blocks. Do NOT include any conversational text.`;
 
     const result = await generateText({
-      model: google('gemini-1.5-flash'),
+      model: google('gemini-1.5-pro'),
       system: systemPrompt,
       prompt: strategistUserPrompt,
       temperature: 0.25

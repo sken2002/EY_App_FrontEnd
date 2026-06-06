@@ -8,14 +8,12 @@ import { simulateWPRisk } from '@/lib/riskEngine/simulate';
 import { SimulationControls } from '../simulation/SimulationControls';
 
 interface RightPanelProps {
-  selectedNodeId: string | null;
   nodes: SpiderNode[];
   edges: SpiderEdge[];
   dataQualityConfidence: number;
-  activePersona?: string;
 }
 
-export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence, activePersona }: RightPanelProps) {
+export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence }: RightPanelProps) {
   const [activeTab, setActiveTab] = useState<'layers' | 'simulation' | 'trend'>('layers');
   const [levers, setLevers] = useState<SimulationLever[]>([]);
   const [narrativeObj, setNarrativeObj] = useState<any | null>(null);
@@ -164,8 +162,7 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
             contextEnv: {
               upstreamDependencies: upstreamNames,
               downstreamDependencies: downstreamNames,
-              impactedDependencies: impactedNames,
-              activePersona: activePersona || 'Global Executive'
+              impactedDependencies: impactedNames
             }
           }),
           signal: abortController.signal
@@ -452,10 +449,10 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
                       <PolarGrid stroke="#333" />
                       <PolarAngleAxis dataKey="subject" tick={{ fill: '#9ca3af', fontSize: 10 }} />
                       <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} axisLine={false} />
-                      <Radar name="Risk Score" dataKey="score" stroke="#10b981" fill="#10b981" fillOpacity={0.3} />
+                      <Radar name="Risk Score" dataKey="score" stroke="#ef4444" fill="#ef4444" fillOpacity={0.3} />
                       <RechartsTooltip 
                         contentStyle={{ backgroundColor: '#111827', borderColor: '#374151', borderRadius: '8px', fontSize: '12px' }}
-                        itemStyle={{ color: '#10b981' }}
+                        itemStyle={{ color: '#ef4444' }}
                       />
                     </RadarChart>
                   </ResponsiveContainer>

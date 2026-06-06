@@ -15,7 +15,7 @@ interface CenterCanvasProps {
   edges: SpiderEdgeType[];
   riskIndex: RiskIndex;
   drill: DrillState;
-  globalFilters?: { criticalOnly: boolean; highExposure: boolean; persona: string };
+  globalFilters?: { criticalOnly: boolean; highExposure: boolean };
   onDrillIntoPillar: (pillar: DimensionKey) => void;
   onDrillIntoEntity: (entityId: string) => void;
   onNavigateBack: () => void;
@@ -146,19 +146,6 @@ export function CenterCanvas({
           x = 500;
           y = otherStartY + (currOther * 150);
           currOther++;
-        }
-      }
-
-      let isDimmed = false;
-      const p = globalFilters?.persona;
-      if (p === 'Project Manager (IT)') {
-        // Dim financial/supplier focused nodes
-        isDimmed = !(n.data.dimensions?.schedule?.class === 'High' || n.data.dimensions?.operational?.class === 'High' || isCenter);
-      } else if (p === 'Risk Auditor') {
-        // Dim operational/schedule nodes, focus on supplier/financial
-        isDimmed = !(n.data.dimensions?.supplier?.class === 'High' || n.data.dimensions?.costFinancial?.class === 'High' || isCenter);
-      }
-
       return {
         ...n,
         position: { x, y },
@@ -167,7 +154,6 @@ export function CenterCanvas({
           isSelected: isCenter,
           isInBlast: false,
           isTrigger: isCenter,
-          isDimmed
         }
       };
     });

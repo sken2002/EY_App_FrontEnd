@@ -23,8 +23,7 @@ export default function Home() {
   const { data, loading, error } = useSpiderState();
   const [globalFilters, setGlobalFilters] = useState({
     criticalOnly: false,
-    highExposure: false,
-    persona: 'Global Executive'
+    highExposure: false
   });
 
   // Filter nodes based on global filters
@@ -168,7 +167,6 @@ export default function Home() {
                 nodes={filteredNodes}
                 edges={data.edges}
                 dataQualityConfidence={data.riskIndex.dataQuality.confidenceModifier}
-                activePersona={globalFilters.persona}
               />
             )}
           </>

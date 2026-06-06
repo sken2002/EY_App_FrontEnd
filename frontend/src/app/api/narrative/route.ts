@@ -34,7 +34,6 @@ type NarrativeRequestBody = {
     upstreamDependencies: string[];
     downstreamDependencies: string[];
     impactedDependencies: string[];
-    activePersona?: string;
   };
 };
 
@@ -221,21 +220,9 @@ export async function POST(req: Request) {
       });
     }
 
-    const activePersona = body.contextEnv?.activePersona || 'Global Executive';
-    
-    let personaInstruction = '';
-    if (activePersona === 'Project Manager (IT)') {
-      personaInstruction = "As an IT Project Manager, emphasize schedule blockers, resource reallocation, and operational bottlenecks. Focus deeply on the immediate downstream delivery impacts.";
-    } else if (activePersona === 'Risk Auditor') {
-      personaInstruction = "As a Risk Auditor, emphasize compliance gaps, supplier SLA violations, cost variances, and financial exposure. Scrutinize the data reliability.";
-    } else {
-      personaInstruction = "As a Global Executive, focus on the high-level financial 'blast radius', critical supply chain failures, and decisive executive actions.";
-    }
-
     const systemPrompt = `You are Project Spider's Chief Strategist AI.
 
 Your role:
-- ${personaInstruction}
 - Explain the risk output in clear, accessible, and highly professional language.
 - Structure your insights with a natural "Situation -> Cause -> Action" flow.
 - Anchor your claims to the exact entities provided in the EXACT DETERMINISTIC PAYLOAD, but avoid overwhelming the user with too many dense statistics. Keep it intuitive and elegant.

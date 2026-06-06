@@ -9,11 +9,13 @@ interface LeftPanelProps {
   globalFilters?: { criticalOnly: boolean; highExposure: boolean };
   setGlobalFilters?: React.Dispatch<React.SetStateAction<{ criticalOnly: boolean; highExposure: boolean }>>;
   onWatchlistClick?: (id: string) => void;
+  watchlist?: string[];
+  nodes?: any[];
 }
 
 const DIMENSION_KEYS: DimensionKey[] = ['costFinancial', 'cashflow', 'schedule', 'operational', 'supplier'];
 
-export function LeftPanel({ riskIndex, activePillar, onPillarClick, globalFilters, setGlobalFilters, onWatchlistClick }: LeftPanelProps) {
+export function LeftPanel({ riskIndex, activePillar, onPillarClick, globalFilters, setGlobalFilters, onWatchlistClick, watchlist = [], nodes = [] }: LeftPanelProps) {
   const cri = riskIndex.compositeRiskIndex;
   const dq = riskIndex.dataQuality;
   
@@ -44,21 +46,25 @@ export function LeftPanel({ riskIndex, activePillar, onPillarClick, globalFilter
         {/* Watchlist Section */}
         <div className="flex flex-col gap-2">
           <div className="text-xs text-gray-500 mb-1">My Watchlist</div>
-          {[
-            { id: 'WP-0005', label: 'WP-0005: Documentation' },
-            { id: 'WP-0001', label: 'WP-0001: Foundations' }
-          ].map((wp) => (
-            <div 
-              key={wp.id} 
-              onClick={() => onWatchlistClick && onWatchlistClick(wp.id)}
-              className="group flex items-center gap-3 p-2.5 rounded-lg bg-white/[0.02] border border-white/5 hover:bg-white/[0.06] hover:border-white/10 cursor-pointer transition-all"
-            >
-              <div className="p-1.5 rounded-md bg-rose-500/10 text-rose-400 group-hover:bg-rose-500/20 group-hover:scale-110 transition-transform">
-                <Shield size={12} />
+          {watchlist.map((id) => {
+            const node = nodes.find(n => n.id === id);
+            if (!node) return null;
+            return (
+              <div 
+                key={id} 
+                onClick={() => onWatchlistClick && onWatchlistClick(id)}
+                className="group flex items-center gap-3 p-2.5 rounded-lg bg-white/[0.02] border border-white/5 hover:bg-white/[0.06] hover:border-white/10 cursor-pointer transition-all"
+              >
+                <div className="p-1.5 rounded-md bg-rose-500/10 text-rose-400 group-hover:bg-rose-500/20 group-hover:scale-110 transition-transform">
+                  <Shield size={12} />
+                </div>
+                <span className="text-xs font-medium text-gray-300 group-hover:text-white truncate transition-colors">{node.data.label || id}</span>
               </div>
-              <span className="text-xs font-medium text-gray-300 group-hover:text-white truncate transition-colors">{wp.label}</span>
-            </div>
-          ))}
+            );
+          })}
+          {watchlist.length === 0 && (
+            <div className="text-xs text-gray-500 italic p-2">Watchlist is empty.</div>
+          )}
         </div>
 
         {/* Filters Section */}

@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bot, Zap, Shield, GitBranch, ArrowRight, Activity, RotateCcw, Download, Upload, Info } from 'lucide-react';
+import { Bot, Zap, Shield, GitBranch, ArrowRight, Activity, RotateCcw, Download, Upload, Info, Star } from 'lucide-react';
 import { SpiderNode, SpiderEdge } from '@/lib/types';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, Tooltip as RechartsTooltip, LineChart, Line, XAxis, YAxis, CartesianGrid } from 'recharts';
 import { SimulationLever, WPRiskState } from '@/lib/riskEngine/types';
@@ -12,9 +12,11 @@ interface RightPanelProps {
   nodes: SpiderNode[];
   edges: SpiderEdge[];
   dataQualityConfidence: number;
+  watchlist?: string[];
+  setWatchlist?: (list: string[]) => void;
 }
 
-export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence }: RightPanelProps) {
+export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence, watchlist = [], setWatchlist }: RightPanelProps) {
   const [activeTab, setActiveTab] = useState<'layers' | 'simulation' | 'trend'>('layers');
   const [levers, setLevers] = useState<SimulationLever[]>([]);
   const [narrativeObj, setNarrativeObj] = useState<any | null>(null);
@@ -204,14 +206,27 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
     
     return (
       <aside className="flex w-[380px] shrink-0 flex-col border-l border-white/10 bg-[#18181b]/80 p-6 overflow-y-auto">
-        <div className="flex items-center gap-3 mb-6 pb-4 border-b border-white/10">
-          <div className={`p-3 rounded-xl ${selectedNode.type === 'contract' ? 'bg-blue-500/20 text-blue-400' : 'bg-emerald-500/20 text-emerald-400'}`}>
-            <Info size={24} />
+        <div className="flex items-center justify-between mb-6 pb-4 border-b border-white/10">
+          <div className="flex items-center gap-3">
+            <div className={`p-3 rounded-xl ${selectedNode.type === 'contract' ? 'bg-blue-500/20 text-blue-400' : 'bg-emerald-500/20 text-emerald-400'}`}>
+              <Info size={24} />
+            </div>
+            <div>
+              <h2 className="text-lg font-bold text-white leading-tight">{selectedNode.data.label}</h2>
+              <p className="text-xs text-gray-400 uppercase tracking-wider mt-1">{selectedNode.type}</p>
+            </div>
           </div>
-          <div>
-            <h2 className="text-lg font-bold text-white leading-tight">{selectedNode.data.label}</h2>
-            <p className="text-xs text-gray-400 uppercase tracking-wider mt-1">{selectedNode.type}</p>
-          </div>
+          <button 
+            onClick={() => {
+              if (setWatchlist) {
+                const isWatched = watchlist.includes(selectedNode.id);
+                setWatchlist(isWatched ? watchlist.filter(id => id !== selectedNode.id) : [...watchlist, selectedNode.id]);
+              }
+            }}
+            className={`p-2 rounded-full transition-colors hover:bg-white/10 ${watchlist.includes(selectedNode.id) ? 'text-yellow-400' : 'text-gray-500 hover:text-gray-300'}`}
+          >
+            <Star size={18} fill={watchlist.includes(selectedNode.id) ? 'currentColor' : 'none'} />
+          </button>
         </div>
         
         <div className="space-y-6">
@@ -263,17 +278,30 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
       
       {/* Header */}
       <div className="flex flex-col border-b border-white/5 p-6 bg-emerald-900/5">
-        <div className="flex items-center gap-3 mb-3">
-          <div className={`relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${isSimulating ? 'bg-amber-500/20 text-amber-400' : 'bg-emerald-500/20 text-emerald-400'}`}>
-            <Activity size={20} />
-            {isSimulating && <span className="absolute top-0 right-0 h-2.5 w-2.5 rounded-full bg-amber-500 animate-pulse"></span>}
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-3">
+            <div className={`relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${isSimulating ? 'bg-amber-500/20 text-amber-400' : 'bg-emerald-500/20 text-emerald-400'}`}>
+              <Activity size={20} />
+              {isSimulating && <span className="absolute top-0 right-0 h-2.5 w-2.5 rounded-full bg-amber-500 animate-pulse"></span>}
+            </div>
+            <div>
+              <h2 className="text-sm font-semibold text-white truncate max-w-[240px]" title={selectedNode.data.label}>
+                {selectedNode.data.label}
+              </h2>
+              <p className="text-xs text-gray-400">Risk Engine Analysis</p>
+            </div>
           </div>
-          <div>
-            <h2 className="text-sm font-semibold text-white truncate max-w-[280px]" title={selectedNode.data.label}>
-              {selectedNode.data.label}
-            </h2>
-            <p className="text-xs text-gray-400">Risk Engine Analysis</p>
-          </div>
+          <button 
+            onClick={() => {
+              if (setWatchlist) {
+                const isWatched = watchlist.includes(selectedNode.id);
+                setWatchlist(isWatched ? watchlist.filter(id => id !== selectedNode.id) : [...watchlist, selectedNode.id]);
+              }
+            }}
+            className={`p-2 rounded-full transition-colors hover:bg-white/10 ${watchlist.includes(selectedNode.id) ? 'text-yellow-400' : 'text-gray-500 hover:text-gray-300'}`}
+          >
+            <Star size={18} fill={watchlist.includes(selectedNode.id) ? 'currentColor' : 'none'} />
+          </button>
         </div>
         
         {/* Topline Metric */}

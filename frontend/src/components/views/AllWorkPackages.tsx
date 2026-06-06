@@ -1,12 +1,14 @@
 import { SpiderNode } from '@/lib/types';
-import { Package, ShieldAlert } from 'lucide-react';
+import { Package, ShieldAlert, Star } from 'lucide-react';
 
 interface AllWorkPackagesProps {
   nodes: SpiderNode[];
   onNodeSelect: (id: string) => void;
+  watchlist?: string[];
+  setWatchlist?: (list: string[]) => void;
 }
 
-export function AllWorkPackages({ nodes, onNodeSelect }: AllWorkPackagesProps) {
+export function AllWorkPackages({ nodes, onNodeSelect, watchlist = [], setWatchlist }: AllWorkPackagesProps) {
   const workPackages = nodes.filter(n => n.type === 'workPackage');
 
   return (
@@ -38,6 +40,8 @@ export function AllWorkPackages({ nodes, onNodeSelect }: AllWorkPackagesProps) {
               statusText = 'On Track';
             }
 
+            const isWatched = watchlist.includes(wp.id);
+
             return (
               <div 
                 key={wp.id}
@@ -52,7 +56,7 @@ export function AllWorkPackages({ nodes, onNodeSelect }: AllWorkPackagesProps) {
                   </div>
                 )}
                 
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 pr-6">
                   <div className={`p-2 rounded-lg ${iconColor}`}>
                     <Package size={18} />
                   </div>
@@ -61,6 +65,18 @@ export function AllWorkPackages({ nodes, onNodeSelect }: AllWorkPackagesProps) {
                     <p className="text-[10px] text-gray-500 uppercase tracking-wider mt-0.5">{wp.id}</p>
                   </div>
                 </div>
+
+                <button 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (setWatchlist) {
+                      setWatchlist(isWatched ? watchlist.filter(id => id !== wp.id) : [...watchlist, wp.id]);
+                    }
+                  }}
+                  className={`absolute top-4 right-4 p-1.5 rounded-full transition-colors z-10 hover:bg-white/10 ${isWatched ? 'text-yellow-400' : 'text-gray-500 hover:text-gray-300'}`}
+                >
+                  <Star size={16} fill={isWatched ? 'currentColor' : 'none'} />
+                </button>
 
                 <div className="grid grid-cols-2 gap-2 mt-2 pt-4 border-t border-white/5">
                   <div>

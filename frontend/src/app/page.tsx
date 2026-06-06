@@ -51,6 +51,9 @@ export default function Home() {
     selectedSubNodeId: null,
   });
 
+  // Watchlist state
+  const [watchlist, setWatchlist] = useState<string[]>(['WP-0005', 'WP-0001']);
+
   // Navigation handlers
   const drillIntoPillar = useCallback((pillar: DimensionKey) => {
     setDrill({ level: 'pillar', activePillar: pillar, activeEntityId: null });
@@ -151,6 +154,8 @@ export default function Home() {
               globalFilters={globalFilters}
               setGlobalFilters={setGlobalFilters}
               onWatchlistClick={drillIntoEntity}
+              watchlist={watchlist}
+              nodes={data.nodes}
             />
 
             {/* Main Content Area */}
@@ -161,6 +166,8 @@ export default function Home() {
                   setDrill({ level: 'entity', activePillar: null, activeEntityId: id });
                   setActiveTopTab('topology');
                 }} 
+                watchlist={watchlist}
+                setWatchlist={setWatchlist}
               />
             ) : (
               <CenterCanvas 
@@ -184,6 +191,8 @@ export default function Home() {
                 nodes={filteredNodes}
                 edges={data.edges}
                 dataQualityConfidence={data.riskIndex.dataQuality.confidenceModifier}
+                watchlist={watchlist}
+                setWatchlist={setWatchlist}
               />
             )}
           </>

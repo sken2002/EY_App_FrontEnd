@@ -34,6 +34,7 @@ type NarrativeRequestBody = {
     upstreamDependencies: string[];
     downstreamDependencies: string[];
     impactedDependencies: string[];
+    activePersona?: string;
   };
 };
 

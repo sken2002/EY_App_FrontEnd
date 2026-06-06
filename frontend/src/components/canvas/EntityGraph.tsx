@@ -13,14 +13,14 @@ import dagre from 'dagre';
 const dagreGraph = new dagre.graphlib.Graph();
 dagreGraph.setDefaultEdgeLabel(() => ({}));
 
-const getLayoutedElements = (nodes: any[], edges: any[], direction = 'TB') => {
+const getLayoutedElements = (nodes: any[], edges: any[], direction = 'LR') => {
   const isHorizontal = direction === 'LR';
-  dagreGraph.setGraph({ rankdir: direction });
+  dagreGraph.setGraph({ rankdir: direction, nodesep: 150, ranksep: 250 });
 
   nodes.forEach((node) => {
-    // Estimate node size based on type
-    const width = node.type === 'workPackage' ? 250 : 200;
-    const height = node.type === 'workPackage' ? 100 : 80;
+    // Greatly increase size estimates to prevent the overlapping seen in the screenshot
+    const width = node.type === 'workPackage' ? 450 : 350;
+    const height = node.type === 'workPackage' ? 250 : 150;
     dagreGraph.setNode(node.id, { width, height });
   });
 
@@ -38,8 +38,8 @@ const getLayoutedElements = (nodes: any[], edges: any[], direction = 'TB') => {
       sourcePosition: isHorizontal ? 'right' : 'bottom',
       // Offset by half dimensions since dagre positions are center-based
       position: {
-        x: nodeWithPosition.x - (node.type === 'workPackage' ? 125 : 100),
-        y: nodeWithPosition.y - (node.type === 'workPackage' ? 50 : 40),
+        x: nodeWithPosition.x - (node.type === 'workPackage' ? 225 : 175),
+        y: nodeWithPosition.y - (node.type === 'workPackage' ? 125 : 75),
       },
     };
     return newNode;
@@ -80,7 +80,7 @@ export function EntityGraph({ nodes: initialNodes, edges: initialEdges, centerId
     const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
       initializedNodes,
       initializedEdges,
-      'TB'
+      'LR'
     );
 
     setNodes(layoutedNodes);

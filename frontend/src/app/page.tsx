@@ -41,7 +41,7 @@ export default function Home() {
   }, [data?.nodes, globalFilters]);
 
   // Top-level tabs for layout simplification
-  const [activeTopTab, setActiveTopTab] = useState<'scorecard' | 'all-packages' | 'topology' | 'pipeline'>('scorecard');
+  const [activeTopTab, setActiveTopTab] = useState<'all-packages' | 'scorecard' | 'topology' | 'pipeline'>('all-packages');
 
   // Drill-down navigation state
   const [drill, setDrill] = useState<DrillState>({
@@ -101,16 +101,16 @@ export default function Home() {
       {/* Top Level Tab Navigation */}
       <div className="flex border-b border-white/10 bg-[#0f0f15] px-4">
         <button 
+          onClick={() => setActiveTopTab('all-packages')}
+          className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors ${activeTopTab === 'all-packages' ? 'border-emerald-500 text-emerald-400' : 'border-transparent text-gray-400 hover:text-white'}`}
+        >
+          Project Inventory
+        </button>
+        <button 
           onClick={() => { setActiveTopTab('scorecard'); setDrill({ level: 'portfolio', activePillar: null, activeEntityId: null }); }}
           className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors ${activeTopTab === 'scorecard' ? 'border-emerald-500 text-emerald-400' : 'border-transparent text-gray-400 hover:text-white'}`}
         >
           Portfolio Scorecard
-        </button>
-        <button 
-          onClick={() => setActiveTopTab('all-packages')}
-          className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors ${activeTopTab === 'all-packages' ? 'border-emerald-500 text-emerald-400' : 'border-transparent text-gray-400 hover:text-white'}`}
-        >
-          All Work Packages
         </button>
         <button 
           onClick={() => { 
@@ -156,7 +156,7 @@ export default function Home() {
             {/* Main Content Area */}
             {activeTopTab === 'all-packages' ? (
               <AllWorkPackages 
-                nodes={data.nodes} 
+                nodes={filteredNodes} 
                 onNodeSelect={(id) => {
                   setDrill({ level: 'entity', activePillar: null, activeEntityId: id });
                   setActiveTopTab('topology');

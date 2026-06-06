@@ -22,22 +22,18 @@ export function AllWorkPackages({ nodes, onNodeSelect, watchlist = [], setWatchl
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {workPackages.map(wp => {
             const score = wp.data.riskScore || 0;
-            let statusColor = 'bg-gray-500/20 text-gray-400 border-gray-500/30';
             let iconColor = 'bg-gray-500/10 text-gray-400';
-            let statusText = 'Healthy';
+            let cardStyle = 'border-white/5 bg-white/[0.02] hover:bg-white/[0.06] hover:border-white/10';
 
             if (score >= 60) {
-              statusColor = 'bg-rose-500/20 text-rose-400 border-rose-500/30';
               iconColor = 'bg-rose-500/10 text-rose-400';
-              statusText = 'Critical';
+              cardStyle = 'border-rose-500/20 bg-rose-500/5 hover:bg-rose-500/10 hover:border-rose-500/40 shadow-[inset_0_1px_0_0_rgba(244,63,94,0.1),0_0_20px_rgba(244,63,94,0.05)]';
             } else if (score >= 40) {
-              statusColor = 'bg-amber-500/20 text-amber-400 border-amber-500/30';
               iconColor = 'bg-amber-500/10 text-amber-400';
-              statusText = 'Elevated';
+              cardStyle = 'border-amber-500/20 bg-amber-500/5 hover:bg-amber-500/10 hover:border-amber-500/40 shadow-[inset_0_1px_0_0_rgba(245,158,11,0.1),0_0_20px_rgba(245,158,11,0.05)]';
             } else if (score > 0) {
-              statusColor = 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30';
               iconColor = 'bg-emerald-500/10 text-emerald-400';
-              statusText = 'On Track';
+              cardStyle = 'border-emerald-500/20 bg-emerald-500/5 hover:bg-emerald-500/10 hover:border-emerald-500/40 shadow-[inset_0_1px_0_0_rgba(16,185,129,0.1),0_0_20px_rgba(16,185,129,0.05)]';
             }
 
             const isWatched = watchlist.includes(wp.id);
@@ -46,16 +42,9 @@ export function AllWorkPackages({ nodes, onNodeSelect, watchlist = [], setWatchl
               <div 
                 key={wp.id}
                 onClick={() => onNodeSelect(wp.id)}
-                className="group p-5 rounded-xl border border-white/5 bg-white/[0.02] hover:bg-white/[0.06] hover:border-white/10 cursor-pointer transition-all flex flex-col gap-4 relative overflow-hidden"
+                className={`group p-5 rounded-xl border cursor-pointer transition-all flex flex-col gap-4 relative overflow-hidden ${cardStyle}`}
               >
-                {score > 0 && (
-                  <div className="absolute top-0 right-0 w-16 h-16 overflow-hidden">
-                    <div className={`absolute top-2 -right-6 w-24 text-[10px] font-bold uppercase tracking-wider text-center py-1 rotate-45 border-y ${statusColor}`}>
-                      {statusText}
-                    </div>
-                  </div>
-                )}
-                
+
                 <div className="flex items-center gap-3 pr-6">
                   <div className={`p-2 rounded-lg ${iconColor}`}>
                     <Package size={18} />
@@ -73,7 +62,7 @@ export function AllWorkPackages({ nodes, onNodeSelect, watchlist = [], setWatchl
                       setWatchlist(isWatched ? watchlist.filter(id => id !== wp.id) : [...watchlist, wp.id]);
                     }
                   }}
-                  className={`absolute bottom-4 right-4 p-1.5 rounded-full transition-colors z-10 hover:bg-white/10 ${isWatched ? 'text-yellow-400' : 'text-gray-500 hover:text-gray-300'}`}
+                  className={`absolute top-4 right-4 p-1.5 rounded-full transition-colors z-10 hover:bg-white/10 ${isWatched ? 'text-yellow-400' : 'text-gray-500 hover:text-gray-300'}`}
                 >
                   <Star size={16} fill={isWatched ? 'currentColor' : 'none'} />
                 </button>

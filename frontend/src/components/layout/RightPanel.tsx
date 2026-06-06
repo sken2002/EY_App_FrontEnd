@@ -427,7 +427,7 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
                     {selectedNode.data.metrics?.supplierCount === undefined && (
                       <li className="flex items-start gap-2 text-[11px] text-amber-200/70">
                         <span className="mt-0.5 w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0"></span>
-                        Supplier compliance scores are outdated by >30 days.
+                        Supplier compliance scores are outdated by &gt;30 days.
                       </li>
                     )}
                     {(selectedNode.data.metrics?.cpi !== undefined && selectedNode.data.metrics?.supplierCount !== undefined) && (

@@ -265,10 +265,10 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
   const isSimulating = levers.some(l => l.currentValue !== l.simulatedValue);
 
   return (
-    <aside className="flex w-[380px] shrink-0 flex-col border-l border-white/10 bg-[#0f0f15]">
+    <aside className="flex w-[380px] shrink-0 flex-col border-l border-white/5 bg-[#0a0a0f]/60 backdrop-blur-2xl">
       
       {/* Header */}
-      <div className="flex flex-col border-b border-white/10 p-5 bg-emerald-900/10">
+      <div className="flex flex-col border-b border-white/5 p-6 bg-emerald-900/5">
         <div className="flex items-center gap-3 mb-3">
           <div className={`relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${isSimulating ? 'bg-amber-500/20 text-amber-400' : 'bg-emerald-500/20 text-emerald-400'}`}>
             <Activity size={20} />
@@ -297,19 +297,18 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-white/10 px-2 pt-2 bg-black/20">
+      <div className="flex border-b border-white/5 bg-white/[0.02]">
         <button 
           onClick={() => setActiveTab('layers')}
-          className={`flex items-center gap-2 border-b-2 px-4 py-2 text-sm font-medium transition-colors ${activeTab === 'layers' ? 'border-emerald-500 text-emerald-400' : 'border-transparent text-gray-500 hover:text-gray-300'}`}
+          className={`flex-1 py-3 text-[11px] font-semibold tracking-wider uppercase transition-colors ${activeTab === 'layers' ? 'border-b-2 border-emerald-500 text-emerald-400' : 'text-gray-500 hover:text-white'}`}
         >
-          <Zap size={14} /> Risk Layers
+          Risk Stack
         </button>
         <button 
           onClick={() => setActiveTab('simulation')}
-          className={`flex items-center gap-2 border-b-2 px-4 py-2 text-sm font-medium transition-colors ${activeTab === 'simulation' ? 'border-amber-500 text-amber-400' : 'border-transparent text-gray-500 hover:text-gray-300'}`}
+          className={`flex-1 py-3 text-[11px] font-semibold tracking-wider uppercase transition-colors ${activeTab === 'simulation' ? 'border-b-2 border-emerald-500 text-emerald-400' : 'text-gray-500 hover:text-white'}`}
         >
-          <Activity size={14} /> Simulation
-          {isSimulating && <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />}
+          Mitigation Engine
         </button>
         <button 
           onClick={() => setActiveTab('trend')}
@@ -398,6 +397,27 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
                           <span className="text-[10px] text-gray-500 block mb-1">Recommended Action:</span>
                           <span className="text-[11px] text-emerald-400">{scen.shortTermActions[0]}</span>
                         </div>
+                        
+                        <details className="group mt-1 cursor-pointer">
+                          <summary className="text-[10px] uppercase font-semibold text-rose-300/80 hover:text-rose-300 select-none list-none flex items-center gap-1">
+                            <ArrowRight size={10} className="group-open:rotate-90 transition-transform" />
+                            View Scenario Rationale
+                          </summary>
+                          <div className="mt-2 pl-3 border-l-2 border-rose-500/20 space-y-2">
+                            <p className="text-[10px] text-gray-400 mb-1">The Scenario Engine predicted this pathway based on the following deterministic triggers:</p>
+                            <ul className="space-y-1.5">
+                              {Object.entries(state.detected).filter(([_, d]) => d.class === 'High' || d.class === 'Medium').map(([dim, data]) => (
+                                <li key={dim} className="text-[10px] text-rose-200">
+                                  <strong className="capitalize text-rose-300 mr-1">{dim.replace(/([A-Z])/g, ' $1').trim()}:</strong>
+                                  {data.drivers?.join(' AND ')}
+                                </li>
+                              ))}
+                              {Object.entries(state.detected).filter(([_, d]) => d.class === 'High' || d.class === 'Medium').length === 0 && (
+                                <li className="text-[10px] text-gray-500 italic">Prediction based on network topology inferences.</li>
+                              )}
+                            </ul>
+                          </div>
+                        </details>
                       </div>
                     ))}
                   </div>

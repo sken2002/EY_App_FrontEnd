@@ -21,9 +21,9 @@ export function LeftPanel({ riskIndex, activePillar, onPillarClick, globalFilter
   const severityLabel = cri.severity === 'critical' ? 'Critical' : cri.severity === 'high' ? 'High' : 'Medium';
 
   return (
-    <aside className="flex w-[280px] shrink-0 flex-col border-r border-white/10 bg-[#0f0f15] overflow-y-auto">
+    <aside className="flex w-[280px] shrink-0 flex-col border-r border-white/5 bg-[#0a0a0f]/60 backdrop-blur-2xl overflow-y-auto">
       {/* CRI Header */}
-      <div className="border-b border-white/10 p-5">
+      <div className="border-b border-white/5 p-6">
         <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-400">Composite Risk Index</h2>
         <div className="mt-3 flex items-end gap-3">
           <div className={`text-4xl font-bold tracking-tight ${color}`}>
@@ -37,10 +37,10 @@ export function LeftPanel({ riskIndex, activePillar, onPillarClick, globalFilter
         </div>
         
         {/* Data Quality Confidence Badge */}
-        <div className="mt-3 flex items-center gap-2 rounded-lg bg-white/5 px-3 py-2">
-          <Shield size={14} className="text-blue-400" />
+        <div className="mt-4 flex items-center gap-3 rounded-xl bg-white/5 border border-white/5 p-3 shadow-sm">
+          <Shield size={16} className="text-blue-400 opacity-80" />
           <div className="flex-1">
-            <div className="text-xs text-gray-400">Data Confidence</div>
+            <div className="text-[10px] uppercase tracking-wider text-gray-500 font-semibold mb-1">Data Confidence</div>
             <div className="flex items-center gap-2">
               <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-black/50">
                 <div 
@@ -60,23 +60,25 @@ export function LeftPanel({ riskIndex, activePillar, onPillarClick, globalFilter
       </div>
 
       {/* 6-Dimension Risk Cards (Removed due to redundancy with PortfolioView) */}
-      <div className="flex flex-col gap-4 p-5">
-        <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-400">Control Center</h3>
+      <div className="flex flex-col gap-6 p-6">
+        <h3 className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Control Center</h3>
         
         {/* Watchlist Section */}
         <div className="flex flex-col gap-2">
           <div className="text-xs text-gray-500 mb-1">My Watchlist</div>
           {[
-            { id: 'wp-5', label: 'WP-0005: Documentation' },
-            { id: 'wp-1', label: 'WP-0001: Foundations' }
+            { id: 'WP-0005', label: 'WP-0005: Documentation' },
+            { id: 'WP-0001', label: 'WP-0001: Foundations' }
           ].map((wp) => (
             <div 
               key={wp.id} 
               onClick={() => onWatchlistClick && onWatchlistClick(wp.id)}
-              className="flex items-center gap-2 p-2 rounded bg-white/5 border border-white/10 hover:bg-white/10 cursor-pointer transition-colors"
+              className="group flex items-center gap-3 p-2.5 rounded-lg bg-white/[0.02] border border-white/5 hover:bg-white/[0.06] hover:border-white/10 cursor-pointer transition-all"
             >
-              <Shield size={12} className="text-rose-400" />
-              <span className="text-xs text-gray-300 truncate">{wp.label}</span>
+              <div className="p-1.5 rounded-md bg-rose-500/10 text-rose-400 group-hover:bg-rose-500/20 group-hover:scale-110 transition-transform">
+                <Shield size={12} />
+              </div>
+              <span className="text-xs font-medium text-gray-300 group-hover:text-white truncate transition-colors">{wp.label}</span>
             </div>
           ))}
         </div>

@@ -27,13 +27,13 @@ export function AllWorkPackages({ nodes, onNodeSelect, watchlist = [], setWatchl
 
             if (score >= 60) {
               iconColor = 'bg-rose-500/10 text-rose-400';
-              cardStyle = 'border-rose-500/20 bg-rose-500/5 hover:bg-rose-500/10 hover:border-rose-500/40 shadow-[inset_0_1px_0_0_rgba(244,63,94,0.1),0_0_20px_rgba(244,63,94,0.05)]';
+              cardStyle = 'border-rose-500/30 bg-white/[0.02] hover:bg-white/[0.06] hover:border-rose-500/50 shadow-[0_0_25px_rgba(244,63,94,0.15)]';
             } else if (score >= 40) {
               iconColor = 'bg-amber-500/10 text-amber-400';
-              cardStyle = 'border-amber-500/20 bg-amber-500/5 hover:bg-amber-500/10 hover:border-amber-500/40 shadow-[inset_0_1px_0_0_rgba(245,158,11,0.1),0_0_20px_rgba(245,158,11,0.05)]';
+              cardStyle = 'border-amber-500/30 bg-white/[0.02] hover:bg-white/[0.06] hover:border-amber-500/50 shadow-[0_0_25px_rgba(245,158,11,0.15)]';
             } else if (score > 0) {
               iconColor = 'bg-emerald-500/10 text-emerald-400';
-              cardStyle = 'border-emerald-500/20 bg-emerald-500/5 hover:bg-emerald-500/10 hover:border-emerald-500/40 shadow-[inset_0_1px_0_0_rgba(16,185,129,0.1),0_0_20px_rgba(16,185,129,0.05)]';
+              cardStyle = 'border-emerald-500/30 bg-white/[0.02] hover:bg-white/[0.06] hover:border-emerald-500/50 shadow-[0_0_25px_rgba(16,185,129,0.15)]';
             }
 
             const isWatched = watchlist.includes(wp.id);

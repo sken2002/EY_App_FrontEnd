@@ -8,6 +8,45 @@ import { Info } from 'lucide-react';
 import { WorkPackageNode } from './WorkPackageNode';
 import { ContractNode } from './ContractNode';
 import { MilestoneNode } from './MilestoneNode';
+import dagre from 'dagre';
+
+const dagreGraph = new dagre.graphlib.Graph();
+dagreGraph.setDefaultEdgeLabel(() => ({}));
+
+const getLayoutedElements = (nodes: any[], edges: any[], direction = 'TB') => {
+  const isHorizontal = direction === 'LR';
+  dagreGraph.setGraph({ rankdir: direction });
+
+  nodes.forEach((node) => {
+    // Estimate node size based on type
+    const width = node.type === 'workPackage' ? 250 : 200;
+    const height = node.type === 'workPackage' ? 100 : 80;
+    dagreGraph.setNode(node.id, { width, height });
+  });
+
+  edges.forEach((edge) => {
+    dagreGraph.setEdge(edge.source, edge.target);
+  });
+
+  dagre.layout(dagreGraph);
+
+  const newNodes = nodes.map((node) => {
+    const nodeWithPosition = dagreGraph.node(node.id);
+    const newNode = {
+      ...node,
+      targetPosition: isHorizontal ? 'left' : 'top',
+      sourcePosition: isHorizontal ? 'right' : 'bottom',
+      // Offset by half dimensions since dagre positions are center-based
+      position: {
+        x: nodeWithPosition.x - (node.type === 'workPackage' ? 125 : 100),
+        y: nodeWithPosition.y - (node.type === 'workPackage' ? 50 : 40),
+      },
+    };
+    return newNode;
+  });
+
+  return { nodes: newNodes, edges };
+};
 
 interface EntityGraphProps {
   nodes: any[];
@@ -27,15 +66,25 @@ export function EntityGraph({ nodes: initialNodes, edges: initialEdges, centerId
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
 
   useEffect(() => {
-    setNodes(initialNodes.map(n => ({
+    const initializedNodes = initialNodes.map(n => ({
       ...n,
       data: { ...n.data, isSelected: n.id === centerId }
-    })));
-    setEdges(initialEdges.map(e => ({
+    }));
+    
+    const initializedEdges = initialEdges.map(e => ({
       ...e,
       animated: true,
       style: { ...e.style, strokeWidth: 2 },
-    })));
+    }));
+
+    const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
+      initializedNodes,
+      initializedEdges,
+      'TB'
+    );
+
+    setNodes(layoutedNodes);
+    setEdges(layoutedEdges);
   }, [initialNodes, initialEdges, centerId, setNodes, setEdges]);
 
   const centerNode = initialNodes.find(n => n.id === centerId);

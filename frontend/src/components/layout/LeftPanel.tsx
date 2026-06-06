@@ -21,7 +21,7 @@ export function LeftPanel({ riskIndex, activePillar, onPillarClick, globalFilter
   const severityLabel = cri.severity === 'critical' ? 'Critical' : cri.severity === 'high' ? 'High' : 'Medium';
 
   return (
-    <aside className="flex w-[280px] shrink-0 flex-col border-r border-white/5 bg-[#0a0a0f]/60 backdrop-blur-2xl overflow-y-auto">
+    <aside className="flex w-[280px] shrink-0 flex-col border-r border-white/5 bg-[#18181b]/80 backdrop-blur-2xl overflow-y-auto">
       {/* CRI Header */}
       <div className="border-b border-white/5 p-6">
         <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-400">Composite Risk Index</h2>

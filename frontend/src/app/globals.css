@@ -2,8 +2,8 @@
 @import "@xyflow/react/dist/style.css";
 
 :root {
-  --background: #0a0a0f;
-  --foreground: #ededed;
+  --background: #18181b;
+  --foreground: #f4f4f5;
 }
 
 @theme inline {

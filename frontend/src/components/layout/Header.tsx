@@ -7,12 +7,12 @@ interface HeaderProps {
 
 export function Header({ meta }: HeaderProps) {
   return (
-    <header className="flex h-14 items-center justify-between border-b border-white/10 bg-[#0f0f15] px-6">
+    <header className="flex h-14 items-center justify-between border-b border-white/5 bg-[#18181b] px-6">
       <div className="flex items-center gap-3">
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/20 text-emerald-400">
-          <Activity size={18} />
+        <div className="flex items-center">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/3/34/EY_logo_2019.svg" alt="EY Logo" className="h-8 w-auto mr-3 brightness-0 invert" />
+          <h1 className="text-lg font-bold tracking-tight text-white border-l border-white/20 pl-3">EY Spider</h1>
         </div>
-        <h1 className="text-lg font-semibold tracking-tight text-white">Project Spider</h1>
         <span className="rounded-full bg-white/10 px-2 py-0.5 text-xs font-medium text-gray-400">
           EY
         </span>

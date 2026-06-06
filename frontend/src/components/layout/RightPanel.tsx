@@ -189,7 +189,7 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
 
   if (!selectedNode) {
     return (
-      <aside className="flex w-[360px] shrink-0 flex-col items-center justify-center border-l border-white/10 bg-[#0f0f15] p-8 text-center">
+      <aside className="flex w-[360px] shrink-0 flex-col items-center justify-center border-l border-white/10 bg-[#18181b]/80 p-8 text-center">
         <Bot size={32} className="mb-4 text-white/20" />
         <h3 className="text-sm font-medium text-white/60">No Entity Selected</h3>
         <p className="mt-2 text-xs text-white/40">Select a work package, contract, or milestone to view details.</p>
@@ -203,7 +203,7 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
     const isNonCompliant = selectedNode.data.metrics?.complianceStatus === 'Non-Compliant';
     
     return (
-      <aside className="flex w-[380px] shrink-0 flex-col border-l border-white/10 bg-[#0f0f15] p-6 overflow-y-auto">
+      <aside className="flex w-[380px] shrink-0 flex-col border-l border-white/10 bg-[#18181b]/80 p-6 overflow-y-auto">
         <div className="flex items-center gap-3 mb-6 pb-4 border-b border-white/10">
           <div className={`p-3 rounded-xl ${selectedNode.type === 'contract' ? 'bg-blue-500/20 text-blue-400' : 'bg-emerald-500/20 text-emerald-400'}`}>
             <Info size={24} />
@@ -259,7 +259,7 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
   const isSimulating = levers.some(l => l.currentValue !== l.simulatedValue);
 
   return (
-    <aside className="flex w-[380px] shrink-0 flex-col border-l border-white/5 bg-[#0a0a0f]/60 backdrop-blur-2xl">
+    <aside className="flex w-[380px] shrink-0 flex-col border-l border-white/5 bg-[#18181b]/80 backdrop-blur-2xl">
       
       {/* Header */}
       <div className="flex flex-col border-b border-white/5 p-6 bg-emerald-900/5">

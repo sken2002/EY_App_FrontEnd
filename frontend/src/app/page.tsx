@@ -5,6 +5,7 @@ import { LeftPanel } from '@/components/layout/LeftPanel';
 import { CenterCanvas } from '@/components/canvas/CenterCanvas';
 import { RightPanel } from '@/components/layout/RightPanel';
 import { Header } from '@/components/layout/Header';
+import { AllWorkPackages } from '@/components/views/AllWorkPackages';
 import { useState, useCallback, useMemo } from 'react';
 import { DimensionKey } from '@/lib/types';
 
@@ -40,7 +41,7 @@ export default function Home() {
   }, [data?.nodes, globalFilters]);
 
   // Top-level tabs for layout simplification
-  const [activeTopTab, setActiveTopTab] = useState<'scorecard' | 'topology' | 'pipeline'>('scorecard');
+  const [activeTopTab, setActiveTopTab] = useState<'scorecard' | 'all-packages' | 'topology' | 'pipeline'>('scorecard');
 
   // Drill-down navigation state
   const [drill, setDrill] = useState<DrillState>({
@@ -106,6 +107,12 @@ export default function Home() {
           Portfolio Scorecard
         </button>
         <button 
+          onClick={() => setActiveTopTab('all-packages')}
+          className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors ${activeTopTab === 'all-packages' ? 'border-emerald-500 text-emerald-400' : 'border-transparent text-gray-400 hover:text-white'}`}
+        >
+          All Work Packages
+        </button>
+        <button 
           onClick={() => { 
             setActiveTopTab('topology'); 
             const firstWp = data.nodes.find(n => n.type === 'workPackage')?.id;
@@ -146,20 +153,30 @@ export default function Home() {
               onWatchlistClick={drillIntoEntity}
             />
 
-            {/* Center Panel: Progressive Drill-Down Canvas (Flex) */}
-            <CenterCanvas 
-              drill={drill} 
-              nodes={filteredNodes} 
-              edges={data.edges} 
-              riskIndex={data.riskIndex}
-              globalFilters={globalFilters}
-              onDrillIntoPortfolio={() => setDrill({ level: 'portfolio', activePillar: null, activeEntityId: null })}
-              onDrillIntoPillar={drillIntoPillar}
-              onDrillIntoEntity={drillIntoEntity}
-              onNavigateBack={navigateBack}
-              onNodeClick={selectSubNode}
-            />
-
+            {/* Main Content Area */}
+            {activeTopTab === 'all-packages' ? (
+              <AllWorkPackages 
+                nodes={data.nodes} 
+                onNodeSelect={(id) => {
+                  setDrill({ level: 'entity', activePillar: null, activeEntityId: id });
+                  setActiveTopTab('topology');
+                }} 
+              />
+            ) : (
+              <CenterCanvas 
+                drill={drill} 
+                nodes={filteredNodes} 
+                edges={data.edges} 
+                riskIndex={data.riskIndex}
+                globalFilters={globalFilters}
+                onDrillIntoPortfolio={() => setDrill({ level: 'portfolio', activePillar: null, activeEntityId: null })}
+                onDrillIntoPillar={drillIntoPillar}
+                onDrillIntoEntity={drillIntoEntity}
+                onNavigateBack={navigateBack}
+                onNodeClick={selectSubNode}
+              />
+            )}
+            
             {/* Right Panel: Risk Engine Simulation (380px) - Only show in Topology */}
             {activeTopTab === 'topology' && (
               <RightPanel 

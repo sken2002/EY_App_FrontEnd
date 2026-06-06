@@ -73,7 +73,7 @@ export function AllWorkPackages({ nodes, onNodeSelect, watchlist = [], setWatchl
                       setWatchlist(isWatched ? watchlist.filter(id => id !== wp.id) : [...watchlist, wp.id]);
                     }
                   }}
-                  className={`absolute top-4 right-4 p-1.5 rounded-full transition-colors z-10 hover:bg-white/10 ${isWatched ? 'text-yellow-400' : 'text-gray-500 hover:text-gray-300'}`}
+                  className={`absolute bottom-4 right-4 p-1.5 rounded-full transition-colors z-10 hover:bg-white/10 ${isWatched ? 'text-yellow-400' : 'text-gray-500 hover:text-gray-300'}`}
                 >
                   <Star size={16} fill={isWatched ? 'currentColor' : 'none'} />
                 </button>
@@ -86,9 +86,9 @@ export function AllWorkPackages({ nodes, onNodeSelect, watchlist = [], setWatchl
                     </div>
                   </div>
                   <div>
-                    <div className="text-[10px] text-gray-500 uppercase tracking-wider">Progress</div>
-                    <div className="text-xs font-medium text-gray-300">
-                      {Math.round((wp.data.metrics?.completionPercentage || 0) * 100)}%
+                    <div className="text-[10px] text-gray-500 uppercase tracking-wider">CRI Score</div>
+                    <div className={`text-xs font-bold ${score >= 60 ? 'text-rose-400' : score >= 40 ? 'text-amber-400' : 'text-emerald-400'}`}>
+                      {Math.round(score)} / 100
                     </div>
                   </div>
                 </div>

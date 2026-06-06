@@ -2,6 +2,19 @@ import { DimensionKey, TrendDirection, SpiderNode, SpiderEdge } from '../types';
 
 export type RiskClass = 'High' | 'Medium' | 'Low' | 'No Data';
 
+export interface ScenarioResult {
+  id: string;
+  name: string;
+  description: string;
+  score: number;             // 0.0 to 1.0 representing probability/confidence
+  confidence: 'High' | 'Medium' | 'Low';
+  residualScore: number;
+  residualClass: 'High' | 'Medium' | 'Low';
+  shortTermActions: string[];
+  midTermActions: string[];
+  longTermActions: string[];
+}
+
 export interface SimulationLever {
   id: string;                    // e.g., 'cpi', 'supplierCount', 'completionPct'
   label: string;                 // e.g., "CPI", "Supplier Count"
@@ -47,6 +60,7 @@ export interface WPRiskState {
     impactedNodeIds: string[];
     totalExposure: number;
   };
+  activeScenarios: ScenarioResult[];
 }
 
 export interface SimulationResult {

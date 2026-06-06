@@ -149,6 +149,16 @@ export function CenterCanvas({
         }
       }
 
+      let isDimmed = false;
+      const p = globalFilters?.persona;
+      if (p === 'Project Manager (IT)') {
+        // Dim financial/supplier focused nodes
+        isDimmed = !(n.data.dimensions?.schedule?.class === 'High' || n.data.dimensions?.operational?.class === 'High' || isCenter);
+      } else if (p === 'Risk Auditor') {
+        // Dim operational/schedule nodes, focus on supplier/financial
+        isDimmed = !(n.data.dimensions?.supplier?.class === 'High' || n.data.dimensions?.costFinancial?.class === 'High' || isCenter);
+      }
+
       return {
         ...n,
         position: { x, y },
@@ -157,6 +167,7 @@ export function CenterCanvas({
           isSelected: isCenter,
           isInBlast: false,
           isTrigger: isCenter,
+          isDimmed
         }
       };
     });

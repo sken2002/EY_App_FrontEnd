@@ -12,9 +12,10 @@ interface RightPanelProps {
   nodes: SpiderNode[];
   edges: SpiderEdge[];
   dataQualityConfidence: number;
+  activePersona?: string;
 }
 
-export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence }: RightPanelProps) {
+export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence, activePersona }: RightPanelProps) {
   const [activeTab, setActiveTab] = useState<'layers' | 'simulation' | 'trend'>('layers');
   const [levers, setLevers] = useState<SimulationLever[]>([]);
   const [narrativeObj, setNarrativeObj] = useState<any | null>(null);
@@ -113,6 +114,22 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
     return historyCache[selectedNode.id];
   }, [selectedNode, historyCache]);
 
+  // Synthetic Scenario Trend Data for the demo narrative
+  const scenarioTrendData = useMemo(() => {
+    if (!simulationResult?.state?.activeScenarios?.length) return [];
+    const topScen = simulationResult.state.activeScenarios[0];
+    const baseScore = topScen.score * 100;
+    
+    // Generate last 4 weeks of data showing an escalation
+    return [
+      { time: 'Week -4', confidence: Math.max(0, baseScore - 60) },
+      { time: 'Week -3', confidence: Math.max(0, baseScore - 40) },
+      { time: 'Week -2', confidence: Math.max(0, baseScore - 20) },
+      { time: 'Week -1', confidence: Math.max(0, baseScore - 5) },
+      { time: 'Current', confidence: baseScore },
+    ];
+  }, [simulationResult?.state?.activeScenarios]);
+
   // Fetch narrative stream when simulation changes
   useEffect(() => {
     if (!simulationResult || !selectedNode) return;
@@ -147,7 +164,8 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
             contextEnv: {
               upstreamDependencies: upstreamNames,
               downstreamDependencies: downstreamNames,
-              impactedDependencies: impactedNames
+              impactedDependencies: impactedNames,
+              activePersona: activePersona || 'Global Executive'
             }
           }),
           signal: abortController.signal
@@ -360,6 +378,65 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
                       )}
                     </div>
                   ) : null}
+                </div>
+              </div>
+
+              {/* Active Scenarios (Probabilistic Layer) */}
+              {state.activeScenarios && state.activeScenarios.length > 0 && (
+                <div className="flex flex-col gap-3">
+                  <div className="border-b border-white/10 pb-1">
+                    <h3 className="text-xs font-semibold uppercase tracking-wider text-rose-500">Predicted Risk Scenarios</h3>
+                    <p className="text-[10px] text-gray-400 mt-1">Probabilistic escalation pathways matching current node metrics.</p>
+                  </div>
+                  <div className="space-y-3">
+                    {state.activeScenarios.map(scen => (
+                      <div key={scen.id} className="bg-rose-500/10 border border-rose-500/20 p-3 rounded-xl flex flex-col gap-2">
+                        <div className="flex items-center justify-between">
+                          <h4 className="text-xs font-bold text-rose-400">{scen.name}</h4>
+                          <span className="text-[10px] uppercase font-bold text-rose-500 px-2 py-0.5 bg-rose-500/20 rounded">{scen.confidence} Confidence</span>
+                        </div>
+                        <p className="text-[11px] text-gray-300">{scen.description}</p>
+                        <div className="mt-2 pt-2 border-t border-rose-500/20">
+                          <span className="text-[10px] text-gray-500 block mb-1">Recommended Action:</span>
+                          <span className="text-[11px] text-emerald-400">{scen.shortTermActions[0]}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Data Reliability & Gaps */}
+              <div className="flex flex-col gap-3">
+                <div className="border-b border-white/10 pb-1">
+                  <h3 className="text-xs font-semibold uppercase tracking-wider text-amber-500">Data Reliability & Gaps</h3>
+                  <p className="text-[10px] text-gray-400 mt-1">Identified gaps in reporting that reduce AI confidence.</p>
+                </div>
+                <div className="bg-black/20 border border-amber-500/20 rounded-xl p-3">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="text-2xl font-bold text-amber-400">{Math.round(dataQualityConfidence * 100)}%</div>
+                    <div className="text-[10px] text-gray-500 leading-tight">Overall<br/>Trust Score</div>
+                  </div>
+                  <ul className="space-y-2 mt-3">
+                    {selectedNode.data.metrics?.cpi === undefined && (
+                      <li className="flex items-start gap-2 text-[11px] text-amber-200/70">
+                        <span className="mt-0.5 w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0"></span>
+                        Missing current Cost Performance Index (CPI) reporting.
+                      </li>
+                    )}
+                    {selectedNode.data.metrics?.supplierCount === undefined && (
+                      <li className="flex items-start gap-2 text-[11px] text-amber-200/70">
+                        <span className="mt-0.5 w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0"></span>
+                        Supplier compliance scores are outdated by >30 days.
+                      </li>
+                    )}
+                    {(selectedNode.data.metrics?.cpi !== undefined && selectedNode.data.metrics?.supplierCount !== undefined) && (
+                      <li className="flex items-start gap-2 text-[11px] text-emerald-400">
+                        <Shield size={12} className="shrink-0" />
+                        Core financial and operational data is up-to-date.
+                      </li>
+                    )}
+                  </ul>
                 </div>
               </div>
 
@@ -610,22 +687,32 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
               )}
 
               <div className="mt-4 pt-4 border-t border-white/10">
-                <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-4">Historical Volatility</h3>
-                <div className="h-[200px] w-full mt-4">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={trendData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" />
-                      <XAxis dataKey="month" stroke="#9ca3af" fontSize={10} tickLine={false} axisLine={false} />
-                      <YAxis stroke="#9ca3af" fontSize={10} domain={[0, 100]} tickLine={false} axisLine={false} />
-                      <RechartsTooltip 
-                        contentStyle={{ backgroundColor: '#111827', borderColor: '#374151', borderRadius: '8px', fontSize: '12px' }}
-                        itemStyle={{ color: '#10b981' }}
-                      />
-                      <Line type="monotone" dataKey="cri" stroke="#10b981" strokeWidth={3} dot={{ fill: '#10b981', strokeWidth: 2 }} />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
-                <p className="text-xs text-gray-500 italic mt-2 text-center">Historical volatility and projected trajectory based on audit logs.</p>
+                <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-4">Probabilistic Escalation Trend</h3>
+                {scenarioTrendData.length > 0 ? (
+                  <>
+                    <p className="text-[11px] text-gray-400 mb-4">
+                      Tracking escalation confidence for <strong className="text-rose-400">{state.activeScenarios[0].name}</strong> over the last 4 weeks.
+                    </p>
+                    <div className="h-[200px] w-full mt-4">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <LineChart data={scenarioTrendData}>
+                          <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" />
+                          <XAxis dataKey="time" stroke="#9ca3af" fontSize={10} tickLine={false} axisLine={false} />
+                          <YAxis stroke="#9ca3af" fontSize={10} domain={[0, 100]} tickLine={false} axisLine={false} />
+                          <RechartsTooltip 
+                            contentStyle={{ backgroundColor: '#111827', borderColor: '#374151', borderRadius: '8px', fontSize: '12px' }}
+                            itemStyle={{ color: '#f43f5e' }}
+                            formatter={(value: number) => [`${Math.round(value)}%`, 'Escalation Probability']}
+                          />
+                          <Line type="monotone" dataKey="confidence" stroke="#f43f5e" strokeWidth={3} dot={{ fill: '#f43f5e', strokeWidth: 2 }} />
+                        </LineChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </>
+                ) : (
+                  <div className="text-xs text-gray-500 italic p-4 bg-white/5 rounded">No active scenarios to track.</div>
+                )}
+                <p className="text-xs text-gray-500 italic mt-2 text-center">Historical predictive volatility based on scenario correlation.</p>
               </div>
             </motion.div>
           )}

@@ -16,6 +16,7 @@ import {
 import { propagateRisk } from './propagation';
 import { detectMitigations } from './mitigation';
 import { computeResidualRisk, computeCRI } from './residual';
+import { runScenarioEngine } from './scenarios';
 
 // Helper: Graph traversal to find blast radius (downstream nodes)
 function computeBlastRadius(startNodeId: string, edges: SpiderEdge[], maxDepth = 3): string[] {
@@ -132,7 +133,18 @@ export function simulateWPRisk(
     }
   }
 
-  // 7. ASSEMBLE STATE
+  // 7. LAYER 9: SCENARIO MODELING
+  const activeScenarios = runScenarioEngine(targetNode, {
+    detected,
+    propagated,
+    mitigations,
+    residual,
+    cri,
+    blastRadius: { impactedNodeIds, totalExposure },
+    activeScenarios: []
+  });
+
+  // 8. ASSEMBLE STATE
   const state: WPRiskState = {
     detected,
     propagated,
@@ -142,7 +154,8 @@ export function simulateWPRisk(
     blastRadius: {
       impactedNodeIds,
       totalExposure
-    }
+    },
+    activeScenarios
   };
 
   return {

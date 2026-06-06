@@ -2,7 +2,7 @@ import { Handle, Position } from '@xyflow/react';
 import { SpiderNodeData } from '@/lib/types';
 import { Briefcase, AlertCircle } from 'lucide-react';
 
-export function WorkPackageNode({ data }: { data: SpiderNodeData & { isSelected?: boolean, isInBlast?: boolean, isTrigger?: boolean } }) {
+export function WorkPackageNode({ data }: { data: SpiderNodeData & { isSelected?: boolean, isInBlast?: boolean, isTrigger?: boolean, isDimmed?: boolean } }) {
   const isCritical = data.severity === 'critical';
   const criScore = data.riskScore || 0;
   
@@ -10,7 +10,8 @@ export function WorkPackageNode({ data }: { data: SpiderNodeData & { isSelected?
     <div className={`relative w-[320px] rounded-xl border bg-black/80 p-5 shadow-2xl backdrop-blur-md transition-all
       ${data.isSelected ? 'ring-2 ring-emerald-500 scale-[1.02] shadow-emerald-500/20' : ''}
       ${data.isTrigger ? 'border-red-500 shadow-red-500/20' : 
-        isCritical ? 'border-orange-500/50' : 'border-emerald-500/30'}`}>
+        isCritical ? 'border-orange-500/50' : 'border-emerald-500/30'}
+      ${data.isDimmed ? 'opacity-30 grayscale hover:opacity-100 hover:grayscale-0' : 'opacity-100'}`}>
       
       {/* Node styling effects */}
       {data.isTrigger && (

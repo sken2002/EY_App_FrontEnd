@@ -2,14 +2,15 @@ import { Handle, Position } from '@xyflow/react';
 import { SpiderNodeData } from '@/lib/types';
 import { FileText, ShieldAlert } from 'lucide-react';
 
-export function ContractNode({ data }: { data: SpiderNodeData & { isSelected?: boolean, isInBlast?: boolean, isTrigger?: boolean } }) {
+export function ContractNode({ data }: { data: SpiderNodeData & { isSelected?: boolean, isInBlast?: boolean, isTrigger?: boolean, isDimmed?: boolean } }) {
   const isNonCompliant = data.metrics.complianceStatus === 'Non-Compliant';
 
   return (
     <div className={`relative flex flex-col gap-2 rounded-lg bg-[#0a0a0f]/95 p-3 min-w-[160px] border backdrop-blur shadow-xl transition-all
       ${data.isSelected ? 'ring-2 ring-white scale-105' : ''}
       ${data.isTrigger ? 'border-red-500/80 shadow-red-500/20' : 
-        isNonCompliant ? 'border-orange-500/50' : 'border-blue-500/20'}`}>
+        isNonCompliant ? 'border-orange-500/50' : 'border-blue-500/20'}
+      ${data.isDimmed ? 'opacity-30 grayscale hover:opacity-100 hover:grayscale-0' : 'opacity-100'}`}>
       
       {data.isTrigger && (
         <div className="absolute -inset-1 -z-10 animate-pulse rounded-lg bg-red-500/20 blur-md" />

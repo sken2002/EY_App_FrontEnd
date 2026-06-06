@@ -144,6 +144,7 @@ export default function Home() {
               onPillarClick={drillIntoPillar}
               globalFilters={globalFilters}
               setGlobalFilters={setGlobalFilters}
+              onWatchlistClick={drillIntoEntity}
             />
 
             {/* Center Panel: Progressive Drill-Down Canvas (Flex) */}
@@ -167,6 +168,7 @@ export default function Home() {
                 nodes={filteredNodes}
                 edges={data.edges}
                 dataQualityConfidence={data.riskIndex.dataQuality.confidenceModifier}
+                activePersona={globalFilters.persona}
               />
             )}
           </>

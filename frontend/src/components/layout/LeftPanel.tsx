@@ -8,11 +8,12 @@ interface LeftPanelProps {
   onPillarClick: (pillar: DimensionKey) => void;
   globalFilters?: { criticalOnly: boolean; highExposure: boolean; persona: string };
   setGlobalFilters?: React.Dispatch<React.SetStateAction<{ criticalOnly: boolean; highExposure: boolean; persona: string }>>;
+  onWatchlistClick?: (id: string) => void;
 }
 
 const DIMENSION_KEYS: DimensionKey[] = ['costFinancial', 'cashflow', 'schedule', 'operational', 'supplier'];
 
-export function LeftPanel({ riskIndex, activePillar, onPillarClick, globalFilters, setGlobalFilters }: LeftPanelProps) {
+export function LeftPanel({ riskIndex, activePillar, onPillarClick, globalFilters, setGlobalFilters, onWatchlistClick }: LeftPanelProps) {
   const cri = riskIndex.compositeRiskIndex;
   const dq = riskIndex.dataQuality;
   
@@ -65,10 +66,17 @@ export function LeftPanel({ riskIndex, activePillar, onPillarClick, globalFilter
         {/* Watchlist Section */}
         <div className="flex flex-col gap-2">
           <div className="text-xs text-gray-500 mb-1">My Watchlist</div>
-          {['WP-014 (Civil)', 'WP-042 (IT Deploy)'].map((wp) => (
-            <div key={wp} className="flex items-center gap-2 p-2 rounded bg-white/5 border border-white/10 hover:bg-white/10 cursor-pointer transition-colors">
+          {[
+            { id: 'wp-5', label: 'WP-0005: Documentation' },
+            { id: 'wp-1', label: 'WP-0001: Foundations' }
+          ].map((wp) => (
+            <div 
+              key={wp.id} 
+              onClick={() => onWatchlistClick && onWatchlistClick(wp.id)}
+              className="flex items-center gap-2 p-2 rounded bg-white/5 border border-white/10 hover:bg-white/10 cursor-pointer transition-colors"
+            >
               <Shield size={12} className="text-rose-400" />
-              <span className="text-xs text-gray-300">{wp}</span>
+              <span className="text-xs text-gray-300 truncate">{wp.label}</span>
             </div>
           ))}
         </div>

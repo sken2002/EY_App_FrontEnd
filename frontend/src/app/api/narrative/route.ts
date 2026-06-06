@@ -205,7 +205,12 @@ export async function POST(req: Request) {
           impacted_node_ids: state.blastRadius?.impactedNodeIds ?? [],
           total_financial_exposure: state.blastRadius?.totalExposure ?? 0
         }
-      }
+      },
+      active_scenarios: state.activeScenarios?.map(s => ({
+        scenario_name: s.name,
+        confidence: s.confidence,
+        description: s.description
+      })) || []
     };
 
     if (!process.env.GOOGLE_GENERATIVE_AI_API_KEY) {
@@ -215,10 +220,22 @@ export async function POST(req: Request) {
       });
     }
 
+    const activePersona = body.contextEnv?.activePersona || 'Global Executive';
+    
+    let personaInstruction = '';
+    if (activePersona === 'Project Manager (IT)') {
+      personaInstruction = "As an IT Project Manager, emphasize schedule blockers, resource reallocation, and operational bottlenecks. Focus deeply on the immediate downstream delivery impacts.";
+    } else if (activePersona === 'Risk Auditor') {
+      personaInstruction = "As a Risk Auditor, emphasize compliance gaps, supplier SLA violations, cost variances, and financial exposure. Scrutinize the data reliability.";
+    } else {
+      personaInstruction = "As a Global Executive, focus on the high-level financial 'blast radius', critical supply chain failures, and decisive executive actions.";
+    }
+
     const systemPrompt = `You are Project Spider's Chief Strategist AI.
 
 Your role:
-- Explain the risk output in clear, accessible, and highly professional language for EY Managers.
+- ${personaInstruction}
+- Explain the risk output in clear, accessible, and highly professional language.
 - Structure your insights with a natural "Situation -> Cause -> Action" flow.
 - Anchor your claims to the exact entities provided in the EXACT DETERMINISTIC PAYLOAD, but avoid overwhelming the user with too many dense statistics. Keep it intuitive and elegant.
 - ZERO generic buzzwords. ZERO management consulting fluff like "monitor situation" or "prioritize intervention".

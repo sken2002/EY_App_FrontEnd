@@ -146,6 +146,9 @@ export function CenterCanvas({
           x = 500;
           y = otherStartY + (currOther * 150);
           currOther++;
+        }
+      }
+
       return {
         ...n,
         position: { x, y },

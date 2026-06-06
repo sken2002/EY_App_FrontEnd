@@ -264,7 +264,7 @@ CRITICAL INSTRUCTION: You MUST return ONLY a single, valid JSON object exactly m
 
     const ai = new GoogleGenAI({ apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY });
     const result = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
+      model: 'gemini-3.5-flash',
       contents: strategistUserPrompt,
       config: {
         systemInstruction: systemPrompt,

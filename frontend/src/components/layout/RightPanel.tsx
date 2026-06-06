@@ -702,7 +702,7 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
                           <RechartsTooltip 
                             contentStyle={{ backgroundColor: '#111827', borderColor: '#374151', borderRadius: '8px', fontSize: '12px' }}
                             itemStyle={{ color: '#f43f5e' }}
-                            formatter={(value: number) => [`${Math.round(value)}%`, 'Escalation Probability']}
+                            formatter={(value: any) => [`${Math.round(Number(value) || 0)}%`, 'Escalation Probability']}
                           />
                           <Line type="monotone" dataKey="confidence" stroke="#f43f5e" strokeWidth={3} dot={{ fill: '#f43f5e', strokeWidth: 2 }} />
                         </LineChart>

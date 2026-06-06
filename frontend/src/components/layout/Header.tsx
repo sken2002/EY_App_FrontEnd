@@ -14,7 +14,7 @@ export function Header({ meta }: HeaderProps) {
         </div>
         <h1 className="text-lg font-semibold tracking-tight text-white">Project Spider</h1>
         <span className="rounded-full bg-white/10 px-2 py-0.5 text-xs font-medium text-gray-400">
-          v{meta?.version || '1.0'}
+          EY
         </span>
       </div>
 

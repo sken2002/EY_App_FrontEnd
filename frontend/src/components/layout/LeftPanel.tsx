@@ -35,28 +35,6 @@ export function LeftPanel({ riskIndex, activePillar, onPillarClick, globalFilter
           <div className={`h-2 w-2 rounded-full ${cri.severity === 'critical' ? 'bg-red-500' : cri.severity === 'high' ? 'bg-orange-500' : 'bg-emerald-500'} animate-pulse`} />
           <span className="text-sm font-medium text-white">{severityLabel} Posture</span>
         </div>
-        
-        {/* Data Quality Confidence Badge */}
-        <div className="mt-4 flex items-center gap-3 rounded-xl bg-white/5 border border-white/5 p-3 shadow-sm">
-          <Shield size={16} className="text-blue-400 opacity-80" />
-          <div className="flex-1">
-            <div className="text-[10px] uppercase tracking-wider text-gray-500 font-semibold mb-1">Data Confidence</div>
-            <div className="flex items-center gap-2">
-              <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-black/50">
-                <div 
-                  className="h-full rounded-full bg-blue-400 transition-all"
-                  style={{ width: `${dq.confidenceModifier * 100}%` }}
-                />
-              </div>
-              <span className="text-xs font-medium text-blue-400">{(dq.confidenceModifier * 100).toFixed(0)}%</span>
-            </div>
-          </div>
-        </div>
-        {dq.criticalIssues > 0 && (
-          <div className="mt-2 text-[10px] text-orange-400">
-            ⚠ {dq.totalIssues} quality issues ({dq.criticalIssues} critical)
-          </div>
-        )}
       </div>
 
       {/* 6-Dimension Risk Cards (Removed due to redundancy with PortfolioView) */}

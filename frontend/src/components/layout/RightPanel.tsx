@@ -129,69 +129,63 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
     ];
   }, [simulationResult?.state?.activeScenarios]);
 
-  // Fetch narrative stream when simulation changes
+  // Reset narrative state when node changes
   useEffect(() => {
+    setNarrativeObj(null);
+    setAgentState('idle');
+  }, [selectedNode?.id]);
+
+  const runSynthesis = async () => {
     if (!simulationResult || !selectedNode) return;
     
-    const abortController = new AbortController();
+    setAgentState('financial');
+    setNarrativeObj(null);
     
-    const fetchNarrative = async () => {
-      setAgentState('financial');
-      setNarrativeObj(null);
-      
-      // Simulate agent handoffs while backend processes
-      const t1 = setTimeout(() => setAgentState('operational'), 1500);
-      const t2 = setTimeout(() => setAgentState('strategist'), 3000);
-      
-      try {
-        // Gather rich context names instead of just IDs
-        const upstreamEdges = edges.filter(e => e.target === selectedNode.id);
-        const downstreamEdges = edges.filter(e => e.source === selectedNode.id);
-        const upstreamNames = upstreamEdges.map(e => nodes.find(n => n.id === e.source)?.data.label).filter(Boolean);
-        const downstreamNames = downstreamEdges.map(e => nodes.find(n => n.id === e.target)?.data.label).filter(Boolean);
-        const impactedNames = simulationResult.state.blastRadius?.impactedNodeIds?.map(id => nodes.find(n => n.id === id)?.data.label).filter(Boolean) || [];
+    // Simulate agent handoffs while backend processes
+    const t1 = setTimeout(() => setAgentState('operational'), 1500);
+    const t2 = setTimeout(() => setAgentState('strategist'), 3000);
+    
+    try {
+      // Gather rich context names instead of just IDs
+      const upstreamEdges = edges.filter(e => e.target === selectedNode.id);
+      const downstreamEdges = edges.filter(e => e.source === selectedNode.id);
+      const upstreamNames = upstreamEdges.map(e => nodes.find(n => n.id === e.source)?.data.label).filter(Boolean);
+      const downstreamNames = downstreamEdges.map(e => nodes.find(n => n.id === e.target)?.data.label).filter(Boolean);
+      const impactedNames = simulationResult.state.blastRadius?.impactedNodeIds?.map(id => nodes.find(n => n.id === id)?.data.label).filter(Boolean) || [];
 
-        const res = await fetch('/api/narrative', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            node: selectedNode,
-            simulationState: simulationResult.state,
-            simulationDelta: simulationResult.delta,
-            dataQualityConfidence,
-            blastRadius: simulationResult.state.blastRadius,
-            contextEnv: {
-              upstreamDependencies: upstreamNames,
-              downstreamDependencies: downstreamNames,
-              impactedDependencies: impactedNames
-            }
-          }),
-          signal: abortController.signal
-        });
+      const res = await fetch('/api/narrative', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          node: selectedNode,
+          simulationState: simulationResult.state,
+          simulationDelta: simulationResult.delta,
+          dataQualityConfidence,
+          blastRadius: simulationResult.state.blastRadius,
+          contextEnv: {
+            upstreamDependencies: upstreamNames,
+            downstreamDependencies: downstreamNames,
+            impactedDependencies: impactedNames
+          }
+        })
+      });
 
-        const data = await res.json();
-        
-        if (data.narrative && typeof data.narrative === 'object') {
-          setNarrativeObj(data.narrative);
-        } else {
-          setNarrativeObj({ executive_summary: "Failed to parse analysis from server." });
-        }
-      } catch (err: any) {
-        if (err.name !== 'AbortError') {
-          console.error("Failed to get narrative", err);
-          setNarrativeObj({ executive_summary: "Analysis could not be generated." });
-        }
-      } finally {
-        clearTimeout(t1);
-        clearTimeout(t2);
-        setAgentState('done');
+      const data = await res.json();
+      
+      if (data.narrative && typeof data.narrative === 'object') {
+        setNarrativeObj(data.narrative);
+      } else {
+        setNarrativeObj({ executive_summary: "Failed to parse analysis from server." });
       }
-    };
-
-    fetchNarrative();
-    
-    return () => abortController.abort();
-  }, [simulationResult, selectedNode]);
+    } catch (err: any) {
+      console.error("Failed to get narrative", err);
+      setNarrativeObj({ executive_summary: "Analysis could not be generated." });
+    } finally {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      setAgentState('done');
+    }
+  };
 
   if (!selectedNode) {
     return (
@@ -300,21 +294,21 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
       <div className="flex border-b border-white/5 bg-white/[0.02]">
         <button 
           onClick={() => setActiveTab('layers')}
-          className={`flex-1 py-3 text-[11px] font-semibold tracking-wider uppercase transition-colors ${activeTab === 'layers' ? 'border-b-2 border-emerald-500 text-emerald-400' : 'text-gray-500 hover:text-white'}`}
+          className={`flex-1 py-3 text-[10px] font-bold tracking-wider uppercase transition-colors ${activeTab === 'layers' ? 'border-b-2 border-emerald-500 text-emerald-400' : 'text-gray-500 hover:text-white'}`}
         >
           Risk Stack
         </button>
         <button 
           onClick={() => setActiveTab('simulation')}
-          className={`flex-1 py-3 text-[11px] font-semibold tracking-wider uppercase transition-colors ${activeTab === 'simulation' ? 'border-b-2 border-emerald-500 text-emerald-400' : 'text-gray-500 hover:text-white'}`}
+          className={`flex-1 py-3 text-[10px] font-bold tracking-wider uppercase transition-colors ${activeTab === 'simulation' ? 'border-b-2 border-emerald-500 text-emerald-400' : 'text-gray-500 hover:text-white'}`}
         >
           Mitigation Engine
         </button>
         <button 
           onClick={() => setActiveTab('trend')}
-          className={`flex items-center gap-2 border-b-2 px-4 py-2 text-sm font-medium transition-colors ${activeTab === 'trend' ? 'border-emerald-500 text-emerald-400' : 'border-transparent text-gray-500 hover:text-gray-300'}`}
+          className={`flex-1 py-3 text-[10px] font-bold tracking-wider uppercase transition-colors ${activeTab === 'trend' ? 'border-b-2 border-emerald-500 text-emerald-400' : 'text-gray-500 hover:text-white'}`}
         >
-          <Activity size={14} /> Trend Analysis
+          Trend
         </button>
       </div>
 
@@ -341,14 +335,42 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
                 </div>
                 
                 <div className="text-sm leading-relaxed text-gray-300 min-h-[60px]">
-                  {agentState === 'financial' && (
-                    <span className="animate-pulse flex items-center gap-2 text-emerald-500/80"><Activity size={14} /> Financial Agent analyzing cost exposure...</span>
+                  {agentState === 'idle' && (
+                    <div className="flex flex-col items-center justify-center py-2">
+                      <p className="text-xs text-gray-400 mb-3 text-center">Run the Multi-Agent Synthesis to generate a strategic narrative and tactical actions.</p>
+                      <button 
+                        onClick={runSynthesis} 
+                        className="flex items-center gap-2 px-4 py-2 bg-emerald-500/20 text-emerald-400 text-xs font-bold uppercase tracking-wider rounded-lg border border-emerald-500/30 hover:bg-emerald-500/30 hover:border-emerald-500/50 transition-all shadow-[0_0_15px_rgba(16,185,129,0.1)]"
+                      >
+                        <Activity size={14} /> Run Analysis
+                      </button>
+                    </div>
                   )}
-                  {agentState === 'operational' && (
-                    <span className="animate-pulse flex items-center gap-2 text-amber-500/80"><Activity size={14} /> Operational Agent auditing supplier delays...</span>
-                  )}
-                  {agentState === 'strategist' && (
-                    <span className="animate-pulse flex items-center gap-2 text-blue-500/80"><Activity size={14} /> Chief Strategist resolving cross-risk correlation...</span>
+                  {(agentState === 'financial' || agentState === 'operational' || agentState === 'strategist') && (
+                    <div className="flex flex-col gap-3 py-2">
+                      <div className="flex justify-between text-[10px] text-gray-400 uppercase tracking-wider font-semibold">
+                        <span>
+                          {agentState === 'financial' ? 'Financial Agent analyzing cost exposure...' : 
+                           agentState === 'operational' ? 'Operational Agent auditing supplier delays...' : 
+                           'Chief Strategist resolving cross-risk correlation...'}
+                        </span>
+                        <span>
+                          {agentState === 'financial' ? '33%' : 
+                           agentState === 'operational' ? '66%' : 
+                           '99%'}
+                        </span>
+                      </div>
+                      <div className="h-1.5 w-full bg-black/50 rounded-full overflow-hidden">
+                        <div 
+                          className="h-full bg-emerald-500 rounded-full transition-all duration-1000 ease-in-out relative"
+                          style={{ 
+                            width: agentState === 'financial' ? '33%' : agentState === 'operational' ? '66%' : '99%' 
+                          }}
+                        >
+                          <div className="absolute inset-0 bg-white/30 animate-[shimmer_1s_infinite]"></div>
+                        </div>
+                      </div>
+                    </div>
                   )}
                   {agentState === 'done' && narrativeObj ? (
                     <div className="space-y-4">

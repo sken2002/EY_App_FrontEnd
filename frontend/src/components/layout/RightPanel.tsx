@@ -8,6 +8,7 @@ import { simulateWPRisk } from '@/lib/riskEngine/simulate';
 import { SimulationControls } from '../simulation/SimulationControls';
 
 interface RightPanelProps {
+  selectedNodeId: string | null;
   nodes: SpiderNode[];
   edges: SpiderEdge[];
   dataQualityConfidence: number;

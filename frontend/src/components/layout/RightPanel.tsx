@@ -201,8 +201,12 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
 
   // Sub-node detail view (Contract / Milestone)
   if (selectedNode.type !== 'workPackage') {
-    const isDelayed = selectedNode.data.status === 'Delayed';
-    const isNonCompliant = selectedNode.data.metrics?.complianceStatus === 'Non-Compliant';
+    const isMilestone = selectedNode.type === 'milestone';
+    const isContract = selectedNode.type === 'contract';
+    const isHighRisk = selectedNode.data.riskScore >= 60;
+    
+    const isDelayed = isMilestone && (selectedNode.data.status === 'Delayed' || isHighRisk);
+    const isNonCompliant = isContract && (selectedNode.data.metrics?.complianceStatus === 'Non-Compliant' || selectedNode.data.metrics?.complianceStatus === 'Pending' || isHighRisk);
     
     return (
       <aside className="flex w-[380px] shrink-0 flex-col border-l border-white/10 bg-[#18181b]/80 p-6 overflow-y-auto">
@@ -240,7 +244,7 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
             ) : isNonCompliant ? (
               <div className="bg-orange-500/10 border border-orange-500/20 p-3 rounded-lg text-sm text-orange-400 flex items-start gap-2 shadow-inner">
                 <Bot size={16} className="mt-0.5 shrink-0" />
-                This contract is flagged as non-compliant, exposing the connected Work Package to severe supply chain risk.
+                This contract is flagged as non-compliant or pending review, exposing the connected Work Package to severe supply chain risk.
               </div>
             ) : (
               <div className="bg-emerald-500/10 border border-emerald-500/20 p-3 rounded-lg text-sm text-emerald-400 flex items-start gap-2 shadow-inner">
@@ -251,10 +255,43 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
           </div>
 
           <div>
+            <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Raw Metrics</h3>
+            <div className="grid grid-cols-2 gap-2">
+              {isContract ? (
+                <>
+                  <div className="bg-black/20 p-3 rounded-lg border border-white/5">
+                    <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Contract Value</p>
+                    <p className="font-mono text-sm text-white">£{((selectedNode.data.metrics?.contractValue || 0) / 1000000).toFixed(1)}M</p>
+                  </div>
+                  <div className="bg-black/20 p-3 rounded-lg border border-white/5">
+                    <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Compliance</p>
+                    <p className={`font-mono text-sm ${isNonCompliant ? 'text-orange-400' : 'text-emerald-400'}`}>
+                      {selectedNode.data.metrics?.complianceStatus || 'Unknown'}
+                    </p>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="bg-black/20 p-3 rounded-lg border border-white/5">
+                    <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Delay</p>
+                    <p className={`font-mono text-sm ${isDelayed ? 'text-red-400' : 'text-emerald-400'}`}>
+                      {selectedNode.data.metrics?.delayDays || 0} Days
+                    </p>
+                  </div>
+                  <div className="bg-black/20 p-3 rounded-lg border border-white/5">
+                    <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Status</p>
+                    <p className="font-mono text-sm text-white">{selectedNode.data.status}</p>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+
+          <div>
             <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Exposure Impact</h3>
             <div className="bg-black/30 p-4 rounded-xl border border-white/5 shadow-md">
               <p className="text-2xl font-mono font-bold text-white mb-1">
-                {selectedNode.type === 'contract' ? `£${(Math.random() * 2 + 0.5).toFixed(1)}M` : 'Schedule Block'}
+                {selectedNode.type === 'contract' ? `£${((selectedNode.data.metrics?.contractValue || 1600000) / 1000000).toFixed(1)}M` : 'Schedule Block'}
               </p>
               <p className="text-xs text-gray-400">
                 {selectedNode.type === 'contract' 
@@ -425,6 +462,40 @@ export function RightPanel({ selectedNodeId, nodes, edges, dataQualityConfidence
                       )}
                     </div>
                   ) : null}
+                </div>
+              </div>
+
+              {/* Live Telemetry & Metrics */}
+              <div className="flex flex-col gap-3">
+                <div className="border-b border-white/10 pb-1">
+                  <h3 className="text-xs font-semibold uppercase tracking-wider text-blue-400">Live Telemetry & Metrics</h3>
+                  <p className="text-[10px] text-gray-400 mt-1">Raw performance data actively monitored by the engine.</p>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="bg-black/20 p-3 rounded-lg border border-white/5 flex flex-col">
+                    <span className="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Cost Performance (CPI)</span>
+                    <span className={`font-mono text-sm ${selectedNode.data.metrics?.cpi < 0.9 ? 'text-red-400' : 'text-emerald-400'}`}>
+                      {selectedNode.data.metrics?.cpi?.toFixed(2) || 'N/A'}
+                    </span>
+                  </div>
+                  <div className="bg-black/20 p-3 rounded-lg border border-white/5 flex flex-col">
+                    <span className="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Schedule Perf. (SPI)</span>
+                    <span className={`font-mono text-sm ${selectedNode.data.metrics?.spi < 0.9 ? 'text-red-400' : 'text-emerald-400'}`}>
+                      {selectedNode.data.metrics?.spi?.toFixed(2) || 'N/A'}
+                    </span>
+                  </div>
+                  <div className="bg-black/20 p-3 rounded-lg border border-white/5 flex flex-col">
+                    <span className="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Budget Variance</span>
+                    <span className={`font-mono text-sm ${(selectedNode.data.metrics?.vacPct || 0) < 0 ? 'text-red-400' : 'text-emerald-400'}`}>
+                      {((selectedNode.data.metrics?.vacPct || 0) * -100).toFixed(1)}%
+                    </span>
+                  </div>
+                  <div className="bg-black/20 p-3 rounded-lg border border-white/5 flex flex-col">
+                    <span className="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Supplier Issues</span>
+                    <span className={`font-mono text-sm ${(selectedNode.data.metrics?.poorRatings || 0) > 0 ? 'text-orange-400' : 'text-gray-300'}`}>
+                      {selectedNode.data.metrics?.poorRatings || 0} Poor Ratings
+                    </span>
+                  </div>
                 </div>
               </div>
 

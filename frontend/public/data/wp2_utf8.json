@@ -1,0 +1,258 @@
+﻿{
+    "Connected":  [
+                      {
+                          "id":  "MILESTONE-0022",
+                          "type":  "milestone",
+                          "data":  {
+                                       "label":  "Planning Permission - 22",
+                                       "subtitle":  "WP-0002 · Final Inspection",
+                                       "status":  "Delayed",
+                                       "riskScore":  88,
+                                       "severity":  "critical",
+                                       "metrics":  {
+                                                       "plannedDate":  "2024-07-31T00:00:00",
+                                                       "forecastDate":  "2024-09-19T00:00:00",
+                                                       "delayDays":  50.0,
+                                                       "isCritical":  true
+                                                   },
+                                       "workPackageId":  "WP-0002"
+                                   },
+                          "position":  {
+                                           "x":  -124.0,
+                                           "y":  394.0
+                                       }
+                      },
+                      {
+                          "id":  "MILESTONE-0097",
+                          "type":  "milestone",
+                          "data":  {
+                                       "label":  "Planning Permission - 97",
+                                       "subtitle":  "WP-0002 · Go-Live",
+                                       "status":  "Delayed",
+                                       "riskScore":  88,
+                                       "severity":  "critical",
+                                       "metrics":  {
+                                                       "plannedDate":  "2024-05-31T00:00:00",
+                                                       "forecastDate":  "2024-06-18T00:00:00",
+                                                       "delayDays":  18.0,
+                                                       "isCritical":  false
+                                                   },
+                                       "workPackageId":  "WP-0002"
+                                   },
+                          "position":  {
+                                           "x":  413.0,
+                                           "y":  1118.0
+                                       }
+                      },
+                      {
+                          "id":  "MILESTONE-0104",
+                          "type":  "milestone",
+                          "data":  {
+                                       "label":  "Planning Permission - 104",
+                                       "subtitle":  "WP-0002 · Go-Live",
+                                       "status":  "At Risk",
+                                       "riskScore":  65,
+                                       "severity":  "high",
+                                       "metrics":  {
+                                                       "plannedDate":  "2024-11-22T00:00:00",
+                                                       "forecastDate":  "2024-12-05T00:00:00",
+                                                       "delayDays":  13.0,
+                                                       "isCritical":  true
+                                                   },
+                                       "workPackageId":  "WP-0002"
+                                   },
+                          "position":  {
+                                           "x":  -60.0,
+                                           "y":  863.0
+                                       }
+                      },
+                      {
+                          "id":  "CONTRACT-0004",
+                          "type":  "contract",
+                          "data":  {
+                                       "label":  "CN-19835 · Global Construction Ltd.",
+                                       "subtitle":  "Unit Price · £2,213,523",
+                                       "status":  "Completed",
+                                       "riskScore":  65,
+                                       "severity":  "high",
+                                       "metrics":  {
+                                                       "contractValue":  2213522.63,
+                                                       "supplierTier":  "Tier 2",
+                                                       "complianceStatus":  "Pending",
+                                                       "isKeySupplier":  true
+                                                   },
+                                       "supplierId":  "SUPPLIER-015",
+                                       "workPackageId":  "WP-0002"
+                                   },
+                          "position":  {
+                                           "x":  1106.0,
+                                           "y":  1039.0
+                                       }
+                      }
+                  ],
+    "WP":  {
+               "id":  "WP-0002",
+               "type":  "workPackage",
+               "data":  {
+                            "label":  "WP-0002: Work Package 2: Safety Systems",
+                            "subtitle":  "IT Systems · Remote",
+                            "status":  "In Progress",
+                            "priority":  "Critical",
+                            "riskScore":  69.5,
+                            "severity":  "critical",
+                            "metrics":  {
+                                            "completionPct":  23.22,
+                                            "plannedCost":  821688.6,
+                                            "actualCost":  0,
+                                            "budgetVariance":  0,
+                                            "cpi":  0.758,
+                                            "spi":  0.829,
+                                            "delayedProp":  0.3333333333333333,
+                                            "avgDelayDays":  14.5,
+                                            "atRiskCount":  1.0,
+                                            "slippageRatio":  0.0,
+                                            "completionShortfall":  0.7678,
+                                            "wpStatusRiskFlag":  false,
+                                            "pastPlannedEnd":  false,
+                                            "backlogRatio":  1.0,
+                                            "onHoldCount":  1,
+                                            "totalSO":  2,
+                                            "emergencyCount":  1,
+                                            "unresolvedCount":  2,
+                                            "totalSO_ops":  2,
+                                            "vacPct":  -0.1703299594471108,
+                                            "cashflowDevRatio":  0.18273677140536088,
+                                            "rejectionRatio":  0.20833333333333334,
+                                            "rejectedCount":  15.0,
+                                            "supplierCount":  1.0,
+                                            "keySupplierSpendShare":  1.0,
+                                            "nonCompliantRatio":  1.0,
+                                            "avgSupplierScore":  68.28291666666667,
+                                            "poorRatings":  6.0,
+                                            "nonCompliantCount":  1.0
+                                        },
+                            "dimensions":  {
+                                               "costFinancial":  {
+                                                                     "score":  85.0,
+                                                                     "class":  "High",
+                                                                     "driver":  "EAC overshoots BAC by 17.0%",
+                                                                     "subComponents":  {
+                                                                                           "cost_var":  "@{class=High; driver=EAC overshoots BAC by 17.0%}",
+                                                                                           "cpi_spi":  "@{class=High; driver=CPI=0.76, SPI=0.83}"
+                                                                                       }
+                                                                 },
+                                               "cashflow":  {
+                                                                "score":  85.0,
+                                                                "class":  "High",
+                                                                "driver":  "Cashflow deviation 18.3%",
+                                                                "subComponents":  {
+                                                                                      "cf":  "@{class=High; driver=Cashflow deviation 18.3%}",
+                                                                                      "pmt_reject":  "@{class=High; driver=15 rejections (21% rate)}"
+                                                                                  }
+                                                            },
+                                               "schedule":  {
+                                                                "score":  55.0,
+                                                                "class":  "Medium",
+                                                                "driver":  "Delay or at-risk signals present",
+                                                                "subComponents":  {
+                                                                                      "ms":  "@{class=Medium; driver=Delay or at-risk signals present}",
+                                                                                      "slip":  "@{class=Medium; driver=Completion at 23% (past planned end)}"
+                                                                                  }
+                                                            },
+                                               "operational":  {
+                                                                   "score":  37.5,
+                                                                   "class":  "Low",
+                                                                   "driver":  "2 unresolved",
+                                                                   "subComponents":  {
+                                                                                         "backlog":  "@{class=Low; driver=Only 2 orders (below threshold)}",
+                                                                                         "ops":  "@{class=Medium; driver=2 unresolved}"
+                                                                                     }
+                                                               },
+                                               "supplier":  {
+                                                                "score":  85.0,
+                                                                "class":  "High",
+                                                                "driver":  "Single supplier (SPOF)",
+                                                                "subComponents":  {
+                                                                                      "conc":  "@{class=High; driver=Single supplier (SPOF)}",
+                                                                                      "perf":  "@{class=High; driver=6 poor ratings, NCR 100%}"
+                                                                                  }
+                                                            }
+                                           },
+                            "trends":  {
+                                           "cpi":  "declining",
+                                           "spi":  "improving",
+                                           "milestoneDelay":  "improving",
+                                           "backlog":  "stable",
+                                           "cashflow":  "stable"
+                                       },
+                            "owner":  "PM-10",
+                            "contractorId":  "CONTRACTOR-1"
+                        },
+               "position":  {
+                                "x":  1196.0,
+                                "y":  871.0
+                            }
+           },
+    "Edges":  [
+                  {
+                      "id":  "e-CONTRACT-0004-WP-0002",
+                      "source":  "CONTRACT-0004",
+                      "target":  "WP-0002",
+                      "type":  "causal",
+                      "data":  {
+                                   "relationship":  "funds",
+                                   "weight":  0.4,
+                                   "description":  "Pending supplier contract"
+                               },
+                      "animated":  false,
+                      "style":  {
+                                    "stroke":  "#6366f1"
+                                }
+                  },
+                  {
+                      "id":  "e-WP-0002-MILESTONE-0022",
+                      "source":  "WP-0002",
+                      "target":  "MILESTONE-0022",
+                      "type":  "causal",
+                      "data":  {
+                                   "relationship":  "delivers",
+                                   "weight":  0.88,
+                                   "description":  "WP delivers milestone (Delayed)"
+                               },
+                      "animated":  true,
+                      "style":  {
+                                    "stroke":  "#f97316"
+                                }
+                  },
+                  {
+                      "id":  "e-WP-0002-MILESTONE-0097",
+                      "source":  "WP-0002",
+                      "target":  "MILESTONE-0097",
+                      "type":  "causal",
+                      "data":  {
+                                   "relationship":  "delivers",
+                                   "weight":  0.88,
+                                   "description":  "WP delivers milestone (Delayed)"
+                               },
+                      "animated":  true,
+                      "style":  {
+                                    "stroke":  "#f97316"
+                                }
+                  },
+                  {
+                      "id":  "e-WP-0002-MILESTONE-0104",
+                      "source":  "WP-0002",
+                      "target":  "MILESTONE-0104",
+                      "type":  "causal",
+                      "data":  {
+                                   "relationship":  "delivers",
+                                   "weight":  0.88,
+                                   "description":  "WP delivers milestone (At Risk)"
+                               },
+                      "animated":  true,
+                      "style":  {
+                                    "stroke":  "#f97316"
+                                }
+                  }
+              ]
+}

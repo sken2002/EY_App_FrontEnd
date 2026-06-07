@@ -1,0 +1,142 @@
+﻿{
+    "Connected":  {
+                      "id":  "MILESTONE-0003",
+                      "type":  "milestone",
+                      "data":  {
+                                   "label":  "Substantial Completion - 3",
+                                   "subtitle":  "WP-0004 · Go-Live",
+                                   "status":  "Delayed",
+                                   "riskScore":  88,
+                                   "severity":  "critical",
+                                   "metrics":  {
+                                                   "plannedDate":  "2024-05-23T00:00:00",
+                                                   "forecastDate":  "2024-06-29T00:00:00",
+                                                   "delayDays":  37.0,
+                                                   "isCritical":  false
+                                               },
+                                   "workPackageId":  "WP-0004"
+                               },
+                      "position":  {
+                                       "x":  -115.0,
+                                       "y":  736.0
+                                   }
+                  },
+    "WP":  {
+               "id":  "WP-0004",
+               "type":  "workPackage",
+               "data":  {
+                            "label":  "WP-0004: Work Package 4: Site Preparation",
+                            "subtitle":  "IT Systems · Canary Wharf",
+                            "status":  "In Progress",
+                            "priority":  "Medium",
+                            "riskScore":  46.5,
+                            "severity":  "high",
+                            "metrics":  {
+                                            "completionPct":  55.4,
+                                            "plannedCost":  35240105.52,
+                                            "actualCost":  0,
+                                            "budgetVariance":  0,
+                                            "cpi":  0.717,
+                                            "spi":  0.803,
+                                            "delayedProp":  1.0,
+                                            "avgDelayDays":  37.0,
+                                            "atRiskCount":  0.0,
+                                            "slippageRatio":  0.0,
+                                            "completionShortfall":  0.44600000000000006,
+                                            "wpStatusRiskFlag":  false,
+                                            "pastPlannedEnd":  false,
+                                            "backlogRatio":  0.5,
+                                            "onHoldCount":  0,
+                                            "totalSO":  2,
+                                            "emergencyCount":  0,
+                                            "unresolvedCount":  1,
+                                            "totalSO_ops":  2,
+                                            "vacPct":  -0.4382813957784973,
+                                            "cashflowDevRatio":  -0.04271472462221566,
+                                            "rejectionRatio":  0.13333333333333333,
+                                            "rejectedCount":  16.0,
+                                            "supplierCount":  0,
+                                            "keySupplierSpendShare":  0,
+                                            "nonCompliantRatio":  0,
+                                            "avgSupplierScore":  100,
+                                            "poorRatings":  0,
+                                            "nonCompliantCount":  0
+                                        },
+                            "dimensions":  {
+                                               "costFinancial":  {
+                                                                     "score":  85.0,
+                                                                     "class":  "High",
+                                                                     "driver":  "EAC overshoots BAC by 43.8%",
+                                                                     "subComponents":  {
+                                                                                           "cost_var":  "@{class=High; driver=EAC overshoots BAC by 43.8%}",
+                                                                                           "cpi_spi":  "@{class=High; driver=CPI=0.72, SPI=0.80 ⚠ CONTRADICTION: Status reports On Track}"
+                                                                                       }
+                                                                 },
+                                               "cashflow":  {
+                                                                "score":  37.5,
+                                                                "class":  "Low",
+                                                                "driver":  "16 rejections (13% rate)",
+                                                                "subComponents":  {
+                                                                                      "cf":  "@{class=Low; driver=Cashflow on track}",
+                                                                                      "pmt_reject":  "@{class=Medium; driver=16 rejections (13% rate)}"
+                                                                                  }
+                                                            },
+                                               "schedule":  {
+                                                                "score":  70.0,
+                                                                "class":  "High",
+                                                                "driver":  "High delay proportion (≥70%)",
+                                                                "subComponents":  {
+                                                                                      "ms":  "@{class=High; driver=High delay proportion (≥70%)}",
+                                                                                      "slip":  "@{class=Medium; driver=Completion at 55% (past planned end)}"
+                                                                                  }
+                                                            },
+                                               "operational":  {
+                                                                   "score":  20.0,
+                                                                   "class":  "Low",
+                                                                   "driver":  "Only 2 orders (below threshold)",
+                                                                   "subComponents":  {
+                                                                                         "backlog":  "@{class=Low; driver=Only 2 orders (below threshold)}",
+                                                                                         "ops":  "@{class=Low; driver=No operational incidents}"
+                                                                                     }
+                                                               },
+                                               "supplier":  {
+                                                                "score":  20.0,
+                                                                "class":  "Low",
+                                                                "driver":  "No data",
+                                                                "subComponents":  {
+                                                                                      "conc":  "@{class=No Data; driver=No contract data — unassessed}",
+                                                                                      "perf":  "@{class=Low; driver=No data}"
+                                                                                  }
+                                                            }
+                                           },
+                            "trends":  {
+                                           "cpi":  "declining",
+                                           "spi":  "declining",
+                                           "milestoneDelay":  "insufficient_data",
+                                           "backlog":  "declining",
+                                           "cashflow":  "improving"
+                                       },
+                            "owner":  "PM-11",
+                            "contractorId":  "CONTRACTOR-13"
+                        },
+               "position":  {
+                                "x":  -105.0,
+                                "y":  804.0
+                            }
+           },
+    "Edges":  {
+                  "id":  "e-WP-0004-MILESTONE-0003",
+                  "source":  "WP-0004",
+                  "target":  "MILESTONE-0003",
+                  "type":  "causal",
+                  "data":  {
+                               "relationship":  "delivers",
+                               "weight":  0.88,
+                               "description":  "WP delivers milestone (Delayed)"
+                           },
+                  "animated":  true,
+                  "style":  {
+                                "stroke":  "#f97316"
+                            }
+              }
+}

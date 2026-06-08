@@ -148,15 +148,6 @@ export function EntityGraph({ nodes: initialNodes, edges: initialEdges, centerId
                   <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-gray-500"></div><span className="text-xs text-gray-300">No Data</span></div>
                 </div>
               </div>
-
-              <div>
-                <h5 className="text-gray-400 text-[10px] uppercase tracking-widest mb-2 border-b border-white/10 pb-1">Entity Types</h5>
-                <div className="flex flex-col gap-2">
-                  <div className="flex items-center gap-2"><div className="w-4 h-4 rounded-sm border border-emerald-500/50 bg-[#1f2937]"></div><span className="text-xs text-gray-300">Work Package</span></div>
-                  <div className="flex items-center gap-2"><div className="w-3 h-3 rotate-45 border border-emerald-500/50 bg-[#1f2937] ml-0.5 mr-0.5"></div><span className="text-xs text-gray-300">Milestone</span></div>
-                  <div className="flex items-center gap-2"><div className="w-4 h-4 rounded-full border border-emerald-500/50 bg-[#1f2937]"></div><span className="text-xs text-gray-300">Contract</span></div>
-                </div>
-              </div>
             </div>
           </Panel>
 
